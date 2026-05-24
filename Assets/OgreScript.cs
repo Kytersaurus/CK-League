@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class OgreScript : MonoBehaviour
@@ -11,34 +12,36 @@ public class OgreScript : MonoBehaviour
     private float timer = 0;
     [SerializeField] private playerScript target;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] private bool isDead;
     void Start()
     {
         currHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
+        isDead = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+       if (currHealth == 0)
         {
-            takeDamage(20);
+            isDead = true;
         }
-        if (timer < attackRate)
-        {
-            timer += Time.deltaTime;
-        }
-        else
-        {
-            target.takeDamage(20);
-            timer = 0;
-        }
+    }
+    public void ogreAttack()
+    {
+        target.takeDamage(20);
     }
     public void takeDamage (int damage)
     {
         if (currHealth >= damage)
         {
             currHealth -= damage;
+            healthBar.setHealth(currHealth);
+        }
+        else
+        {
+            currHealth = 0;
             healthBar.setHealth(currHealth);
         }
     }
@@ -53,5 +56,9 @@ public class OgreScript : MonoBehaviour
             currHealth = maxHealth;
         }
         healthBar.setHealth(currHealth);
+    }
+    private void deathAnimate()
+    {
+        
     }
 }
