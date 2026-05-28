@@ -9,6 +9,8 @@ public class UnitManager : MonoBehaviour
 
     private List<ScriptableUnit> _units;
 
+    public BaseHero SelectedHero;
+
     void Awake()
     {
         Instance = this;
@@ -29,8 +31,11 @@ public class UnitManager : MonoBehaviour
     {
         var spawnedHero = Instantiate(Hero);
         spawnTile.SetUnit(spawnedHero);
+    }
 
-        GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+    public void SetSelectedHero(BaseHero hero)
+    {
+        SelectedHero = hero;
     }
 
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit

@@ -98,3 +98,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ogre
   OccupiedTile: {fileID: 0}
+  Faction: 1

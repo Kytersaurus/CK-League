@@ -27,6 +27,19 @@ public class Tile : MonoBehaviour
         if(GameManager.Instance.State == GameState.SpawnHeroes && OccupiedUnit == null)
         {
             UnitManager.Instance.SpawnHeroes(this);
+            GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+        }
+        else if(GameManager.Instance.State == GameState.MovementPhase)
+        {
+            if(UnitManager.Instance.SelectedHero == null && OccupiedUnit != null)
+            {
+                UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
+            }
+            else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null)
+            {
+                SetUnit(UnitManager.Instance.SelectedHero);
+                UnitManager.Instance.SetSelectedHero((BaseHero)null);
+            }
         }
     }
 
