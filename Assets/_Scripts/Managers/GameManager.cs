@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.SpawnEnemies();
                 break;
             case GameState.SpawnHeroes:
-                //HandleSetup();
+                
                 break;
             case GameState.MovementPhase:
                 //HandleMovement();

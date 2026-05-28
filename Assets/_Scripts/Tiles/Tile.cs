@@ -22,6 +22,14 @@ public class Tile : MonoBehaviour
         _highlight.SetActive(false);
     }
 
+    void OnMouseDown()
+    {
+        if(GameManager.Instance.State == GameState.SpawnHeroes && OccupiedUnit == null)
+        {
+            UnitManager.Instance.SpawnHeroes(this);
+        }
+    }
+
     public void SetUnit(BaseUnit unit)
     {
         if(unit.OccupiedTile != null)

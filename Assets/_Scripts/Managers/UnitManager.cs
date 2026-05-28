@@ -21,6 +21,16 @@ public class UnitManager : MonoBehaviour
         var spawnedEnemy = Instantiate(Enemy);
         var spawnTile = GridManager.Instance.GetEnemySpawnTile();
         spawnTile.SetUnit(spawnedEnemy);
+
+        GameManager.Instance.UpdateGameState(GameState.SpawnHeroes);
+    }
+
+    public void SpawnHeroes(Tile spawnTile)
+    {
+        var spawnedHero = Instantiate(Hero);
+        spawnTile.SetUnit(spawnedHero);
+
+        GameManager.Instance.UpdateGameState(GameState.MovementPhase);
     }
 
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit

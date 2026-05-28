@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitManager
   Enemy: {fileID: 2187027633415355129, guid: 09991eeead63ed24e8756183ac376e76, type: 3}
-  Hero: {fileID: 0}
+  Hero: {fileID: 3478506273195455071, guid: d79f60a5e0a0f314aaab775622716034, type: 3}
 --- !u!4 &832267232
 Transform:
   m_ObjectHideFlags: 0
