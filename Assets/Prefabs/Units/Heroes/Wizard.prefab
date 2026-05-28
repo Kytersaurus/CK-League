@@ -90,3 +90,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Wizard
   OccupiedTile: {fileID: 0}
+  Faction: 0
+  MaxHealth: 100
+  CurrentHealth: 100

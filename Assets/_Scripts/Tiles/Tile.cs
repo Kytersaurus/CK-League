@@ -39,6 +39,28 @@ public class Tile : MonoBehaviour
             {
                 SetUnit(UnitManager.Instance.SelectedHero);
                 UnitManager.Instance.SetSelectedHero((BaseHero)null);
+                GameManager.Instance.UpdateGameState(GameState.AttackPhase);
+            }
+        }
+        else if(GameManager.Instance.State == GameState.AttackPhase && OccupiedUnit != null)
+        {
+            if(OccupiedUnit.Faction == Faction.Hero)
+            {
+                UnitManager.Instance.SelectedHero = (BaseHero)OccupiedUnit;
+            }
+            else if(UnitManager.Instance.SelectedHero != null)
+            {
+                UnitManager.Instance.TakeDamage(OccupiedUnit);
+                if(OccupiedUnit.CurrentHealth <= 0)
+                {
+                    Destroy(OccupiedUnit.gameObject);
+                    GameManager.Instance.UpdateGameState(GameState.Victory);
+                }
+                else
+                {
+                    UnitManager.Instance.SetSelectedHero((BaseHero)null);
+                    GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+                }
             }
         }
     }

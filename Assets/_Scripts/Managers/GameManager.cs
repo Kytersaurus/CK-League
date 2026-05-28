@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     public void UpdateGameState(GameState newState)
     {
         State = newState;
+        MenuManager.Instance.ShowGamePhase(newState);
 
         switch (newState)
         {
@@ -33,10 +34,9 @@ public class GameManager : MonoBehaviour
                 
                 break;
             case GameState.MovementPhase:
-                //HandleMovement();
                 break;
             case GameState.AttackPhase:
-                //HandleAttack();
+                
                 break;
             case GameState.Victory:
                 //HandleVictory();

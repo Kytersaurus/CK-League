@@ -1,0 +1,40 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class MenuManager : MonoBehaviour
+{
+    public static MenuManager Instance;
+
+    [SerializeField] private GameObject _showPhaseObject;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    public void ShowGamePhase(GameState currentState)
+    {
+        string phaseName;
+        if(currentState == GameState.MovementPhase)
+        {
+            phaseName = "Movement Phase";
+        }
+        else if(currentState == GameState.AttackPhase)
+        {
+            phaseName = "Attack Phase";
+        }
+        else if(currentState == GameState.Victory)
+        {
+            phaseName = "Victory";
+        }
+        else
+        {
+            _showPhaseObject.SetActive(false);
+            return;
+        }
+
+        _showPhaseObject.GetComponentInChildren<TextMeshProUGUI>().text = phaseName;
+        _showPhaseObject.SetActive(true);
+    }
+}
