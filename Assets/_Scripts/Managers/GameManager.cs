@@ -26,7 +26,10 @@ public class GameManager : MonoBehaviour
             case GameState.GenerateGrid:
                 GridManager.Instance.GenerateGrid();
                 break;
-            case GameState.Setup:
+            case GameState.SpawnEnemies:
+                UnitManager.Instance.SpawnEnemies();
+                break;
+            case GameState.SpawnHeroes:
                 //HandleSetup();
                 break;
             case GameState.MovementPhase:
@@ -53,7 +56,8 @@ public class GameManager : MonoBehaviour
 public enum GameState
 {
     GenerateGrid,
-    Setup,
+    SpawnEnemies,
+    SpawnHeroes,
     MovementPhase,
     AttackPhase,
     Victory,
