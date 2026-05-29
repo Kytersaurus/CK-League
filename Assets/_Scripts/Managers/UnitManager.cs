@@ -40,7 +40,7 @@ public class UnitManager : MonoBehaviour
 
     public void TakeDamage(BaseUnit unit)
     {
-        unit.CurrentHealth -= 20;
+        unit.takeDamage(20);
     }
 
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit
