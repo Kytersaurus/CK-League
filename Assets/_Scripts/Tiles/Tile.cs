@@ -5,9 +5,10 @@ public class Tile : MonoBehaviour
     [SerializeField] private Color _baseColor, _offsetColor;
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private GameObject _highlight;
+    [SerializeField] private bool _isWalkable = true;
 
     public BaseUnit OccupiedUnit;
-    public bool Walkable => OccupiedUnit == null;
+    public bool Walkable => OccupiedUnit == null && _isWalkable == true;
     public void Init(bool isOffset)
     {
         _renderer.color = isOffset ? _offsetColor : _baseColor;
@@ -31,7 +32,7 @@ public class Tile : MonoBehaviour
         }
         else if(GameManager.Instance.State == GameState.MovementPhase)
         {
-            if(UnitManager.Instance.SelectedHero == null && OccupiedUnit != null)
+            if(UnitManager.Instance.SelectedHero == null && OccupiedUnit is BaseHero hero)
             {
                 UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
             }

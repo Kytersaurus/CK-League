@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3664a1ef30d700f458b58ecaa392e7b3
+guid: 3570610c5264bb140a354ac97af7eb33
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -127,7 +127,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Ground
+  - name: Marsh body 1
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -138,8 +138,8 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 64
-      height: 32
-    spriteID: d4ae6ce402ee2be4187ea011aae0afb3
+      height: 64
+    spriteID: 2b387958fa14f19478378c0162d264b5
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 2024493761
+      value0: 2844621220
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: Ground
+    name: Marsh body 1
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Ground
+    - name: Marsh body 1
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
         width: 64
-        height: 32
-      spriteId: d4ae6ce402ee2be4187ea011aae0afb3
+        height: 64
+      spriteId: 2b387958fa14f19478378c0162d264b5
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -182,4 +182,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 64, y: 64}
-  previousTextureSize: {x: 128, y: 64}
+  previousTextureSize: {x: 128, y: 128}
