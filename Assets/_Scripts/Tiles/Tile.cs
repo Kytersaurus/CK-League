@@ -24,11 +24,13 @@ public class Tile : MonoBehaviour
 
     void OnMouseDown()
     {
+        //Select Unit Spawn Location
         if(GameManager.Instance.State == GameState.SpawnHeroes && OccupiedUnit == null)
         {
             UnitManager.Instance.SpawnHeroes(this);
             GameManager.Instance.UpdateGameState(GameState.MovementPhase);
         }
+        //Movement Phase
         else if(GameManager.Instance.State == GameState.MovementPhase)
         {
             if(UnitManager.Instance.SelectedHero == null && OccupiedUnit != null)
@@ -42,15 +44,16 @@ public class Tile : MonoBehaviour
                 GameManager.Instance.UpdateGameState(GameState.AttackPhase);
             }
         }
+        //Attack Phase
         else if(GameManager.Instance.State == GameState.AttackPhase && OccupiedUnit != null)
         {
             if(OccupiedUnit.Faction == Faction.Hero)
             {
                 UnitManager.Instance.SelectedHero = (BaseHero)OccupiedUnit;
             }
-            else if(UnitManager.Instance.SelectedHero != null)
+            else if(UnitManager.Instance.SelectedHero != null && InAttackRange(UnitManager.Instance.SelectedHero))
             {
-                UnitManager.Instance.TakeDamage(OccupiedUnit);
+                OccupiedUnit.TakeDamage(20);
                 if(OccupiedUnit.CurrentHealth <= 0)
                 {
                     Destroy(OccupiedUnit.gameObject);
@@ -74,5 +77,12 @@ public class Tile : MonoBehaviour
         unit.transform.position = transform.position;
         OccupiedUnit = unit;
         unit.OccupiedTile = this;
+    }
+
+    public bool InAttackRange(BaseUnit unit)
+    {
+        var horizontalDistance = Mathf.Abs(unit.transform.position.x - transform.position.x);
+        var verticalDistance = Mathf.Abs(unit.transform.position.y - transform.position.y);
+        return unit.AttackRange >= (horizontalDistance + verticalDistance);
     }
 }

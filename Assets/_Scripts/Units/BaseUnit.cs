@@ -6,6 +6,7 @@ public class BaseUnit : MonoBehaviour
     public Faction Faction;
     public int maxHealth = 100;
     public int CurrentHealth;
+    public int AttackRange;
    
     public healthbarScript healthBar;
     
@@ -18,7 +19,7 @@ public class BaseUnit : MonoBehaviour
         healthBar.setMaxHealth(maxHealth);
     }
     
-    public void takeDamage (int damage)
+    public void TakeDamage (int damage)
     {
         if (CurrentHealth >= damage)
         {
