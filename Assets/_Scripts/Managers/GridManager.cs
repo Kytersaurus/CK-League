@@ -100,9 +100,12 @@ public class GridManager : MonoBehaviour
     public Tile GetTilePrefab(TileType type, TileVariant variant)
     {
         foreach (var entry in _tilePrefabs)
+        {
             if (entry.tileType == type && entry.tileVariant == variant)
+            {    
                 return entry.prefab;
-
+            }
+        }
         return _tilePrefabs[0].prefab;
     }
 
