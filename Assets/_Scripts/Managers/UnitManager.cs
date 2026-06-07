@@ -42,6 +42,7 @@ public class UnitManager : MonoBehaviour
     {
         unit.takeDamage(20);
     }
+    
 
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit
     {

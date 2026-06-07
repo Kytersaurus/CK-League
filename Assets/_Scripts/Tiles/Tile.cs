@@ -1,31 +1,106 @@
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+
+public enum TileType
+{
+    Grass,
+    Water,
+    Marsh,
+    Mountain,
+    Tree
+}
+
+public enum TileVariant
+{
+    Body1,
+    Body2,
+    EdgeTL,
+    EdgeTR,
+    EdgeBL,
+    EdgeBR,
+    Pillar,
+    PillarBase
+}
 
 public class Tile : MonoBehaviour
 {
     [SerializeField] private Color _baseColor, _offsetColor;
-    [SerializeField] private SpriteRenderer _renderer;
+    [SerializeField] private SpriteRenderer _baseRenderer;
     [SerializeField] private GameObject _highlight;
+    [SerializeField] private GameObject _highlightError;
     [SerializeField] private bool _isWalkable = true;
-
+    [SerializeField] protected TileType _tileType;
+    [SerializeField] protected TileVariant _tileVariant;
+    
+    public TileType TileType => _tileType;
+    public TileVariant TileVariant => _tileVariant;
     public BaseUnit OccupiedUnit;
     public bool Walkable => OccupiedUnit == null && _isWalkable == true;
-    public void Init(bool isOffset)
+    public virtual void Init(int x, int y)
     {
-        _renderer.color = isOffset ? _offsetColor : _baseColor;
+        var isOffset = (x + y) % 2 == 1;
+        _baseRenderer.color = isOffset ? _offsetColor : _baseColor;
     }
 
     void OnMouseEnter()
-    {
-        _highlight.SetActive(true);
+    {   
+        if (GameManager.Instance.State == GameState.SpawnHeroes)
+        {
+            if (Walkable)
+            {
+                _highlight.SetActive(true);
+            }
+            else
+            {
+                _highlightError.SetActive(true);
+            }
+        }
+        else if (GameManager.Instance.State == GameState.MovementPhase)
+        {
+            if (OccupiedUnit != null && UnitManager.Instance.SelectedHero == null && OccupiedUnit.Faction == Faction.Hero)
+            {
+                _highlight.SetActive(true);
+            }
+            else if ((Walkable || (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero)) && UnitManager.Instance.SelectedHero != null)
+            {
+                _highlight.SetActive(true);    
+            }
+            else
+            {
+                _highlightError.SetActive(true);    
+            }
+        }
+        else if (GameManager.Instance.State == GameState.AttackPhase)
+        {
+            if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && OccupiedUnit.Faction == Faction.Enemy)
+            {
+                _highlight.SetActive(true);    
+            }
+            else if (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero)
+            {
+                _highlight.SetActive(true);    
+            }
+            else
+            {
+                _highlightError.SetActive(true);
+            }
+        }
     }
     void OnMouseExit()
     {
-        _highlight.SetActive(false);
+        if(_highlight.activeSelf)
+        {
+            _highlight.SetActive(false);
+        }
+        else if (_highlightError.activeSelf)
+        {
+            _highlightError.SetActive(false);
+        }
     }
 
     void OnMouseDown()
     {
-        if(GameManager.Instance.State == GameState.SpawnHeroes && OccupiedUnit == null)
+        if(GameManager.Instance.State == GameState.SpawnHeroes && OccupiedUnit == null && Walkable)
         {
             UnitManager.Instance.SpawnHeroes(this);
             GameManager.Instance.UpdateGameState(GameState.MovementPhase);

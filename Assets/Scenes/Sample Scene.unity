@@ -287,7 +287,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GridManager
   _width: 16
   _height: 9
-  _tilePrefab: {fileID: 8906911454195278994, guid: 8dcbbd3d053d4094fbdcad45c17f47b8, type: 3}
+  _tilePrefabs:
+  - tileType: 0
+    tileVariant: 0
+    prefab: {fileID: 2897188364716991104, guid: c662d9552ff27e24bac44387f167ff24, type: 3}
+  - tileType: 1
+    tileVariant: 0
+    prefab: {fileID: 1239841764403863133, guid: ed025eb8938f61b4799c11a060a7e1f3, type: 3}
+  - tileType: 1
+    tileVariant: 1
+    prefab: {fileID: 1239841764403863133, guid: 7d56c1415f9727a46a278811b05ec6f4, type: 3}
+  - tileType: 1
+    tileVariant: 2
+    prefab: {fileID: 1239841764403863133, guid: 691e7eb9716ad9b4986bedecb8d7f513, type: 3}
+  - tileType: 1
+    tileVariant: 3
+    prefab: {fileID: 1239841764403863133, guid: 923333ba5fbe25b4d8ff088147a2ddd3, type: 3}
+  - tileType: 1
+    tileVariant: 4
+    prefab: {fileID: 8976474526484542280, guid: bdd18251edaf6314ea0217cbf892278d, type: 3}
+  - tileType: 1
+    tileVariant: 5
+    prefab: {fileID: 1239841764403863133, guid: a98a3274bc7a03843a6259287f3d1ac3, type: 3}
+  - tileType: 2
+    tileVariant: 0
+    prefab: {fileID: -5010107933780863044, guid: 6263b453106689142bbbcb4e872d1eda, type: 3}
+  - tileType: 2
+    tileVariant: 1
+    prefab: {fileID: -5010107933780863044, guid: 39676d1f3c97f7641a7d0168c4513332, type: 3}
+  - tileType: 2
+    tileVariant: 2
+    prefab: {fileID: 4845231299211648303, guid: 97ccf5008eeea864791e8f934ec4e213, type: 3}
+  - tileType: 2
+    tileVariant: 3
+    prefab: {fileID: 7272529892469142353, guid: 42477e19d0c215a41a601b7ce53f976f, type: 3}
+  - tileType: 2
+    tileVariant: 4
+    prefab: {fileID: 5882236714783170844, guid: 6efc134b0ff7d614ab2364e07cdcd056, type: 3}
+  - tileType: 2
+    tileVariant: 5
+    prefab: {fileID: 4491259301177065534, guid: 94241bbef6f62804b84723820f087d2d, type: 3}
+  - tileType: 3
+    tileVariant: 0
+    prefab: {fileID: 4587675475669668450, guid: b296d325d7389514aa3e48d0a2ff12fe, type: 3}
+  - tileType: 3
+    tileVariant: 6
+    prefab: {fileID: 4587675475669668450, guid: a9c2d7eb35080f5419d5834551d3f20f, type: 3}
+  - tileType: 3
+    tileVariant: 7
+    prefab: {fileID: 4587675475669668450, guid: 756704781f2693849a83e51759cec3c9, type: 3}
+  - tileType: 3
+    tileVariant: 1
+    prefab: {fileID: 4587675475669668450, guid: 8fee1389aa14d1d4e8e9916c1004a895, type: 3}
+  - tileType: 4
+    tileVariant: 0
+    prefab: {fileID: 2377796777517833010, guid: 9f7892ddf2652b348b658d2effabfab7, type: 3}
   _cam: {fileID: 519420032}
 --- !u!4 &346764683
 Transform:
@@ -385,7 +439,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

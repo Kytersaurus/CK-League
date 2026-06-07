@@ -116,7 +116,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 541928409570552007}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1.565, y: 1.565, z: 1.565}
   m_ConstrainProportionsScale: 0
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1941296726204792428, guid: 847715e5ae3d7354b81e36f059b1a482, type: 3}
+  m_Sprite: {fileID: -1090340927963016656, guid: 3570610c5264bb140a354ac97af7eb33, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -193,9 +193,9 @@ GameObject:
   - component: {fileID: 7771498253470926075}
   - component: {fileID: 2260353478883093830}
   - component: {fileID: 1513232105391131790}
-  - component: {fileID: 4587675475669668450}
+  - component: {fileID: -5010107933780863044}
   m_Layer: 0
-  m_Name: Mountain Top Tile
+  m_Name: Marsh Body Tile 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -324,7 +324,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4587675475669668450
+--- !u!114 &-5010107933780863044
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -333,16 +333,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 752928720138348104}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 354df4639c7cc7646b4192a0899cc42b, type: 3}
+  m_Script: {fileID: 11500000, guid: 3348f2da8015f4f41b72e6962f9bcd49, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MountainTile
+  m_EditorClassIdentifier: Assembly-CSharp::MarshTile
   _baseColor: {r: 0.43137255, g: 0.7372549, b: 0.3647059, a: 1}
   _offsetColor: {r: 0.4, g: 0.6784314, b: 0.34117648, a: 1}
   _baseRenderer: {fileID: 2260353478883093830}
   _highlight: {fileID: 1062581401193619028}
   _highlightError: {fileID: 385731349539450447}
-  _isWalkable: 0
-  _tileType: 3
+  _isWalkable: 1
+  _tileType: 2
   _tileVariant: 0
   OccupiedUnit: {fileID: 0}
 --- !u!1 &1062581401193619028

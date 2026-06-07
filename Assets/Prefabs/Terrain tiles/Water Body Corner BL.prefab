@@ -79,7 +79,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.990566, g: 0, b: 0, a: 0.38431373}
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 7771498253470926075}
   - component: {fileID: 2260353478883093830}
   - component: {fileID: 1513232105391131790}
-  - component: {fileID: 1239841764403863133}
+  - component: {fileID: 8976474526484542280}
   m_Layer: 0
   m_Name: Water Body Corner BL
   m_TagString: Untagged
@@ -324,7 +324,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1239841764403863133
+--- !u!114 &8976474526484542280
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -336,11 +336,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdcfb607cc7bcc84c9f1e9e979df66bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WaterTile
-  _baseColor: {r: 0, g: 0, b: 0, a: 0}
-  _offsetColor: {r: 0, g: 0, b: 0, a: 0}
-  _renderer: {fileID: 0}
-  _highlight: {fileID: 0}
+  _baseColor: {r: 0.43137255, g: 0.7372549, b: 0.3647059, a: 1}
+  _offsetColor: {r: 0.4, g: 0.6784314, b: 0.34117648, a: 1}
+  _baseRenderer: {fileID: 2260353478883093830}
+  _highlight: {fileID: 1062581401193619028}
+  _highlightError: {fileID: 385731349539450447}
   _isWalkable: 0
+  _tileType: 1
+  _tileVariant: 4
   OccupiedUnit: {fileID: 0}
 --- !u!1 &1062581401193619028
 GameObject:
@@ -421,7 +424,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.38431373}
