@@ -250,6 +250,7 @@ MonoBehaviour:
   _highlight: {fileID: 1062581401193619028}
   _highlightError: {fileID: 385731349539450447}
   _isWalkable: 1
+  _movementCost: 1
   _tileType: 0
   _tileVariant: 0
   OccupiedUnit: {fileID: 0}

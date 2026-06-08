@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.IO;
+using Clrain.Collections; //priority queue script
 
 [System.Serializable]
 public class TileEntry
@@ -162,5 +163,70 @@ public class GridManager : MonoBehaviour
         if (_tiles.TryGetValue(pos, out var tile))
             return tile;
         return null;
+    }
+    public List<Tile> GetNeighbourTiles(Tile root)
+    {
+        var nbs = new List<Tile>();
+        Vector2 rootPos = root.gridPos;
+        Vector2[] directions =
+        {
+            Vector2.up,
+            Vector2.down,
+            Vector2.left,
+            Vector2.right
+        };
+        foreach (Vector2 dir in directions)
+        {
+            Tile nb = GetTileAtPosition(rootPos + dir);
+            if (nb != null)
+            {
+                nbs.Add(nb);
+            }
+        }
+        return nbs;
+    }
+    public List<Tile> GetReachableTiles(Tile from, int moveRange)
+    {
+        var dists = new Dictionary<Tile, int>();
+        var vis = new HashSet<Tile>(); 
+        var pq = new PriorityQueue<Tile, int>(); //using pq script from internet as unity does not support it natively
+        
+        foreach (var tile in _tiles.Values)
+        {
+            dists[tile] = int.MaxValue;
+        }
+        pq.Enqueue(from, 0);
+
+        while (pq.Count > 0)
+        {
+            var curr = pq.Dequeue();
+            List<Tile> nbs = GetNeighbourTiles(curr);
+            if (!vis.Add(curr))
+            {
+                continue;
+            }
+            if (dists[curr] > moveRange)
+            {
+                continue;
+            }
+            foreach (var nb in nbs)
+            {
+                if (vis.Contains(nb) || !nb.Walkable)
+                {
+                    continue;
+                }
+                int newDist = dists[curr] + nb.moveCost;
+                if (newDist <= moveRange && newDist < dists[nb])
+                {
+                    dists[nb] = newDist;
+                    pq.Enqueue(nb, newDist);
+                }
+            }
+        }
+        return dists
+        //only return list of tiles in range
+            .Where(kvp => kvp.Value <= moveRange && kvp.Key != from)
+            .Select(kvp => kvp.Key)
+            .ToList();
     }
 }

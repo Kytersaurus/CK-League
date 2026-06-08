@@ -28,18 +28,21 @@ public class Tile : MonoBehaviour
     [SerializeField] private SpriteRenderer _baseRenderer;
     [SerializeField] private GameObject _highlight;
     [SerializeField] private GameObject _highlightError;
-    [SerializeField] private bool _isWalkable = true;
+    [SerializeField] private bool _isWalkable;
+    [SerializeField] private int _movementCost;
     [SerializeField] protected TileType _tileType;
     [SerializeField] protected TileVariant _tileVariant;
+    public Vector2 gridPos {get; private set;}
     
     public TileType TileType => _tileType;
     public TileVariant TileVariant => _tileVariant;
     public BaseUnit OccupiedUnit;
     public bool Walkable => OccupiedUnit == null && _isWalkable == true;
+    public int moveCost => _movementCost;
     public virtual void Init(int x, int y)
     {
-        var isOffset = (x + y) % 2 == 1;
-        _baseRenderer.color = isOffset ? _offsetColor : _baseColor;
+        gridPos = new Vector2(x, y);
+        _baseRenderer.color = (x + y) % 2 == 1 ? _offsetColor : _baseColor;
     }
 
     void OnMouseEnter()
