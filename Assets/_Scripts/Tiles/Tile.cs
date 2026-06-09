@@ -40,8 +40,9 @@ public class Tile : MonoBehaviour
             else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null)
             {
                 SetUnit(UnitManager.Instance.SelectedHero);
-                UnitManager.Instance.SetSelectedHero((BaseHero)null);
-                GameManager.Instance.UpdateGameState(GameState.AttackPhase);
+                UnitManager.Instance.SetSelectedHero(null);
+                if(!UnitManager.Instance.SkipAttackPhase())
+                    GameManager.Instance.UpdateGameState(GameState.AttackPhase);
             }
         }
         //Attack Phase
@@ -51,17 +52,17 @@ public class Tile : MonoBehaviour
             {
                 UnitManager.Instance.SelectedHero = (BaseHero)OccupiedUnit;
             }
-            else if(UnitManager.Instance.SelectedHero != null && InAttackRange(UnitManager.Instance.SelectedHero))
+            else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit))
             {
-                OccupiedUnit.TakeDamage(20);
+                OccupiedUnit.TakeDamage(50);
                 if(OccupiedUnit.CurrentHealth <= 0)
                 {
-                    Destroy(OccupiedUnit.gameObject);
-                    GameManager.Instance.UpdateGameState(GameState.Victory);
+                    UnitManager.Instance.KillUnit(OccupiedUnit);
+                    //Destroy(OccupiedUnit.gameObject);
                 }
                 else
                 {
-                    UnitManager.Instance.SetSelectedHero((BaseHero)null);
+                    UnitManager.Instance.SetSelectedHero(null);
                     GameManager.Instance.UpdateGameState(GameState.MovementPhase);
                 }
             }
@@ -77,12 +78,5 @@ public class Tile : MonoBehaviour
         unit.transform.position = transform.position;
         OccupiedUnit = unit;
         unit.OccupiedTile = this;
-    }
-
-    public bool InAttackRange(BaseUnit unit)
-    {
-        var horizontalDistance = Mathf.Abs(unit.transform.position.x - transform.position.x);
-        var verticalDistance = Mathf.Abs(unit.transform.position.y - transform.position.y);
-        return unit.AttackRange >= (horizontalDistance + verticalDistance);
     }
 }
