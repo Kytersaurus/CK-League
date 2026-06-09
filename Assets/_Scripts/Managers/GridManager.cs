@@ -81,7 +81,7 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < _height; y++)
             {
                 TileInfo info = _levelLayout[x, y];
-                var spawnedTile = GenerateTile(x, y, info.type, info.variant);
+                Tile spawnedTile = GenerateTile(x, y, info.type, info.variant);
                 spawnedTile.Init(x, y);
             }
         }
@@ -91,8 +91,8 @@ public class GridManager : MonoBehaviour
 
     public Tile GenerateTile(int x, int y, TileType type, TileVariant variant)
     {
-        var prefab = GetTilePrefab(type, variant);
-        var spawnedTile = Instantiate(prefab, new Vector3(x, y), Quaternion.identity);
+        Tile prefab = GetTilePrefab(type, variant);
+        Tile spawnedTile = Instantiate(prefab, new Vector3(x, y), Quaternion.identity);
         spawnedTile.name = $"Tile {x} {y} ({type} {variant})";
         _tiles[new Vector2(x, y)] = spawnedTile;
         return spawnedTile;
@@ -100,7 +100,7 @@ public class GridManager : MonoBehaviour
 
     public Tile GetTilePrefab(TileType type, TileVariant variant)
     {
-        foreach (var entry in _tilePrefabs)
+        foreach (TileEntry entry in _tilePrefabs)
         {
             if (entry.tileType == type && entry.tileVariant == variant)
             {    
@@ -191,15 +191,16 @@ public class GridManager : MonoBehaviour
         var vis = new HashSet<Tile>(); 
         var pq = new PriorityQueue<Tile, int>(); //using pq script from internet as unity does not support it natively
         
-        foreach (var tile in _tiles.Values)
+        foreach (Tile tile in _tiles.Values)
         {
             dists[tile] = int.MaxValue;
         }
+        dists[from] = 0;
         pq.Enqueue(from, 0);
 
         while (pq.Count > 0)
         {
-            var curr = pq.Dequeue();
+            Tile curr = pq.Dequeue();
             List<Tile> nbs = GetNeighbourTiles(curr);
             if (!vis.Add(curr))
             {
@@ -209,13 +210,13 @@ public class GridManager : MonoBehaviour
             {
                 continue;
             }
-            foreach (var nb in nbs)
+            foreach (Tile nb in nbs)
             {
                 if (vis.Contains(nb) || !nb.Walkable)
                 {
                     continue;
                 }
-                int newDist = dists[curr] + nb.moveCost;
+                int newDist = dists[curr] + nb.MoveCost;
                 if (newDist <= moveRange && newDist < dists[nb])
                 {
                     dists[nb] = newDist;

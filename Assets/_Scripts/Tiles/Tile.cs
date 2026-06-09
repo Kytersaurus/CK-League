@@ -1,4 +1,3 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public enum TileType
@@ -26,19 +25,19 @@ public class Tile : MonoBehaviour
 {
     [SerializeField] private Color _baseColor, _offsetColor;
     [SerializeField] private SpriteRenderer _baseRenderer;
-    [SerializeField] private GameObject _highlight;
-    [SerializeField] private GameObject _highlightError;
+    public GameObject _highlight;
+    public GameObject _highlightSelect;
+    public GameObject _highlightError;
     [SerializeField] private bool _isWalkable;
     [SerializeField] private int _movementCost;
     [SerializeField] protected TileType _tileType;
     [SerializeField] protected TileVariant _tileVariant;
     public Vector2 gridPos {get; private set;}
-    
     public TileType TileType => _tileType;
     public TileVariant TileVariant => _tileVariant;
     public BaseUnit OccupiedUnit;
     public bool Walkable => OccupiedUnit == null && _isWalkable == true;
-    public int moveCost => _movementCost;
+    public int MoveCost => _movementCost;
     public virtual void Init(int x, int y)
     {
         gridPos = new Vector2(x, y);
@@ -51,7 +50,7 @@ public class Tile : MonoBehaviour
         {
             if (Walkable)
             {
-                _highlight.SetActive(true);
+                _highlightSelect.SetActive(true);
             }
             else
             {
@@ -62,11 +61,11 @@ public class Tile : MonoBehaviour
         {
             if (OccupiedUnit != null && UnitManager.Instance.SelectedHero == null && OccupiedUnit.Faction == Faction.Hero)
             {
-                _highlight.SetActive(true);
+                _highlightSelect.SetActive(true);
             }
-            else if ((Walkable || (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero)) && UnitManager.Instance.SelectedHero != null)
+            else if (UnitManager.Instance.SelectedHero != null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
-                _highlight.SetActive(true);    
+                _highlightSelect.SetActive(true);
             }
             else
             {
@@ -77,11 +76,11 @@ public class Tile : MonoBehaviour
         {
             if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && OccupiedUnit.Faction == Faction.Enemy)
             {
-                _highlight.SetActive(true);    
+                _highlightSelect.SetActive(true);    
             }
             else if (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero)
             {
-                _highlight.SetActive(true);    
+                _highlightSelect.SetActive(true);    
             }
             else
             {
@@ -91,9 +90,9 @@ public class Tile : MonoBehaviour
     }
     void OnMouseExit()
     {
-        if(_highlight.activeSelf)
+        if (_highlightSelect.activeSelf)
         {
-            _highlight.SetActive(false);
+            _highlightSelect.SetActive(false);
         }
         else if (_highlightError.activeSelf)
         {
@@ -114,10 +113,10 @@ public class Tile : MonoBehaviour
             {
                 UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
             }
-            else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null)
+            else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
                 SetUnit(UnitManager.Instance.SelectedHero);
-                UnitManager.Instance.SetSelectedHero((BaseHero)null);
+                UnitManager.Instance.SetSelectedHero(null);
                 GameManager.Instance.UpdateGameState(GameState.AttackPhase);
             }
         }
