@@ -12,7 +12,7 @@ public class UnitManager : MonoBehaviour
     private List<BaseUnit> _enemiesLeft = new List<BaseUnit>();
 
     public BaseHero SelectedHero;
-
+    public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
     void Awake()
     {
         Instance = this;
@@ -44,7 +44,24 @@ public class UnitManager : MonoBehaviour
 
     public void SetSelectedHero(BaseHero hero)
     {
+        foreach (Tile tile in ReachableTiles)
+        {
+            tile._highlight.SetActive(false);
+        }
+        ReachableTiles.Clear();
+
         SelectedHero = hero;
+
+        if (hero == null)
+        {
+            return;
+        }
+
+        ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
+        foreach (Tile tile in ReachableTiles)
+        {
+            tile._highlight.SetActive(true);
+        }
     }
 
     public void KillUnit(BaseUnit unit)
