@@ -54,17 +54,7 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit))
             {
-                OccupiedUnit.TakeDamage(50);
-                if(OccupiedUnit.CurrentHealth <= 0)
-                {
-                    UnitManager.Instance.KillUnit(OccupiedUnit);
-                    //Destroy(OccupiedUnit.gameObject);
-                }
-                else
-                {
-                    UnitManager.Instance.SetSelectedHero(null);
-                    GameManager.Instance.UpdateGameState(GameState.MovementPhase);
-                }
+                UnitManager.Instance.SelectedHero.Attack(OccupiedUnit);
             }
         }
     }

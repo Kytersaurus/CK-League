@@ -213,6 +213,7 @@ MonoBehaviour:
   maxHealth: 100
   CurrentHealth: 100
   AttackRange: 3
+  AttackPower: 50
   healthBar: {fileID: 2743834586076405301}
 --- !u!1001 &240034667750404394
 PrefabInstance:
