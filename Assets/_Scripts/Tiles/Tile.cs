@@ -133,15 +133,10 @@ public class Tile : MonoBehaviour
             {
                 OccupiedUnit.TakeDamage(50);
                 if(OccupiedUnit.CurrentHealth <= 0)
-                {
                     UnitManager.Instance.KillUnit(OccupiedUnit);
-                    //Destroy(OccupiedUnit.gameObject);
-                }
                 else
-                {
-                    UnitManager.Instance.SetSelectedHero(null);
                     GameManager.Instance.UpdateGameState(GameState.MovementPhase);
-                }
+                UnitManager.Instance.SetSelectedHero(null);
             }
         }
     }
