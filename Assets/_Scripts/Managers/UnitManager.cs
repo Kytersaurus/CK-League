@@ -55,12 +55,11 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void TakeDamage(BaseUnit unit)
+    /*public void TakeDamage(BaseUnit unit)
     {
         unit.takeDamage(20);
-    }
-    
-    
+    }*/
+
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit
     {
         //return (T)_units.Where
