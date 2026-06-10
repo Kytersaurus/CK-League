@@ -28,6 +28,10 @@ public class MenuManager : MonoBehaviour
         {
             phaseName = "Victory";
         }
+        else if(currentState == GameState.Defeat)
+        {
+            phaseName = "Defeat";
+        }
         else
         {
             _showPhaseObject.SetActive(false);
