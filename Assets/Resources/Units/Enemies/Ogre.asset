@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Ogre
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableUnit
   Faction: 1
-  UnitPrefab: {fileID: 2187027633415355129, guid: 09991eeead63ed24e8756183ac376e76, type: 3}
+  UnitPrefab: {fileID: 5984570235343405919, guid: b9b697ddf1d6a8d4fbdd1c3e4ba5e179, type: 3}

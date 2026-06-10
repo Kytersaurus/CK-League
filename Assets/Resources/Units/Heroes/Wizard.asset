@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Wizard
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableUnit
   Faction: 0
-  UnitPrefab: {fileID: 3478506273195455071, guid: d79f60a5e0a0f314aaab775622716034, type: 3}
+  UnitPrefab: {fileID: 8842051701527593582, guid: 1b1c65a84ba86814fbb5fec5a5cef7c9, type: 3}
