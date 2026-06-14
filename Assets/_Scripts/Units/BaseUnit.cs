@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class BaseUnit : MonoBehaviour
@@ -6,7 +7,10 @@ public class BaseUnit : MonoBehaviour
     public Faction Faction;
     public int maxHealth = 100;
     public int CurrentHealth;
-    public int AttackRange, AttackPower;
+    public int AttackRange, AttackPower, AttackSpeed;
+    public AttackPhaseAction Action = AttackPhaseAction.Attack;
+    public bool Alive = true;
+    //public List<BaseUnit> ValidTargets;
    
     public healthbarScript healthBar;
     
@@ -30,14 +34,33 @@ public class BaseUnit : MonoBehaviour
         else
         {
             healthBar.setHealth(CurrentHealth);
-            UnitManager.Instance.SetSelectedHero(null);
             GameManager.Instance.UpdateGameState(GameState.MovementPhase);
         }
+        UnitManager.Instance.DeselectHero();
     }
 
     public void Attack(BaseUnit defendingUnit)
     {
-        defendingUnit.TakeDamage(AttackPower);
+        float counterAttackChance = 0.5f;
+        if(defendingUnit.Action == AttackPhaseAction.Attack)
+        {
+            if(AttackSpeed >= defendingUnit.AttackSpeed)
+            {
+                defendingUnit.TakeDamage(AttackPower);
+                if(defendingUnit.Alive && UnitManager.Instance.InAttackRange(defendingUnit, this) && Random.value < counterAttackChance)
+                {
+                    this.TakeDamage(defendingUnit.AttackPower);
+                }
+            }
+            else
+            {
+                this.TakeDamage(defendingUnit.AttackPower);
+                if(this.Alive && UnitManager.Instance.InAttackRange(this, defendingUnit) && Random.value < counterAttackChance)
+                {
+                    defendingUnit.TakeDamage(AttackPower);
+                }
+            }
+        }
     }
 
     public void healHealth (int healAmount)
@@ -53,4 +76,11 @@ public class BaseUnit : MonoBehaviour
         healthBar.setHealth(CurrentHealth);
     }
     
+}
+
+public enum AttackPhaseAction
+{
+    Attack,
+    Block,
+    Dodge
 }

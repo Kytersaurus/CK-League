@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    //[SerializeField] private BaseUnit Enemy, Hero;
     public static UnitManager Instance;
 
-    private List<ScriptableUnit> _units, _heroes, _enemies;
-    private List<BaseUnit> _heroesLeft = new List<BaseUnit>();
-    private List<BaseUnit> _enemiesLeft = new List<BaseUnit>();
+    private List<ScriptableUnit> _units, _heroes;
+    private List<BaseUnit> _remainingHeroes = new List<BaseUnit>();
+    private List<BaseUnit> _remainingEnemies = new List<BaseUnit>();
+    private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
 
     public BaseHero SelectedHero;
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
@@ -19,17 +19,20 @@ public class UnitManager : MonoBehaviour
 
         _units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
         _heroes = _units.Where(u=>u.Faction == Faction.Hero).ToList();
-        _enemies = _units.Where(u=>u.Faction == Faction.Enemy).ToList();
     }
 
     public void SpawnEnemies()
     {
-        foreach(ScriptableUnit enemy in _enemies)
+        foreach(ScriptableUnit unit in _units)
         {
-            var spawnedEnemy = Instantiate(enemy.UnitPrefab);
-            var spawnTile = GridManager.Instance.GetEnemySpawnTile();
-            spawnTile.SetUnit(spawnedEnemy);
-            _enemiesLeft.Add(spawnedEnemy);
+            if(unit.Faction == Faction.Enemy)
+            {
+                var spawnedEnemy = Instantiate(unit.UnitPrefab);
+                var spawnTile = GridManager.Instance.GetEnemySpawnTile();
+                spawnTile.SetUnit(spawnedEnemy);
+                _remainingEnemies.Add(spawnedEnemy);
+                _remainingUnits.Add(spawnedEnemy);
+            }
         }
 
         GameManager.Instance.UpdateGameState(GameState.SpawnHeroes);
@@ -39,49 +42,66 @@ public class UnitManager : MonoBehaviour
     {
         var spawnedHero = Instantiate(_heroes[0].UnitPrefab);
         spawnTile.SetUnit(spawnedHero);
-        _heroesLeft.Add(spawnedHero);
+        _remainingHeroes.Add(spawnedHero);
+        _remainingUnits.Add(spawnedHero);
     }
 
     public void SetSelectedHero(BaseHero hero)
     {
-        foreach (Tile tile in ReachableTiles)
-        {
-            tile._highlight.SetActive(false);
-        }
-        ReachableTiles.Clear();
-
         SelectedHero = hero;
 
         if (hero == null)
         {
             return;
         }
+        if(GameManager.Instance.State == GameState.MovementPhase)
+        {
+            ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
+            foreach (Tile tile in ReachableTiles)
+            {
+                tile._highlight.SetActive(true);
+            }
+        }
+        else if(GameManager.Instance.State == GameState.AttackPhase)
+        {
+            var targetList = FindAllAttackTargets(hero);
+            foreach(BaseUnit enemy in targetList)
+            {
+                //enemy.OccupiedTile._highlight.SetActive(true);
+            }
+        }
+    }
 
-        ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
+    public void DeselectHero()
+    {
+        SetSelectedHero(null);
+
         foreach (Tile tile in ReachableTiles)
         {
-            tile._highlight.SetActive(true);
+            tile._highlight.SetActive(false);
         }
+        ReachableTiles.Clear();
     }
 
     public void KillUnit(BaseUnit unit)
     {
         if(unit.Faction == Faction.Hero)
         {
-            _heroesLeft.Remove(unit);
-            if(_heroesLeft.Count == 0)
+            _remainingHeroes.Remove(unit);
+            if(_remainingHeroes.Count == 0)
                 GameManager.Instance.UpdateGameState(GameState.Defeat);
             else
                 GameManager.Instance.UpdateGameState(GameState.MovementPhase);
         }
         else
         {
-            _enemiesLeft.Remove(unit);
-            if(_enemiesLeft.Count == 0)
+            _remainingEnemies.Remove(unit);
+            if(_remainingEnemies.Count == 0)
                 GameManager.Instance.UpdateGameState(GameState.Victory);
             else
                 GameManager.Instance.UpdateGameState(GameState.MovementPhase);
         }
+        unit.Alive = false;
         Destroy(unit.gameObject);
     }
 
@@ -92,11 +112,33 @@ public class UnitManager : MonoBehaviour
         return attackingUnit.AttackRange >= (horizontalDistance + verticalDistance);
     }
 
+    private List<BaseUnit> FindAllAttackTargets(BaseUnit unit)
+    {
+        var validTargets = new List<BaseUnit>();
+        if(unit.Faction == Faction.Hero){
+            foreach(BaseUnit enemy in _remainingEnemies)
+            {
+                if(InAttackRange(unit, enemy))
+                    validTargets.Add(enemy);
+            }
+        }
+        else
+        {
+            foreach(BaseUnit hero in _remainingHeroes)
+            {
+                if(InAttackRange(unit, hero))
+                    validTargets.Add(hero);
+            }
+            
+        }
+        return validTargets;
+    }
+
     public bool SkipAttackPhase()
     {
-        foreach(BaseUnit hero in _heroesLeft)
+        foreach(BaseUnit hero in _remainingHeroes)
         {
-            foreach(BaseUnit enemy in _enemiesLeft)
+            foreach(BaseUnit enemy in _remainingEnemies)
             {
                 if(InAttackRange(hero, enemy) || InAttackRange(enemy, hero))
                     return false;
