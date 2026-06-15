@@ -214,6 +214,12 @@ MonoBehaviour:
   CurrentHealth: 100
   AttackRange: 3
   healthBar: {fileID: 2743834586076405301}
+  moveSet:
+  - {fileID: 11400000, guid: 400f42836c41bc647935c9f35a0a5f2d, type: 2}
+  - {fileID: 11400000, guid: f5388790c205c4a41a5d7dec7d6fedad, type: 2}
+  - {fileID: 11400000, guid: a63f3e48fff761a4792a86e023cb8322, type: 2}
+  - {fileID: 11400000, guid: 9487483c11814c84e98168db2d48ff8d, type: 2}
+  unitIcon: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
   moveRange: 5
 --- !u!1001 &240034667750404394
 PrefabInstance:

@@ -139,9 +139,9 @@ public class Tile : MonoBehaviour
                 }
                 else
                 {
-                    UnitManager.Instance.SetSelectedHero(null);
                     GameManager.Instance.UpdateGameState(GameState.MovementPhase);
                 }
+                UnitManager.Instance.SetSelectedHero(null);
             }
         }
     }

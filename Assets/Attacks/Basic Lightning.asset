@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: Basic Lightning
+  m_EditorClassIdentifier: Assembly-CSharp::BasicLightningAttack
+  attackName: Basic Lightning Spell
+  damage: 40
+  aoeDamage: 0
+  healAmount: 0
+  range: 3
+  aoeRange: 0
+  icon: {fileID: -4664471186202462783, guid: 3b2ae7e9f9bff4d4c8d26e161a7554b0, type: 3}
