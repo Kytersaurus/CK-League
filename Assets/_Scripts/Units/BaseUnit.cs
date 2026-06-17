@@ -10,7 +10,7 @@ public class BaseUnit : MonoBehaviour
     public int AttackRange, AttackPower, AttackSpeed;
     public AttackPhaseAction Action = AttackPhaseAction.Attack;
     public bool Alive = true;
-    //public List<BaseUnit> ValidTargets;
+    public List<BaseUnit> ValidTargets = new List<BaseUnit>();
    
     public healthbarScript healthBar;
     

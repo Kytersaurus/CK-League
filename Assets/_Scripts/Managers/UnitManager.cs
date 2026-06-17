@@ -64,23 +64,27 @@ public class UnitManager : MonoBehaviour
         }
         else if(GameManager.Instance.State == GameState.AttackPhase)
         {
-            var targetList = FindAllAttackTargets(hero);
+            var targetList = hero.ValidTargets;
             foreach(BaseUnit enemy in targetList)
             {
-                //enemy.OccupiedTile._highlight.SetActive(true);
+                enemy.OccupiedTile._highlight.SetActive(true);
             }
         }
     }
 
     public void DeselectHero()
     {
-        SetSelectedHero(null);
-
         foreach (Tile tile in ReachableTiles)
         {
             tile._highlight.SetActive(false);
         }
         ReachableTiles.Clear();
+        var targetList = SelectedHero.ValidTargets;
+        foreach(BaseUnit enemy in targetList)
+        {
+            enemy.OccupiedTile._highlight.SetActive(false);
+        }
+        SetSelectedHero(null);
     }
 
     public void KillUnit(BaseUnit unit)
@@ -101,6 +105,7 @@ public class UnitManager : MonoBehaviour
             else
                 GameManager.Instance.UpdateGameState(GameState.MovementPhase);
         }
+        _remainingUnits.Remove(unit);
         unit.Alive = false;
         Destroy(unit.gameObject);
     }
@@ -132,6 +137,15 @@ public class UnitManager : MonoBehaviour
             
         }
         return validTargets;
+    }
+
+    public void UpdateAllTargetLists()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            unit.ValidTargets.Clear();
+            unit.ValidTargets = FindAllAttackTargets(unit);
+        }
     }
 
     public bool SkipAttackPhase()

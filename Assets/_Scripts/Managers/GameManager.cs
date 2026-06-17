@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             case GameState.MovementPhase:
                 break;
             case GameState.AttackPhase:
-                
+                UnitManager.Instance.UpdateAllTargetLists();
                 break;
             case GameState.Victory:
                 //HandleVictory();
