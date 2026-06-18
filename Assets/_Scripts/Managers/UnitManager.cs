@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Clrain.Collections;
 using UnityEngine;
 
 public class UnitManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class UnitManager : MonoBehaviour
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
 
     public BaseHero SelectedHero;
+    private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>();
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
     void Awake()
     {
@@ -92,22 +94,32 @@ public class UnitManager : MonoBehaviour
         if(unit.Faction == Faction.Hero)
         {
             _remainingHeroes.Remove(unit);
-            if(_remainingHeroes.Count == 0)
+            /*if(_remainingHeroes.Count == 0)
                 GameManager.Instance.UpdateGameState(GameState.Defeat);
             else
-                GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+                GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
         }
         else
         {
             _remainingEnemies.Remove(unit);
-            if(_remainingEnemies.Count == 0)
+            /*if(_remainingEnemies.Count == 0)
                 GameManager.Instance.UpdateGameState(GameState.Victory);
             else
-                GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+                GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
         }
         _remainingUnits.Remove(unit);
         unit.Alive = false;
         Destroy(unit.gameObject);
+    }
+
+    public bool IsVictory()
+    {
+        return _remainingEnemies.Count == 0;
+    }
+
+    public bool IsDefeat()
+    {
+        return _remainingHeroes.Count == 0;
     }
 
     public bool InAttackRange(BaseUnit attackingUnit, BaseUnit defendingUnit)
@@ -159,6 +171,34 @@ public class UnitManager : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void ExecuteAllActions()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            if(unit.Action == AttackPhaseAction.Attack && unit.Target != null)
+            {
+                _actionQueue.Enqueue(unit, unit.AttackSpeed);
+            }
+        }
+
+        while(_actionQueue.Count > 0)
+        {
+            var unit = _actionQueue.Dequeue();
+            if (unit.Alive)
+            {
+                unit.Attack(unit.Target);
+            }
+        }
+    }
+
+    public void ResetAllTargets()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            unit.Target = null;
+        }
     }
 
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit

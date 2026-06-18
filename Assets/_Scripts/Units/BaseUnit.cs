@@ -11,6 +11,7 @@ public class BaseUnit : MonoBehaviour
     public AttackPhaseAction Action = AttackPhaseAction.Attack;
     public bool Alive = true;
     public List<BaseUnit> ValidTargets = new List<BaseUnit>();
+    public BaseUnit Target;
    
     public healthbarScript healthBar;
     
@@ -34,14 +35,15 @@ public class BaseUnit : MonoBehaviour
         else
         {
             healthBar.setHealth(CurrentHealth);
-            GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+            //GameManager.Instance.UpdateGameState(GameState.MovementPhase);
         }
         UnitManager.Instance.DeselectHero();
     }
 
     public void Attack(BaseUnit defendingUnit)
     {
-        float counterAttackChance = 0.5f;
+        defendingUnit.TakeDamage(AttackPower);
+        /*float counterAttackChance = 0.5f;
         if(defendingUnit.Action == AttackPhaseAction.Attack)
         {
             if(AttackSpeed >= defendingUnit.AttackSpeed)
@@ -60,7 +62,7 @@ public class BaseUnit : MonoBehaviour
                     defendingUnit.TakeDamage(AttackPower);
                 }
             }
-        }
+        }*/
     }
 
     public void healHealth (int healAmount)
