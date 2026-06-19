@@ -78,7 +78,7 @@ public class Tile : MonoBehaviour
             {
                 _highlightSelect.SetActive(true);    
             }
-            else if (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero)
+            else if (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero && UnitManager.Instance.SelectedHero == null)
             {
                 _highlightSelect.SetActive(true);    
             }
@@ -86,6 +86,10 @@ public class Tile : MonoBehaviour
             {
                 _highlightError.SetActive(true);
             }
+        }
+        else
+        {
+            return;
         }
     }
     void OnMouseExit()
@@ -127,11 +131,12 @@ public class Tile : MonoBehaviour
         {
             if(OccupiedUnit.Faction == Faction.Hero)
             {
-                UnitManager.Instance.SelectedHero = (BaseHero)OccupiedUnit;
+                UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
             }
-            else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit))
+            else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit) && UnitManager.Instance.SelectedHero.SelectedAttack != null)
             {
-                OccupiedUnit.TakeDamage(50);
+                UnitManager.Instance.SelectedHero.SelectedAttack.Execute(UnitManager.Instance.SelectedHero, OccupiedUnit);
+                UnitManager.Instance.SelectedHero.SelectedAttack = null;
                 if(OccupiedUnit.CurrentHealth <= 0)
                 {
                     UnitManager.Instance.KillUnit(OccupiedUnit);

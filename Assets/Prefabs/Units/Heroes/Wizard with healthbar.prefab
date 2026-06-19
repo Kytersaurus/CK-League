@@ -215,12 +215,15 @@ MonoBehaviour:
   AttackRange: 3
   healthBar: {fileID: 2743834586076405301}
   moveSet:
-  - {fileID: 11400000, guid: 400f42836c41bc647935c9f35a0a5f2d, type: 2}
-  - {fileID: 11400000, guid: f5388790c205c4a41a5d7dec7d6fedad, type: 2}
-  - {fileID: 11400000, guid: a63f3e48fff761a4792a86e023cb8322, type: 2}
-  - {fileID: 11400000, guid: 9487483c11814c84e98168db2d48ff8d, type: 2}
-  unitIcon: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
+  - {fileID: 11400000, guid: 509b6a188c187ec4ebd262e635bd35c1, type: 2}
+  - {fileID: 11400000, guid: 694c893fb0822fa4caabe93c974e238b, type: 2}
+  - {fileID: 11400000, guid: 53a8ad70b3ada4c4f92b8d4e66e74d50, type: 2}
+  - {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
+  UnitIcon: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
+  SelectedAttack: {fileID: 0}
+  UnitDescription: This is a wizard
   moveRange: 5
+  attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
 --- !u!1001 &240034667750404394
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -303,11 +306,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -0.02
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -0.12
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

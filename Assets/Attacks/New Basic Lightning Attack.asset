@@ -9,13 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Basic Lightning
+  m_Script: {fileID: 11500000, guid: 6271b5efa7c805341ab685af600b8af3, type: 3}
+  m_Name: New Basic Lightning Attack
   m_EditorClassIdentifier: Assembly-CSharp::BasicLightningAttack
   attackName: Basic Lightning Spell
   damage: 40
-  aoeDamage: 0
-  healAmount: 0
-  range: 3
-  aoeRange: 0
+  range: 0
   icon: {fileID: -4664471186202462783, guid: 3b2ae7e9f9bff4d4c8d26e161a7554b0, type: 3}

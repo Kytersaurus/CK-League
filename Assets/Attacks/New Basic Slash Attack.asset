@@ -9,13 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Basic Slash
+  m_Script: {fileID: 11500000, guid: a896aa9e3b4565c46b4607a59ac60296, type: 3}
+  m_Name: New Basic Slash Attack
   m_EditorClassIdentifier: Assembly-CSharp::BasicSlashAttack
-  attackName: Basic Slash Melee
+  attackName: Basic Slash Attack
   damage: 10
-  aoeDamage: 0
-  healAmount: 0
   range: 0
-  aoeRange: 0
   icon: {fileID: -5696639355708230901, guid: bbe42ce29b0d676409c6b94259c27d2a, type: 3}

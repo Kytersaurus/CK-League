@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: Basic Heal
+  m_Script: {fileID: 11500000, guid: 8aaaf2baa43a4f24ba5a3da99ed404cf, type: 3}
+  m_Name: New Basic Heal
   m_EditorClassIdentifier: Assembly-CSharp::BasicHeal
   attackName: Basic Heal Spell
   damage: 0
-  aoeDamage: 0
-  healAmount: 10
   range: 0
-  aoeRange: 0
   icon: {fileID: -7125717687315017858, guid: 6781b6e08d08912409e53ca2f3c5455c, type: 3}
+  healAmount: 20
