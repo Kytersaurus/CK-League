@@ -121,7 +121,7 @@ public class Tile : MonoBehaviour
             else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
                 SetUnit(UnitManager.Instance.SelectedHero);
-                UnitManager.Instance.SetSelectedHero(null);
+                UnitManager.Instance.DeselectHero();
                 if(!UnitManager.Instance.SkipAttackPhase())
                     GameManager.Instance.UpdateGameState(GameState.AttackPhase);
             }
@@ -147,6 +147,8 @@ public class Tile : MonoBehaviour
                     GameManager.Instance.UpdateGameState(GameState.MovementPhase);
                 }
                 UnitManager.Instance.SetSelectedHero(null);
+                UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
+                UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);
             }
         }
     }

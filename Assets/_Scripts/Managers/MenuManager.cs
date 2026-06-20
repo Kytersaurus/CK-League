@@ -41,4 +41,5 @@ public class MenuManager : MonoBehaviour
         _showPhaseObject.GetComponentInChildren<TextMeshProUGUI>().text = phaseName;
         _showPhaseObject.SetActive(true);
     }
+
 }

@@ -36,7 +36,10 @@ public class GameManager : MonoBehaviour
             case GameState.MovementPhase:
                 break;
             case GameState.AttackPhase:
-                
+                UnitManager.Instance.UpdateAllTargetLists();
+                UnitManager.Instance.ResetAllTargets();
+                UnitManager.Instance.SetEnemyAttacks();
+                EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.Victory:
                 //HandleVictory();

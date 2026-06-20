@@ -113,7 +113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7936564632459670178}
   - component: {fileID: 5135173484745426493}
-  - component: {fileID: 8842051701527593582}
+  - component: {fileID: 7637416815247104811}
   m_Layer: 0
   m_Name: Wizard with healthbar
   m_TagString: Untagged
@@ -196,7 +196,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &8842051701527593582
+--- !u!114 &7637416815247104811
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,14 +205,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6970510293019159674}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25427335ac97cca4a9f4de3f3870cad8, type: 3}
+  m_Script: {fileID: 11500000, guid: a146e69c821fcfc498555736f53ccf42, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Wizard
+  m_EditorClassIdentifier: Assembly-CSharp::BaseMage
   OccupiedTile: {fileID: 0}
   Faction: 0
   maxHealth: 100
-  CurrentHealth: 100
-  AttackRange: 3
+  CurrentHealth: 0
+  AttackRange: 0
+  AttackPower: 0
+  AttackSpeed: 0
+  Action: 0
+  Alive: 1
+  TargetsList: []
+  Target: {fileID: 0}
   healthBar: {fileID: 2743834586076405301}
   moveSet:
   - {fileID: 11400000, guid: 509b6a188c187ec4ebd262e635bd35c1, type: 2}

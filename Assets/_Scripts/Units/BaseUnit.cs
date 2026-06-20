@@ -7,8 +7,12 @@ public class BaseUnit : MonoBehaviour
     public Tile OccupiedTile;
     public Faction Faction;
     public int maxHealth = 100;
-    public int CurrentHealth;
-    public int AttackRange;
+    public int CurrentHealth, AttackRange, AttackPower, AttackSpeed;
+    public AttackPhaseAction Action = AttackPhaseAction.Attack;
+    public bool Alive = true;
+    public List<BaseUnit> TargetsList = new List<BaseUnit>();
+    public BaseUnit Target;
+   
     public healthbarScript healthBar;
     public List<Attacks> moveSet = new List<Attacks>();
     public Sprite UnitIcon;
@@ -25,17 +29,43 @@ public class BaseUnit : MonoBehaviour
     
     public void TakeDamage (int damage)
     {
-        if (CurrentHealth >= damage)
+        CurrentHealth -= damage;
+        if(CurrentHealth <= 0)
         {
-            CurrentHealth -= damage;
-            healthBar.setHealth(CurrentHealth);
+            CurrentHealth = 0;
+            UnitManager.Instance.KillUnit(this);
         }
         else
         {
-            CurrentHealth = 0;
             healthBar.setHealth(CurrentHealth);
         }
     }
+
+    public void Attack(BaseUnit defendingUnit)
+    {
+        defendingUnit.TakeDamage(AttackPower);
+        /*float counterAttackChance = 0.5f;
+        if(defendingUnit.Action == AttackPhaseAction.Attack)
+        {
+            if(AttackSpeed >= defendingUnit.AttackSpeed)
+            {
+                defendingUnit.TakeDamage(AttackPower);
+                if(defendingUnit.Alive && UnitManager.Instance.InAttackRange(defendingUnit, this) && Random.value < counterAttackChance)
+                {
+                    this.TakeDamage(defendingUnit.AttackPower);
+                }
+            }
+            else
+            {
+                this.TakeDamage(defendingUnit.AttackPower);
+                if(this.Alive && UnitManager.Instance.InAttackRange(this, defendingUnit) && Random.value < counterAttackChance)
+                {
+                    defendingUnit.TakeDamage(AttackPower);
+                }
+            }
+        }*/
+    }
+
     public void HealHealth (int healAmount)
     {
         if (CurrentHealth + healAmount < maxHealth)
@@ -48,5 +78,18 @@ public class BaseUnit : MonoBehaviour
         }
         healthBar.setHealth(CurrentHealth);
     }
+
+    public void SetTarget(BaseUnit targetUnit)
+    {
+        Target = targetUnit;
+        UnitManager.Instance.DeselectHero();
+    }
     
+}
+
+public enum AttackPhaseAction
+{
+    Attack,
+    Block,
+    Dodge
 }
