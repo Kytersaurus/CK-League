@@ -1,15 +1,15 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BaseMage : BaseHero
+public class BaseArcher : BaseHero
 {
     public void Start()
     {
-        maxHealth -= 50;
-        AttackPower = 70;
+        maxHealth -= 30;
+        AttackPower = 60;
         AttackSpeed = 3;
         AttackRange = 3;
-        moveRange = 1;
+        moveRange = 2;
     }
-
+    
 }

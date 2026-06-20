@@ -6,8 +6,7 @@ public class BaseUnit : MonoBehaviour
     public Tile OccupiedTile;
     public Faction Faction;
     public int maxHealth = 100;
-    public int CurrentHealth;
-    public int AttackRange, AttackPower, AttackSpeed;
+    public int CurrentHealth, AttackRange, AttackPower, AttackSpeed;
     public AttackPhaseAction Action = AttackPhaseAction.Attack;
     public bool Alive = true;
     public List<BaseUnit> TargetsList = new List<BaseUnit>();
