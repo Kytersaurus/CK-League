@@ -10,5 +10,6 @@ public abstract class Attacks : ScriptableObject
     public virtual void Execute(BaseUnit attacker, BaseUnit target)//Default attacking function for all attacks, overide if neccessary
     {
         target.TakeDamage(damage);
+        attacker.SelectedAttack = null;
     }
 }

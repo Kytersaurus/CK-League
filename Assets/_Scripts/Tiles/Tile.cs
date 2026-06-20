@@ -135,7 +135,7 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit) && UnitManager.Instance.SelectedHero.SelectedAttack != null)
             {
-                UnitManager.Instance.SelectedHero.SelectedAttack.Execute(UnitManager.Instance.SelectedHero, OccupiedUnit);
+                /*UnitManager.Instance.SelectedHero.SelectedAttack.Execute(UnitManager.Instance.SelectedHero, OccupiedUnit);
                 UnitManager.Instance.SelectedHero.SelectedAttack = null;
                 if(OccupiedUnit.CurrentHealth <= 0)
                 {
@@ -146,7 +146,7 @@ public class Tile : MonoBehaviour
                 {
                     GameManager.Instance.UpdateGameState(GameState.MovementPhase);
                 }
-                UnitManager.Instance.SetSelectedHero(null);
+                UnitManager.Instance.SetSelectedHero(null);*/
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
                 UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);
             }

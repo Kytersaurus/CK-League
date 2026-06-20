@@ -223,7 +223,8 @@ public class UnitManager : MonoBehaviour
             var unit = _actionQueue.Dequeue();
             if (unit.Alive)
             {
-                unit.Attack(unit.Target);
+                unit.SelectedAttack.Execute(unit, unit.Target);
+                unit.SelectedAttack = null;
             }
         }
     }
