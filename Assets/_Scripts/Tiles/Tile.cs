@@ -131,9 +131,8 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit))
             {
-                //UnitManager.Instance.SelectedHero.Attack(OccupiedUnit);
-                UnitManager.Instance.SelectedHero.Target = OccupiedUnit;
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
+                UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);
             }
         }
     }

@@ -634,6 +634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 837927412}
   - component: {fileID: 837927413}
+  - component: {fileID: 837927414}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -669,6 +670,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuManager
   _showPhaseObject: {fileID: 887558695}
+--- !u!114 &837927414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 837927411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 808b689855aa4c34893f1f02e00fcba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EndTurnButton
+  _endTurnButton: {fileID: 1190197705}
 --- !u!1 &887558695
 GameObject:
   m_ObjectHideFlags: 0
@@ -985,14 +999,13 @@ GameObject:
   - component: {fileID: 1190197707}
   - component: {fileID: 1190197706}
   - component: {fileID: 1190197705}
-  - component: {fileID: 1190197708}
   m_Layer: 5
   m_Name: EndTurnButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1190197704
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1057,7 +1070,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1190197708}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: EndTurnButton, Assembly-CSharp
         m_MethodName: EndTurn
         m_Mode: 1
@@ -1068,7 +1081,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &1190197706
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1107,18 +1120,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1190197703}
   m_CullTransparentMesh: 1
---- !u!114 &1190197708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1190197703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 808b689855aa4c34893f1f02e00fcba3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EndTurnButton
 --- !u!1 &1528198254
 GameObject:
   m_ObjectHideFlags: 0

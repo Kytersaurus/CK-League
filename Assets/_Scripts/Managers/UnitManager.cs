@@ -13,7 +13,7 @@ public class UnitManager : MonoBehaviour
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
 
     public BaseHero SelectedHero;
-    private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>();
+    private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
     void Awake()
     {
@@ -66,7 +66,7 @@ public class UnitManager : MonoBehaviour
         }
         else if(GameManager.Instance.State == GameState.AttackPhase)
         {
-            var targetList = hero.ValidTargets;
+            var targetList = hero.TargetsList;
             foreach(BaseUnit enemy in targetList)
             {
                 enemy.OccupiedTile._highlight.SetActive(true);
@@ -81,7 +81,7 @@ public class UnitManager : MonoBehaviour
             tile._highlight.SetActive(false);
         }
         ReachableTiles.Clear();
-        var targetList = SelectedHero.ValidTargets;
+        var targetList = SelectedHero.TargetsList;
         foreach(BaseUnit enemy in targetList)
         {
             enemy.OccupiedTile._highlight.SetActive(false);
@@ -131,12 +131,12 @@ public class UnitManager : MonoBehaviour
 
     private List<BaseUnit> FindAllAttackTargets(BaseUnit unit)
     {
-        var validTargets = new List<BaseUnit>();
+        var targetsList = new List<BaseUnit>();
         if(unit.Faction == Faction.Hero){
             foreach(BaseUnit enemy in _remainingEnemies)
             {
                 if(InAttackRange(unit, enemy))
-                    validTargets.Add(enemy);
+                    targetsList.Add(enemy);
             }
         }
         else
@@ -144,19 +144,19 @@ public class UnitManager : MonoBehaviour
             foreach(BaseUnit hero in _remainingHeroes)
             {
                 if(InAttackRange(unit, hero))
-                    validTargets.Add(hero);
+                    targetsList.Add(hero);
             }
             
         }
-        return validTargets;
+        return targetsList;
     }
 
     public void UpdateAllTargetLists()
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
-            unit.ValidTargets.Clear();
-            unit.ValidTargets = FindAllAttackTargets(unit);
+            unit.TargetsList.Clear();
+            unit.TargetsList = FindAllAttackTargets(unit);
         }
     }
 
@@ -171,6 +171,18 @@ public class UnitManager : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void SetEnemyAttacks()
+    {
+        foreach(BaseUnit enemy in _remainingEnemies)
+        {
+            enemy.Action = AttackPhaseAction.Attack;
+            if(enemy.TargetsList.Count > 0)
+            {
+                enemy.Target = enemy.TargetsList.OrderBy(o=>Random.value).First();
+            }
+        }
     }
 
     public void ExecuteAllActions()
