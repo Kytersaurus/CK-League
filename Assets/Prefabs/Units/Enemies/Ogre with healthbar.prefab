@@ -114,6 +114,10 @@ MonoBehaviour:
   AttackSpeed: 1
   Action: 0
   healthBar: {fileID: 5543288751080440739}
+  moveSet: []
+  UnitIcon: {fileID: 0}
+  SelectedAttack: {fileID: 0}
+  UnitDescription: 
 --- !u!1 &2762809049444436295
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,11 +303,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 7.1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 13.7
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

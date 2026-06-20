@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using Clrain.Collections;
 using UnityEngine;
@@ -15,6 +16,8 @@ public class UnitManager : MonoBehaviour
     public BaseHero SelectedHero;
     private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
+    private GameObject _attackBar;
+    [SerializeField] private Canvas _canvas;
     void Awake()
     {
         Instance = this;
@@ -54,8 +57,28 @@ public class UnitManager : MonoBehaviour
 
         if (hero == null)
         {
+            if (_attackBar != null)
+            {
+                Destroy(_attackBar);
+            }
             return;
         }
+        if (GameManager.Instance.State == GameState.AttackPhase)
+        {
+            _attackBar = Instantiate(hero.attackToolBar, _canvas.transform);
+            RectTransform rect = _attackBar.GetComponent<RectTransform>();
+            int yTransform = SelectedHero.OccupiedTile.gridPos.y < 3 ? 145 : -225; 
+            rect.anchoredPosition = new Vector2(0, yTransform);
+        }   
+        if (GameManager.Instance.State == GameState.MovementPhase)
+        {
+            ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
+            foreach (Tile tile in ReachableTiles)
+            {
+                tile._highlight.SetActive(true);
+            }    
+        }
+        
         if(GameManager.Instance.State == GameState.MovementPhase)
         {
             ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a896aa9e3b4565c46b4607a59ac60296, type: 3}
+  m_Name: New Basic Slash Attack
+  m_EditorClassIdentifier: Assembly-CSharp::BasicSlashAttack
+  attackName: Basic Slash Attack
+  damage: 10
+  range: 0
+  icon: {fileID: -5696639355708230901, guid: bbe42ce29b0d676409c6b94259c27d2a, type: 3}

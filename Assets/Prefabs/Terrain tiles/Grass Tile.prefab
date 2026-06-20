@@ -255,6 +255,7 @@ MonoBehaviour:
   _movementCost: 1
   _tileType: 0
   _tileVariant: 0
+  _attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
   OccupiedUnit: {fileID: 0}
 --- !u!1 &1062581401193619028
 GameObject:

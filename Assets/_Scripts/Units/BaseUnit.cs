@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,7 +14,10 @@ public class BaseUnit : MonoBehaviour
     public BaseUnit Target;
    
     public healthbarScript healthBar;
-    
+    public List<Attacks> moveSet = new List<Attacks>();
+    public Sprite UnitIcon;
+    public Attacks SelectedAttack;
+    public string UnitDescription;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -62,7 +66,7 @@ public class BaseUnit : MonoBehaviour
         }*/
     }
 
-    public void healHealth (int healAmount)
+    public void HealHealth (int healAmount)
     {
         if (CurrentHealth + healAmount < maxHealth)
         {
