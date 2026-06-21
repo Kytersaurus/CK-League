@@ -17,6 +17,7 @@ public class UnitManager : MonoBehaviour
     private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
     private GameObject _attackBar;
+    public bool IsAttackBarActive => _attackBar != null;
     [SerializeField] private Canvas _canvas;
     void Awake()
     {

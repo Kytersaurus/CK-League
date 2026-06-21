@@ -210,11 +210,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BaseMage
   OccupiedTile: {fileID: 0}
   Faction: 0
-  maxHealth: 100
-  CurrentHealth: 0
-  AttackRange: 0
-  AttackPower: 0
-  AttackSpeed: 0
   Action: 0
   Alive: 1
   TargetsList: []
@@ -228,7 +223,12 @@ MonoBehaviour:
   UnitIcon: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
   SelectedAttack: {fileID: 0}
   UnitDescription: This is a wizard
-  moveRange: 5
+  maxHealth: 50
+  CurrentHealth: 0
+  AttackRange: 3
+  AttackPower: 70
+  AttackSpeed: 3
+  moveRange: 1
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
 --- !u!1001 &240034667750404394
 PrefabInstance:

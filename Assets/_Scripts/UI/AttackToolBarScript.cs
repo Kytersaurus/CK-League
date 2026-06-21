@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class AttackToolBarScript : MonoBehaviour
@@ -34,5 +35,9 @@ public class AttackToolBarScript : MonoBehaviour
     {
         _slider.value = _selectedUnit.CurrentHealth;
         _label.text = $"{_selectedUnit.CurrentHealth} / {_selectedUnit.maxHealth}";
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            UnitManager.Instance.SetSelectedHero(null);
+        }
     }
 }

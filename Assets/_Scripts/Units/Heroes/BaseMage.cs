@@ -5,11 +5,7 @@ public class BaseMage : BaseHero
 {
     public void Start()
     {
-        maxHealth -= 50;
-        AttackPower = 70;
-        AttackSpeed = 3;
-        AttackRange = 3;
-        moveRange = 1;
+       
     }
 
 }
