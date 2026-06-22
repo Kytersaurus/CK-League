@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class MenuManager : MonoBehaviour
 {
@@ -54,6 +55,25 @@ public class MenuManager : MonoBehaviour
             else
             {
                 _pauseMenu.SetActive(false);
+            }
+        }
+        if (GameManager.Instance.State == GameState.AttackPhase)
+        {
+            bool attacksValid = true;
+            foreach (var hero in UnitManager.Instance.GetRemainingHeroes())
+            {
+                if (hero.SelectedAttack == null || hero.Target == null)
+                {
+                    attacksValid = false;
+                }
+            }
+            if (attacksValid)
+            {
+                EndTurnButton.Instance.ActivateEndTurnButton();
+            }
+            else if (!attacksValid)
+            {
+                EndTurnButton.Instance.DeactivateEndTurnButton();
             }
         }
     }

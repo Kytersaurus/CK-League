@@ -15,6 +15,19 @@ public class AttackToolBarScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _label;
     void Awake()
     {
+        Refresh();
+    }
+    void Update()
+    {
+        _slider.value = _selectedUnit.CurrentHealth;
+        _label.text = $"{_selectedUnit.CurrentHealth} / {_selectedUnit.maxHealth}";
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            UnitManager.Instance.SetSelectedHero(null);
+        }
+    }
+    public void Refresh()
+    {
         _selectedUnit = UnitManager.Instance.SelectedHero;
         if (_selectedUnit == null)
         {
@@ -29,15 +42,6 @@ public class AttackToolBarScript : MonoBehaviour
             _attackButtonIcons[i].sprite = attacks[i].icon;
             var buttonScript = _attackButtons[i].GetComponent<AttackButtonScript>();
             buttonScript.attack = attacks[i];
-        }    
-    }
-    void Update()
-    {
-        _slider.value = _selectedUnit.CurrentHealth;
-        _label.text = $"{_selectedUnit.CurrentHealth} / {_selectedUnit.maxHealth}";
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            UnitManager.Instance.SetSelectedHero(null);
-        }
+        } 
     }
 }
