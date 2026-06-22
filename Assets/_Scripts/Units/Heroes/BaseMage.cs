@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class BaseMage : BaseHero
 {
-    public void Start()
+    void Start()
     {
-        maxHealth -= 50;
+        maxHealth = 50;
         AttackPower = 70;
         AttackSpeed = 3;
         AttackRange = 3;

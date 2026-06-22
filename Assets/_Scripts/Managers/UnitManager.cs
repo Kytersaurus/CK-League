@@ -201,6 +201,7 @@ public class UnitManager : MonoBehaviour
         foreach(BaseUnit enemy in _remainingEnemies)
         {
             enemy.Action = AttackPhaseAction.Attack;
+            enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>Random.value).First();
             if(enemy.TargetsList.Count > 0)
             {
                 enemy.Target = enemy.TargetsList.OrderBy(o=>Random.value).First();
