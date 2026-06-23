@@ -43,12 +43,20 @@ public class UnitManager : MonoBehaviour
         GameManager.Instance.UpdateGameState(GameState.SpawnHeroes);
     }
 
-    public void SpawnHeroes(Tile spawnTile)
+    public void SpawnHeroes()
     {
-        var spawnedHero = Instantiate(_heroes[0].UnitPrefab);
-        spawnTile.SetUnit(spawnedHero);
-        _remainingHeroes.Add(spawnedHero);
-        _remainingUnits.Add(spawnedHero);
+        foreach(ScriptableUnit unit in _units)
+        {
+            if(unit.Faction == Faction.Hero)
+            {
+                var spawnedHero = Instantiate(unit.UnitPrefab);
+                var spawnTile = GridManager.Instance.GetHeroSpawnTile();
+                spawnTile.SetUnit(spawnedHero);
+                _remainingHeroes.Add(spawnedHero);
+                _remainingUnits.Add(spawnedHero);
+            }
+        }
+        //GameManager.Instance.UpdateGameState(GameState.MovementPhase);
     }
 
     public void SetSelectedHero(BaseHero hero)

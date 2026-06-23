@@ -31,10 +31,11 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.SpawnEnemies();
                 break;
             case GameState.SpawnHeroes:
-                
+                UnitManager.Instance.SpawnHeroes();
+                EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.MovementPhase:
-            
+
                 break;
             case GameState.AttackPhase:
                 UnitManager.Instance.UpdateAllTargetLists();

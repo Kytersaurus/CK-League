@@ -24,8 +24,11 @@ public class EndTurnButton : MonoBehaviour
 
     public void EndTurn()
     {
-        //Debug.Log("Execute commands");
-        if(GameManager.Instance.State == GameState.AttackPhase)
+        if(GameManager.Instance.State == GameState.SpawnHeroes)
+        {
+            GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+        }
+        else if(GameManager.Instance.State == GameState.AttackPhase)
         {
             UnitManager.Instance.ExecuteAllActions();
             if (UnitManager.Instance.IsVictory())
