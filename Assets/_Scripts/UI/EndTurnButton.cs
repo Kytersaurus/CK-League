@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public class EndTurnButton : MonoBehaviour
     public static EndTurnButton Instance;
 
     [SerializeField] private Button _endTurnButton;
+    [SerializeField] private TextMeshProUGUI _text;
     void Awake()
     {
         Instance = this;
@@ -27,6 +29,7 @@ public class EndTurnButton : MonoBehaviour
         if(GameManager.Instance.State == GameState.SpawnHeroes)
         {
             GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+            ChangeText("End Turn");
         }
         else if(GameManager.Instance.State == GameState.AttackPhase)
         {
@@ -55,7 +58,6 @@ public class EndTurnButton : MonoBehaviour
 
         DeactivateEndTurnButton();
     }
-
     
     public void DeactivateEndTurnButton()
     {
@@ -65,5 +67,10 @@ public class EndTurnButton : MonoBehaviour
     public void ActivateEndTurnButton()
     {
         _endTurnButton.interactable = true;
+    }
+
+    public void ChangeText(string newText)
+    {
+        _text.text = newText;
     }
 }

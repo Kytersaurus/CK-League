@@ -32,10 +32,10 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.SpawnHeroes:
                 UnitManager.Instance.SpawnHeroes();
+                EndTurnButton.Instance.ChangeText("Start");
                 EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.MovementPhase:
-
                 break;
             case GameState.AttackPhase:
                 UnitManager.Instance.UpdateAllTargetLists();
