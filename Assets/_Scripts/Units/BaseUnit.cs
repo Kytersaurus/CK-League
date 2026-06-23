@@ -11,8 +11,7 @@ public class BaseUnit : MonoBehaviour
     public AttackPhaseAction Action = AttackPhaseAction.Attack;
     public bool Alive = true;
     public List<BaseUnit> TargetsList = new List<BaseUnit>();
-    public BaseUnit Target;
-   
+    public BaseUnit Target;   
     public healthbarScript healthBar;
     public List<Attacks> moveSet = new List<Attacks>();
     public Sprite UnitIcon;
@@ -22,11 +21,15 @@ public class BaseUnit : MonoBehaviour
 
     void Awake()
     {
-        maxHealth = 100;
+        /*maxHealth = 100;
         CurrentHealth = maxHealth;
+        healthBar.setMaxHealth(maxHealth);*/
+    }
+    public void InitializeHealth(int health)
+    {
+        CurrentHealth = health;
         healthBar.setMaxHealth(maxHealth);
     }
-    
     public void TakeDamage (int damage)
     {
         CurrentHealth -= damage;
