@@ -230,12 +230,48 @@ public class UnitManager : MonoBehaviour
         }
     }
 
+    public bool AllAttacksSelected()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            if(unit.TargetsList.Count != 0 && unit.Target == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void ResetAllTargets()
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
             unit.Target = null;
         }
+    }
+
+    public void ExecuteAllMovements()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            if(unit.DestinationTile != null)
+            {
+                unit.DestinationTile.SetUnit(unit);
+            }
+        }
+        
+    }
+
+    public bool AllMovementsSelected()
+    {
+        foreach(BaseUnit unit in _remainingHeroes)
+        {
+            if(unit.DestinationTile == null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit

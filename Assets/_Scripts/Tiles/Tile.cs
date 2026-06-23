@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum TileType
@@ -120,10 +121,15 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
-                SetUnit(UnitManager.Instance.SelectedHero);
+                UnitManager.Instance.SelectedHero.SetDestination(this);
+                if (UnitManager.Instance.AllMovementsSelected())
+                {
+                    EndTurnButton.Instance.ActivateEndTurnButton();
+                }
+                /*SetUnit(UnitManager.Instance.SelectedHero);
                 UnitManager.Instance.DeselectHero();
                 if(!UnitManager.Instance.SkipAttackPhase())
-                    GameManager.Instance.UpdateGameState(GameState.AttackPhase);
+                    GameManager.Instance.UpdateGameState(GameState.AttackPhase);*/
             }
         }
         //Attack Phase
@@ -135,20 +141,12 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit) && UnitManager.Instance.SelectedHero.SelectedAttack != null)
             {
-                /*UnitManager.Instance.SelectedHero.SelectedAttack.Execute(UnitManager.Instance.SelectedHero, OccupiedUnit);
-                UnitManager.Instance.SelectedHero.SelectedAttack = null;
-                if(OccupiedUnit.CurrentHealth <= 0)
-                {
-                    UnitManager.Instance.KillUnit(OccupiedUnit);
-                    //Destroy(OccupiedUnit.gameObject);
-                }
-                else
-                {
-                    GameManager.Instance.UpdateGameState(GameState.MovementPhase);
-                }
-                UnitManager.Instance.SetSelectedHero(null);*/
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
                 UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);
+                if (UnitManager.Instance.AllAttacksSelected())
+                {
+                    EndTurnButton.Instance.ActivateEndTurnButton();
+                }
             }
         }
     }

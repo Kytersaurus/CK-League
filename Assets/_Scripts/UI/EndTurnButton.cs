@@ -41,6 +41,14 @@ public class EndTurnButton : MonoBehaviour
                 GameManager.Instance.UpdateGameState(GameState.MovementPhase);
             }
         }
+        else if(GameManager.Instance.State == GameState.MovementPhase)
+        {
+            UnitManager.Instance.ExecuteAllMovements();
+            if (!UnitManager.Instance.SkipAttackPhase())
+            {
+                GameManager.Instance.UpdateGameState(GameState.AttackPhase);
+            }
+        }
 
         DeactivateEndTurnButton();
     }

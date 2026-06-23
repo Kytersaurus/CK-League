@@ -17,13 +17,11 @@ public class BaseUnit : MonoBehaviour
     public Sprite UnitIcon;
     public Attacks SelectedAttack;
     public string UnitDescription;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Tile DestinationTile;
 
     void Awake()
     {
-        /*maxHealth = 100;
-        CurrentHealth = maxHealth;
-        healthBar.setMaxHealth(maxHealth);*/
+        
     }
     public void InitializeHealth(int health)
     {
@@ -88,6 +86,11 @@ public class BaseUnit : MonoBehaviour
         UnitManager.Instance.DeselectHero();
     }
     
+    public void SetDestination(Tile tile)
+    {
+        DestinationTile = tile;
+        UnitManager.Instance.DeselectHero();
+    }
 }
 
 public enum AttackPhaseAction
