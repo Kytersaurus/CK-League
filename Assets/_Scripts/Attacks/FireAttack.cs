@@ -7,7 +7,7 @@ public abstract class FireAttack : Attacks
     public int aoeRange;
     protected void FireAOEAttack(Tile origin, int range)
     {
-        List<Tile> affectedTiles = GridManager.Instance.GetNeighbourTiles(origin);
+        List<Tile> affectedTiles = GridManager.Instance.GetTileInAOERAnge(origin, range);
         foreach(Tile tile in affectedTiles)
         {
             if (tile.OccupiedUnit == null)

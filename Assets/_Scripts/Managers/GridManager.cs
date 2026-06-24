@@ -4,7 +4,8 @@ using UnityEngine;
 using System.IO;
 using Clrain.Collections;
 using UnityEngine.Rendering;
-using UnityEditor.PackageManager.UI; //priority queue script
+using UnityEditor.PackageManager.UI;
+using NUnit.Framework; //priority queue script
 
 [System.Serializable]
 public class TileEntry
@@ -70,7 +71,7 @@ public class GridManager : MonoBehaviour
     }
     public void GenerateGrid()
     {
-        LoadGrid($"Sample Grid");
+        LoadGrid("AllGrass");
     }
 
     public Tile GenerateTile(int x, int y, TileType type, TileVariant variant)
@@ -120,6 +121,7 @@ public class GridManager : MonoBehaviour
             });
         }
         File.WriteAllText(GetSavePath(levelName), JsonUtility.ToJson(levelData, true));
+        UnityEditor.AssetDatabase.Refresh();
     }
     #endif
 
@@ -199,6 +201,44 @@ public class GridManager : MonoBehaviour
             }
         }
         return nbs;
+    }
+    public List<Tile> GetTileInAOERAnge(Tile origin, int range)
+    {
+        var dists = new Dictionary<Tile, int>();
+        var vis = new HashSet<Tile>();
+        var q = new Queue<Tile>();
+
+        foreach (Tile tile in _tiles.Values)
+        {
+            dists[tile] = int.MaxValue;
+        }
+        dists[origin] = 0;
+        q.Enqueue(origin);
+        while (q.Count > 0)
+        {
+            Tile curr = q.Dequeue();
+            if (!vis.Add(curr))
+            {
+                continue;
+            }
+            List<Tile> nbs = GetNeighbourTiles(curr);
+            foreach(Tile nb in nbs)
+            {
+                if (vis.Contains(nb))
+                {
+                    continue;
+                }
+                if (dists[curr] + 1 <= range)
+                {
+                    dists[nb] = dists[curr] + 1;
+                    q.Enqueue(nb);
+                }
+            }
+        }
+        return dists
+            .Where(kvp => kvp.Value <= range && kvp.Key != origin)
+            .Select(kvp => kvp.Key)
+            .ToList();
     }
 
     public List<Tile> GetReachableTiles(Tile from, int moveRange)

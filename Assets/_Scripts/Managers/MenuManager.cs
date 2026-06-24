@@ -10,6 +10,7 @@ public class MenuManager : MonoBehaviour
 
     [SerializeField] private GameObject _showPhaseObject;
     public GameObject _pauseMenu;
+    public bool popUpActive;
 
     void Awake()
     {
@@ -50,11 +51,13 @@ public class MenuManager : MonoBehaviour
         {
             if (!_pauseMenu.activeSelf)
             {
-                _pauseMenu.SetActive(true);    
+                _pauseMenu.SetActive(true);
+                popUpActive = true;
             } 
             else
             {
                 _pauseMenu.SetActive(false);
+                popUpActive = false;
             }
         }
         if (GameManager.Instance.State == GameState.AttackPhase)
@@ -67,11 +70,11 @@ public class MenuManager : MonoBehaviour
                     attacksValid = false;
                 }
             }
-            if (attacksValid)
+            if (attacksValid && !popUpActive)
             {
                 EndTurnButton.Instance.ActivateEndTurnButton();
             }
-            else if (!attacksValid)
+            else if (!attacksValid || popUpActive)
             {
                 EndTurnButton.Instance.DeactivateEndTurnButton();
             }

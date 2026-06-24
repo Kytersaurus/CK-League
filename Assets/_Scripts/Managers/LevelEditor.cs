@@ -25,18 +25,18 @@ public class LevelEditor : MonoBehaviour
         {
             return;
         }
-        if (Keyboard.current.eKey.wasPressedThisFrame && !EditingMode)
+        if (Keyboard.current.eKey.wasPressedThisFrame)
         {
-            EditingMode ^= true;
+            EditingMode = !EditingMode;
         }
         if (Keyboard.current.sKey.wasPressedThisFrame && EditingMode)
         {
             if (string.IsNullOrEmpty(_saveName))
             {
-                Debug.LogError($"Please input level name");
+                Debug.LogError("Please input level name");
                 return;
             }
-            Debug.Log($"Level saved");
+            Debug.Log($"Level {_saveName} saved");
             GridManager.Instance.SaveGrid(_saveName);
         }
         if (Keyboard.current.lKey.wasPressedThisFrame && EditingMode)
@@ -57,7 +57,7 @@ public class LevelEditor : MonoBehaviour
         GUILayout.Label("S to save, L to load");
         GUILayout.Space(10);
 
-        GUILayout.Label("Tile Types");
+        GUILayout.Label("Tile Types:");
         foreach (TileType type in System.Enum.GetValues(typeof(TileType)))
         {
             if (GUILayout.Button(selectedType == type ? $"[{type}]" : type.ToString()))
@@ -67,7 +67,7 @@ public class LevelEditor : MonoBehaviour
         }
         GUILayout.Space(10);
 
-        GUILayout.Label("Tile Variants");
+        GUILayout.Label("Tile Variants:");
         foreach (TileVariant variant in System.Enum.GetValues(typeof(TileVariant)))
         {
             if (GUILayout.Button(selectedVariant == variant ? $"[{variant}]" : variant.ToString()))

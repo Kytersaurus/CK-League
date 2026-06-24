@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 public enum TileType
@@ -48,6 +49,11 @@ public class Tile : MonoBehaviour
 
     void OnMouseEnter()
     {   
+        if (MenuManager.Instance != null && MenuManager.Instance.popUpActive)
+        {
+            return;
+        }
+        
         #if UNITY_EDITOR
         if (LevelEditor.Instance != null && LevelEditor.Instance.EditingMode)
         {
@@ -121,6 +127,11 @@ public class Tile : MonoBehaviour
 
     void OnMouseDown()
     {
+        if (MenuManager.Instance != null && MenuManager.Instance.popUpActive)
+        {
+            return;
+        }
+
         #if UNITY_EDITOR
         //For level editor
         if (LevelEditor.Instance != null && LevelEditor.Instance.EditingMode)

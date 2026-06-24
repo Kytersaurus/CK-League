@@ -68,7 +68,7 @@ public class UnitManager : MonoBehaviour
         {
             _attackBar = Instantiate(hero.attackToolBar, _canvas.transform);
             var attackBarScript = _attackBar.GetComponent<AttackToolBarScript>();
-            attackBarScript.flipped = hero.OccupiedTile.GridPos.y < 2;
+            attackBarScript.flipped = hero.OccupiedTile.GridPos.y < 3;
             attackBarScript.Refresh();
         }   
         if (GameManager.Instance.State == GameState.MovementPhase)
@@ -222,7 +222,7 @@ public class UnitManager : MonoBehaviour
         while(_actionQueue.Count > 0)
         {
             var unit = _actionQueue.Dequeue();
-            if (unit.Alive)
+            if (unit.Alive && unit.SelectedAttack != null)
             {
                 unit.SelectedAttack.Execute(unit, unit.Target);
                 unit.SelectedAttack = null;
