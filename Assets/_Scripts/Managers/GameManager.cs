@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.GenerateGrid:
-                GridManager.Instance.GenerateGrid();
+                GridManager.Instance.SetupGrid();
                 break;
             case GameState.SpawnEnemies:
                 UnitManager.Instance.SpawnEnemies();
@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.UpdateAllTargetLists();
                 UnitManager.Instance.ResetAllTargets();
                 UnitManager.Instance.SetEnemyAttacks();
-                EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.Victory:
                 //HandleVictory();

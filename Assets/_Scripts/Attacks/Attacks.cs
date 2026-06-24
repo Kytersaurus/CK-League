@@ -7,9 +7,9 @@ public abstract class Attacks : ScriptableObject
     public int damage;
     public int range;
     public Sprite icon;
+    public string attackDesc;
     public virtual void Execute(BaseUnit attacker, BaseUnit target)//Default attacking function for all attacks, overide if neccessary
     {
         target.TakeDamage(damage);
-        attacker.SelectedAttack = null;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -13,6 +14,9 @@ public class AttackToolBarScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _unitDescription;
     [SerializeField] private Slider _slider;
     [SerializeField] private TextMeshProUGUI _label;
+    [SerializeField] private GameObject _attackBar;
+    [SerializeField] private List<GameObject> _tooltips;
+    public bool flipped;
     void Awake()
     {
         Refresh();
@@ -32,6 +36,14 @@ public class AttackToolBarScript : MonoBehaviour
         if (_selectedUnit == null)
         {
             return;
+        }
+        RectTransform _rect = _attackBar.GetComponent<RectTransform>();
+        _rect.anchoredPosition = new Vector2(0, flipped ? 145 : -225);
+
+        foreach (var tooltip in _tooltips)
+        {
+            RectTransform toolTipRect = tooltip.GetComponent<RectTransform>();
+            toolTipRect.anchoredPosition = new Vector2(toolTipRect.anchoredPosition.x, flipped ? -toolTipRect.anchoredPosition.y : toolTipRect.anchoredPosition.y);
         }
          _slider.maxValue = _selectedUnit.maxHealth;
         _profileIcon.sprite = _selectedUnit.UnitIcon;
