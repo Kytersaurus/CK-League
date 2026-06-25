@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BaseMage : BaseHero
 {
-    public void Start()
+    void Awake()
     {
        
     }

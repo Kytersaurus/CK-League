@@ -44,12 +44,20 @@ public class UnitManager : MonoBehaviour
         GameManager.Instance.UpdateGameState(GameState.SpawnHeroes);
     }
 
-    public void SpawnHeroes(Tile spawnTile)
+    public void SpawnHeroes()
     {
-        var spawnedHero = Instantiate(_heroes[0].UnitPrefab);
-        spawnTile.SetUnit(spawnedHero);
-        _remainingHeroes.Add(spawnedHero);
-        _remainingUnits.Add(spawnedHero);
+        foreach(ScriptableUnit unit in _units)
+        {
+            if(unit.Faction == Faction.Hero)
+            {
+                var spawnedHero = Instantiate(unit.UnitPrefab);
+                var spawnTile = GridManager.Instance.GetHeroSpawnTile();
+                spawnTile.SetUnit(spawnedHero);
+                _remainingHeroes.Add(spawnedHero);
+                _remainingUnits.Add(spawnedHero);
+            }
+        }
+        //GameManager.Instance.UpdateGameState(GameState.MovementPhase);
     }
 
     public void SetSelectedHero(BaseHero hero)
@@ -202,6 +210,7 @@ public class UnitManager : MonoBehaviour
         foreach(BaseUnit enemy in _remainingEnemies)
         {
             enemy.Action = AttackPhaseAction.Attack;
+            enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>Random.value).First();
             if(enemy.TargetsList.Count > 0)
             {
                 enemy.Target = enemy.TargetsList.OrderBy(o=>Random.value).First();
@@ -231,12 +240,48 @@ public class UnitManager : MonoBehaviour
         SetSelectedHero(null);
     }
 
+    public bool AllAttacksSelected()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            if(unit.TargetsList.Count != 0 && unit.Target == null)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void ResetAllTargets()
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
             unit.Target = null;
         }
+    }
+
+    public void ExecuteAllMovements()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            if(unit.DestinationTile != null)
+            {
+                unit.DestinationTile.SetUnit(unit);
+            }
+        }
+        
+    }
+
+    public bool AllMovementsSelected()
+    {
+        foreach(BaseUnit unit in _remainingHeroes)
+        {
+            if(unit.DestinationTile == null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /*private T GetUnit<T>(Faction faction) where T : BaseUnit

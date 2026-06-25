@@ -18,6 +18,7 @@ public class BaseUnit : MonoBehaviour
     public string UnitDescription;
     public int maxHealth;
     public int CurrentHealth, AttackRange, AttackPower, AttackSpeed;
+    public Tile DestinationTile;
     public Tile PreviousTile;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -26,7 +27,6 @@ public class BaseUnit : MonoBehaviour
         CurrentHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
     }
-    
     public void TakeDamage (int damage)
     {
         CurrentHealth -= damage;
@@ -85,6 +85,11 @@ public class BaseUnit : MonoBehaviour
         UnitManager.Instance.DeselectHero();
     }
     
+    public void SetDestination(Tile tile)
+    {
+        DestinationTile = tile;
+        UnitManager.Instance.DeselectHero();
+    }
 }
 
 public enum AttackPhaseAction
