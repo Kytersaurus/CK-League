@@ -14,7 +14,6 @@ public class EndTurnButton : MonoBehaviour
     }
     private void Start()
     {
-        _endTurnButton.gameObject.SetActive(false);
         DeactivateEndTurnButton();
         _endTurnButton.onClick.AddListener(EndTurn);
     }
@@ -61,12 +60,12 @@ public class EndTurnButton : MonoBehaviour
     
     public void DeactivateEndTurnButton()
     {
-        _endTurnButton.gameObject.SetActive(false);
+        _endTurnButton.interactable = false;
     }
 
     public void ActivateEndTurnButton()
     {
-        _endTurnButton.gameObject.SetActive(true);
+        _endTurnButton.interactable = true;
     }
 
     public void ChangeText(string newText)

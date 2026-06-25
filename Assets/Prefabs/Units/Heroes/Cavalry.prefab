@@ -131,7 +131,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3937745615201340750}
@@ -228,6 +228,7 @@ MonoBehaviour:
   AttackRange: 2
   AttackPower: 10
   AttackSpeed: 2
+  DestinationTile: {fileID: 0}
   PreviousTile: {fileID: 0}
   moveRange: 5
   immune: 0
@@ -319,7 +320,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2.19
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

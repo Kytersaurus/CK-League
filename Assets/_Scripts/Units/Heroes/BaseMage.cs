@@ -3,9 +3,5 @@ using UnityEngine;
 
 public class BaseMage : BaseHero
 {
-    void Awake()
-    {
-       
-    }
-
+    
 }

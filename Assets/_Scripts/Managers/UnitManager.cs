@@ -62,14 +62,17 @@ public class UnitManager : MonoBehaviour
 
     public void SetSelectedHero(BaseHero hero)
     {
+        if (SelectedHero != null)
+        {
+            DeselectHero();
+        }
         SelectedHero = hero;
-
+        if (_attackBar != null)
+        {
+            Destroy(_attackBar);
+        }
         if (hero == null)
         {
-            if (_attackBar != null)
-            {
-                Destroy(_attackBar);
-            }
             return;
         }
         if (GameManager.Instance.State == GameState.AttackPhase)
@@ -118,7 +121,7 @@ public class UnitManager : MonoBehaviour
         {
             enemy.OccupiedTile.highlight.SetActive(false);
         }
-        SetSelectedHero(null);
+        SelectedHero = null;
     }
 
     public void KillUnit(BaseUnit unit)
@@ -244,7 +247,7 @@ public class UnitManager : MonoBehaviour
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
-            if(unit.TargetsList.Count != 0 && unit.Target == null)
+            if(unit.TargetsList.Count != 0 && (unit.Target == null || unit.SelectedAttack == null))
             {
                 return false;
             }

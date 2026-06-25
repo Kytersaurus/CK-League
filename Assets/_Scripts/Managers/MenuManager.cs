@@ -62,19 +62,11 @@ public class MenuManager : MonoBehaviour
         }
         if (GameManager.Instance.State == GameState.AttackPhase)
         {
-            bool attacksValid = true;
-            foreach (var hero in UnitManager.Instance.GetRemainingHeroes())
-            {
-                if (hero.SelectedAttack == null || hero.Target == null)
-                {
-                    attacksValid = false;
-                }
-            }
-            if (attacksValid && !popUpActive)
+            if (!popUpActive)
             {
                 EndTurnButton.Instance.ActivateEndTurnButton();
             }
-            else if (!attacksValid || popUpActive)
+            else if (popUpActive)
             {
                 EndTurnButton.Instance.DeactivateEndTurnButton();
             }
