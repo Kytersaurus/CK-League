@@ -684,6 +684,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndTurnButton
   _endTurnButton: {fileID: 1190197705}
+  _text: {fileID: 1528198256}
 --- !u!1 &887558695
 GameObject:
   m_ObjectHideFlags: 0
