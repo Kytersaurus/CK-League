@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -156,6 +157,7 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
+                UnitManager.Instance.SelectedHero.PreviousTile = UnitManager.Instance.SelectedHero.OccupiedTile;
                 SetUnit(UnitManager.Instance.SelectedHero);
                 UnitManager.Instance.DeselectHero();
                 if(!UnitManager.Instance.SkipAttackPhase())

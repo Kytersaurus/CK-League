@@ -18,6 +18,7 @@ public class BaseUnit : MonoBehaviour
     public string UnitDescription;
     public int maxHealth;
     public int CurrentHealth, AttackRange, AttackPower, AttackSpeed;
+    public Tile PreviousTile;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()

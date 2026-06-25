@@ -215,7 +215,11 @@ MonoBehaviour:
   TargetsList: []
   Target: {fileID: 0}
   healthBar: {fileID: 2743834586076405301}
-  moveSet: []
+  moveSet:
+  - {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
+  - {fileID: 11400000, guid: 5ba5044e0e4245c4b9b3abb75fbe2b75, type: 2}
+  - {fileID: 11400000, guid: 694c893fb0822fa4caabe93c974e238b, type: 2}
+  - {fileID: 11400000, guid: 5b01f7a79474ad44885c296f7ebc9534, type: 2}
   UnitIcon: {fileID: 2452124917026411172, guid: e49f4c956a08d8141ae3c3dfee7896c9, type: 3}
   SelectedAttack: {fileID: 0}
   UnitDescription: Calvarly unit, high health and high mobility, short range.
@@ -224,7 +228,10 @@ MonoBehaviour:
   AttackRange: 2
   AttackPower: 10
   AttackSpeed: 2
+  PreviousTile: {fileID: 0}
   moveRange: 5
+  immune: 0
+  reducedDmg: 0
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
 --- !u!1001 &240034667750404394
 PrefabInstance:

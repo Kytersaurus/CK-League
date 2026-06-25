@@ -489,7 +489,7 @@ MonoBehaviour:
     tileVariant: 0
     prefab: {fileID: 2377796777517833010, guid: 9f7892ddf2652b348b658d2effabfab7, type: 3}
   _cam: {fileID: 519420032}
-  _levelName: Tutorial
+  _levelName: Sample Grid
 --- !u!4 &346764683
 Transform:
   m_ObjectHideFlags: 0
@@ -956,6 +956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MenuManager
   _showPhaseObject: {fileID: 887558695}
   _pauseMenu: {fileID: 1631972780}
+  popUpActive: 0
 --- !u!114 &837927414
 MonoBehaviour:
   m_ObjectHideFlags: 0
