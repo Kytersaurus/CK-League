@@ -113,10 +113,14 @@ MonoBehaviour:
   AttackPower: 20
   AttackSpeed: 1
   Action: 0
+  Alive: 1
+  TargetsList: []
+  Target: {fileID: 0}
   healthBar: {fileID: 5543288751080440739}
-  moveSet: []
+  moveSet:
+  - {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
   UnitIcon: {fileID: 0}
-  SelectedAttack: {fileID: 0}
+  SelectedAttack: {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
   UnitDescription: 
 --- !u!1 &2762809049444436295
 GameObject:

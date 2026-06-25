@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public enum TileType
@@ -48,7 +50,7 @@ public class Tile : MonoBehaviour
     {   
         if (GameManager.Instance.State == GameState.SpawnHeroes)
         {
-            if (Walkable)
+            if (Walkable || (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero))
             {
                 _highlightSelect.SetActive(true);
             }
@@ -106,10 +108,21 @@ public class Tile : MonoBehaviour
 
     void OnMouseDown()
     {
-        if(GameManager.Instance.State == GameState.SpawnHeroes && OccupiedUnit == null && Walkable)
+        if(GameManager.Instance.State == GameState.SpawnHeroes && (Walkable || OccupiedUnit.Faction == Faction.Hero))
         {
-            UnitManager.Instance.SpawnHeroes(this);
-            GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+            if(UnitManager.Instance.SelectedHero != null)
+            {
+                if(OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero)
+                {
+                    UnitManager.Instance.SelectedHero.OccupiedTile.SetUnit(OccupiedUnit);
+                }
+                SetUnit(UnitManager.Instance.SelectedHero);
+                UnitManager.Instance.DeselectHero();
+            }
+            else if(UnitManager.Instance.SelectedHero == null && OccupiedUnit != null)
+            {
+                UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
+            }
         }
         //Movement Phase
         else if(GameManager.Instance.State == GameState.MovementPhase)
@@ -120,10 +133,15 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
-                SetUnit(UnitManager.Instance.SelectedHero);
+                UnitManager.Instance.SelectedHero.SetDestination(this);
+                if (UnitManager.Instance.AllMovementsSelected())
+                {
+                    EndTurnButton.Instance.ActivateEndTurnButton();
+                }
+                /*SetUnit(UnitManager.Instance.SelectedHero);
                 UnitManager.Instance.DeselectHero();
                 if(!UnitManager.Instance.SkipAttackPhase())
-                    GameManager.Instance.UpdateGameState(GameState.AttackPhase);
+                    GameManager.Instance.UpdateGameState(GameState.AttackPhase);*/
             }
         }
         //Attack Phase
@@ -135,20 +153,12 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit) && UnitManager.Instance.SelectedHero.SelectedAttack != null)
             {
-                /*UnitManager.Instance.SelectedHero.SelectedAttack.Execute(UnitManager.Instance.SelectedHero, OccupiedUnit);
-                UnitManager.Instance.SelectedHero.SelectedAttack = null;
-                if(OccupiedUnit.CurrentHealth <= 0)
-                {
-                    UnitManager.Instance.KillUnit(OccupiedUnit);
-                    //Destroy(OccupiedUnit.gameObject);
-                }
-                else
-                {
-                    GameManager.Instance.UpdateGameState(GameState.MovementPhase);
-                }
-                UnitManager.Instance.SetSelectedHero(null);*/
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
                 UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);
+                if (UnitManager.Instance.AllAttacksSelected())
+                {
+                    EndTurnButton.Instance.ActivateEndTurnButton();
+                }
             }
         }
     }

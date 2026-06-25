@@ -11,22 +11,23 @@ public class BaseUnit : MonoBehaviour
     public AttackPhaseAction Action = AttackPhaseAction.Attack;
     public bool Alive = true;
     public List<BaseUnit> TargetsList = new List<BaseUnit>();
-    public BaseUnit Target;
-   
+    public BaseUnit Target;   
     public healthbarScript healthBar;
     public List<Attacks> moveSet = new List<Attacks>();
     public Sprite UnitIcon;
     public Attacks SelectedAttack;
     public string UnitDescription;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Tile DestinationTile;
 
     void Awake()
     {
-        maxHealth = 100;
-        CurrentHealth = maxHealth;
+        
+    }
+    public void InitializeHealth(int health)
+    {
+        CurrentHealth = health;
         healthBar.setMaxHealth(maxHealth);
     }
-    
     public void TakeDamage (int damage)
     {
         CurrentHealth -= damage;
@@ -85,6 +86,11 @@ public class BaseUnit : MonoBehaviour
         UnitManager.Instance.DeselectHero();
     }
     
+    public void SetDestination(Tile tile)
+    {
+        DestinationTile = tile;
+        UnitManager.Instance.DeselectHero();
+    }
 }
 
 public enum AttackPhaseAction
