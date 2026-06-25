@@ -16,5 +16,6 @@ MonoBehaviour:
   damage: 20
   range: 0
   icon: {fileID: 7403167413984483019, guid: e7e93b8408ed07648bd0e0ecb5726eeb, type: 3}
+  attackDesc: This attack deals AOE damage. Target is hit harder than the surroundings.
   aoeDamage: 10
   aoeRange: 1

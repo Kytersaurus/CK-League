@@ -107,11 +107,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Ogre
   OccupiedTile: {fileID: 0}
   Faction: 1
-  maxHealth: 100
-  CurrentHealth: 100
-  AttackRange: 1
-  AttackPower: 20
-  AttackSpeed: 1
   Action: 0
   Alive: 1
   TargetsList: []
@@ -122,6 +117,11 @@ MonoBehaviour:
   UnitIcon: {fileID: 0}
   SelectedAttack: {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
   UnitDescription: 
+  maxHealth: 100
+  CurrentHealth: 100
+  AttackRange: 1
+  AttackPower: 20
+  AttackSpeed: 1
 --- !u!1 &2762809049444436295
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &2707254752159918869
 MonoBehaviour:

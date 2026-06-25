@@ -6,26 +6,25 @@ public class BaseUnit : MonoBehaviour
 {
     public Tile OccupiedTile;
     public Faction Faction;
-    public int maxHealth = 100;
-    public int CurrentHealth, AttackRange, AttackPower, AttackSpeed;
+    
     public AttackPhaseAction Action = AttackPhaseAction.Attack;
     public bool Alive = true;
     public List<BaseUnit> TargetsList = new List<BaseUnit>();
-    public BaseUnit Target;   
+    public BaseUnit Target;
     public healthbarScript healthBar;
     public List<Attacks> moveSet = new List<Attacks>();
     public Sprite UnitIcon;
     public Attacks SelectedAttack;
     public string UnitDescription;
+    public int maxHealth;
+    public int CurrentHealth, AttackRange, AttackPower, AttackSpeed;
     public Tile DestinationTile;
+    public Tile PreviousTile;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
     {
-        
-    }
-    public void InitializeHealth(int health)
-    {
-        CurrentHealth = health;
+        CurrentHealth = maxHealth;
         healthBar.setMaxHealth(maxHealth);
     }
     public void TakeDamage (int damage)

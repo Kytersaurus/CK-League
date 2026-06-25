@@ -16,4 +16,5 @@ MonoBehaviour:
   damage: 0
   range: 0
   icon: {fileID: -7125717687315017858, guid: 6781b6e08d08912409e53ca2f3c5455c, type: 3}
+  attackDesc: Heals the unit for a small amount of health.
   healAmount: 20

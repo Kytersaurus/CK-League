@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8646706518667112840}
   - component: {fileID: 5333775645376652223}
   m_Layer: 5
-  m_Name: Wizard Canvas
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61,7 +61,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &8646706518667112840
 MonoBehaviour:
@@ -210,11 +210,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BaseMage
   OccupiedTile: {fileID: 0}
   Faction: 0
-  maxHealth: 100
-  CurrentHealth: 0
-  AttackRange: 0
-  AttackPower: 0
-  AttackSpeed: 0
   Action: 0
   Alive: 1
   TargetsList: []
@@ -227,9 +222,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
   UnitIcon: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
   SelectedAttack: {fileID: 0}
-  UnitDescription: This is a wizard
+  UnitDescription: Standard Mage, lacks in health and move range but attacks are
+    powerful.
+  maxHealth: 50
+  CurrentHealth: 0
+  AttackRange: 3
+  AttackPower: 70
+  AttackSpeed: 3
   DestinationTile: {fileID: 0}
-  moveRange: 5
+  moveRange: 1
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
 --- !u!1001 &240034667750404394
 PrefabInstance:

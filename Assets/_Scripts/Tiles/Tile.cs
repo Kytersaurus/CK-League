@@ -1,5 +1,5 @@
 using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+using UnityEditor;
 using UnityEngine;
 
 public enum TileType
@@ -27,66 +27,86 @@ public class Tile : MonoBehaviour
 {
     [SerializeField] private Color _baseColor, _offsetColor;
     [SerializeField] private SpriteRenderer _baseRenderer;
-    public GameObject _highlight;
-    public GameObject _highlightSelect;
-    public GameObject _highlightError;
+    public GameObject highlight;
+    public GameObject highlightSelect;
+    public GameObject highlightError;
     [SerializeField] private bool _isWalkable;
     [SerializeField] private int _movementCost;
     [SerializeField] protected TileType _tileType;
     [SerializeField] protected TileVariant _tileVariant;
-    public Vector2 gridPos {get; private set;}
+    public Vector2 GridPos {get; private set;}
     public TileType TileType => _tileType;
     public TileVariant TileVariant => _tileVariant;
     public BaseUnit OccupiedUnit;
     public bool Walkable => OccupiedUnit == null && _isWalkable == true;
     public int MoveCost => _movementCost;
+    public bool IsOffset {get; private set;}
     public virtual void Init(int x, int y)
     {
-        gridPos = new Vector2(x, y);
-        _baseRenderer.color = (x + y) % 2 == 1 ? _offsetColor : _baseColor;
+        GridPos = new Vector2(x, y);
+        IsOffset = (x + y) % 2 == 1; 
+        _baseRenderer.color = IsOffset ? _offsetColor : _baseColor;
     }
 
     void OnMouseEnter()
     {   
+        if (MenuManager.Instance != null && MenuManager.Instance.popUpActive)
+        {
+            return;
+        }
+        
+        #if UNITY_EDITOR
+        if (LevelEditor.Instance != null && LevelEditor.Instance.EditingMode)
+        {
+            highlightSelect.SetActive(true);
+            return;
+        }
+        #endif
+
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
+        
         if (GameManager.Instance.State == GameState.SpawnHeroes)
         {
             if (Walkable || (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero))
             {
-                _highlightSelect.SetActive(true);
+                highlightSelect.SetActive(true);
             }
             else
             {
-                _highlightError.SetActive(true);
+                highlightError.SetActive(true);
             }
         }
         else if (GameManager.Instance.State == GameState.MovementPhase)
         {
             if (OccupiedUnit != null && UnitManager.Instance.SelectedHero == null && OccupiedUnit.Faction == Faction.Hero)
             {
-                _highlightSelect.SetActive(true);
+                highlightSelect.SetActive(true);
             }
             else if (UnitManager.Instance.SelectedHero != null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
-                _highlightSelect.SetActive(true);
+                highlightSelect.SetActive(true);
             }
             else
             {
-                _highlightError.SetActive(true);    
+                highlightError.SetActive(true);    
             }
         }
         else if (GameManager.Instance.State == GameState.AttackPhase)
         {
             if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && OccupiedUnit.Faction == Faction.Enemy)
             {
-                _highlightSelect.SetActive(true);    
+                highlightSelect.SetActive(true);    
             }
             else if (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero && UnitManager.Instance.SelectedHero == null)
             {
-                _highlightSelect.SetActive(true);    
+                highlightSelect.SetActive(true);    
             }
             else
             {
-                _highlightError.SetActive(true);
+                highlightError.SetActive(true);
             }
         }
         else
@@ -96,18 +116,33 @@ public class Tile : MonoBehaviour
     }
     void OnMouseExit()
     {
-        if (_highlightSelect.activeSelf)
+        if (highlightSelect.activeSelf)
         {
-            _highlightSelect.SetActive(false);
+            highlightSelect.SetActive(false);
         }
-        else if (_highlightError.activeSelf)
+        else if (highlightError.activeSelf)
         {
-            _highlightError.SetActive(false);
+            highlightError.SetActive(false);
         }
     }
 
     void OnMouseDown()
     {
+        if (MenuManager.Instance != null && MenuManager.Instance.popUpActive)
+        {
+            return;
+        }
+
+        #if UNITY_EDITOR
+        //For level editor
+        if (LevelEditor.Instance != null && LevelEditor.Instance.EditingMode)
+        {
+            var pos = new Vector2(transform.position.x, transform.position.y);
+            GridManager.Instance.PlaceTile(pos, LevelEditor.Instance.selectedType, LevelEditor.Instance.selectedVariant);
+            return;
+        }
+        #endif
+        
         if(GameManager.Instance.State == GameState.SpawnHeroes && (Walkable || OccupiedUnit.Faction == Faction.Hero))
         {
             if(UnitManager.Instance.SelectedHero != null)
@@ -133,6 +168,7 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
+                UnitManager.Instance.SelectedHero.PreviousTile = UnitManager.Instance.SelectedHero.OccupiedTile;
                 UnitManager.Instance.SelectedHero.SetDestination(this);
                 if (UnitManager.Instance.AllMovementsSelected())
                 {

@@ -17,6 +17,7 @@ public class UnitManager : MonoBehaviour
     private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
     private GameObject _attackBar;
+    public bool IsAttackBarActive => _attackBar != null;
     [SerializeField] private Canvas _canvas;
     void Awake()
     {
@@ -74,16 +75,16 @@ public class UnitManager : MonoBehaviour
         if (GameManager.Instance.State == GameState.AttackPhase)
         {
             _attackBar = Instantiate(hero.attackToolBar, _canvas.transform);
-            RectTransform rect = _attackBar.GetComponent<RectTransform>();
-            int yTransform = SelectedHero.OccupiedTile.gridPos.y < 3 ? 145 : -225; 
-            rect.anchoredPosition = new Vector2(0, yTransform);
+            var attackBarScript = _attackBar.GetComponent<AttackToolBarScript>();
+            attackBarScript.flipped = hero.OccupiedTile.GridPos.y < 3;
+            attackBarScript.Refresh();
         }   
         if (GameManager.Instance.State == GameState.MovementPhase)
         {
             ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
             foreach (Tile tile in ReachableTiles)
             {
-                tile._highlight.SetActive(true);
+                tile.highlight.SetActive(true);
             }    
         }
         
@@ -92,7 +93,7 @@ public class UnitManager : MonoBehaviour
             ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
             foreach (Tile tile in ReachableTiles)
             {
-                tile._highlight.SetActive(true);
+                tile.highlight.SetActive(true);
             }
         }
         else if(GameManager.Instance.State == GameState.AttackPhase)
@@ -100,7 +101,7 @@ public class UnitManager : MonoBehaviour
             var targetList = hero.TargetsList;
             foreach(BaseUnit enemy in targetList)
             {
-                enemy.OccupiedTile._highlight.SetActive(true);
+                enemy.OccupiedTile.highlight.SetActive(true);
             }
         }
     }
@@ -109,13 +110,13 @@ public class UnitManager : MonoBehaviour
     {
         foreach (Tile tile in ReachableTiles)
         {
-            tile._highlight.SetActive(false);
+            tile.highlight.SetActive(false);
         }
         ReachableTiles.Clear();
         var targetList = SelectedHero.TargetsList;
         foreach(BaseUnit enemy in targetList)
         {
-            enemy.OccupiedTile._highlight.SetActive(false);
+            enemy.OccupiedTile.highlight.SetActive(false);
         }
         SetSelectedHero(null);
     }
@@ -230,12 +231,13 @@ public class UnitManager : MonoBehaviour
         while(_actionQueue.Count > 0)
         {
             var unit = _actionQueue.Dequeue();
-            if (unit.Alive)
+            if (unit.Alive && unit.SelectedAttack != null)
             {
                 unit.SelectedAttack.Execute(unit, unit.Target);
                 unit.SelectedAttack = null;
             }
         }
+        SetSelectedHero(null);
     }
 
     public bool AllAttacksSelected()
@@ -286,4 +288,8 @@ public class UnitManager : MonoBehaviour
     {
         return (T)_units.Where(u=>u.Faction == faction).OrderBy(o=>Random.value).First().UnitPrefab;
     }*/
+    public List<BaseUnit> GetRemainingHeroes()
+    {
+        return _remainingHeroes;
+    }
 }

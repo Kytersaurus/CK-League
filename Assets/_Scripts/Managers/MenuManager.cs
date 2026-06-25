@@ -1,12 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class MenuManager : MonoBehaviour
 {
     public static MenuManager Instance;
 
     [SerializeField] private GameObject _showPhaseObject;
+    public GameObject _pauseMenu;
+    public bool popUpActive;
 
     void Awake()
     {
@@ -41,5 +45,39 @@ public class MenuManager : MonoBehaviour
         _showPhaseObject.GetComponentInChildren<TextMeshProUGUI>().text = phaseName;
         _showPhaseObject.SetActive(true);
     }
-
+    void Update()
+    {
+        if (!UnitManager.Instance.IsAttackBarActive && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            if (!_pauseMenu.activeSelf)
+            {
+                _pauseMenu.SetActive(true);
+                popUpActive = true;
+            } 
+            else
+            {
+                _pauseMenu.SetActive(false);
+                popUpActive = false;
+            }
+        }
+        if (GameManager.Instance.State == GameState.AttackPhase)
+        {
+            bool attacksValid = true;
+            foreach (var hero in UnitManager.Instance.GetRemainingHeroes())
+            {
+                if (hero.SelectedAttack == null || hero.Target == null)
+                {
+                    attacksValid = false;
+                }
+            }
+            if (attacksValid && !popUpActive)
+            {
+                EndTurnButton.Instance.ActivateEndTurnButton();
+            }
+            else if (!attacksValid || popUpActive)
+            {
+                EndTurnButton.Instance.DeactivateEndTurnButton();
+            }
+        }
+    }
 }

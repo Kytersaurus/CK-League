@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.IO;
-using Clrain.Collections; //priority queue script
+using Clrain.Collections;
+using UnityEngine.Rendering;
+using UnityEditor.PackageManager.UI;
+using NUnit.Framework; //priority queue script
 
 [System.Serializable]
 public class TileEntry
@@ -24,6 +27,7 @@ public class TileData
 [System.Serializable]
 public class LevelData
 {
+    public string levelName;
     public int width, height;
     public List<TileData> tileList = new List<TileData>();
 }
@@ -36,8 +40,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private TileEntry[] _tilePrefabs;
     [SerializeField] private Transform _cam;
     private Dictionary<Vector2, Tile> _tiles;
-    private string SavePath => Path.Combine(Application.persistentDataPath, "level.json");
-
+    [SerializeField] private string _levelName;
     void Awake()
     {
         Instance = this;
@@ -54,39 +57,21 @@ public class GridManager : MonoBehaviour
         }
     }
     //Level
-    private TileInfo[,] _levelLayout = new TileInfo[,]
+    
+    public void SetupGrid()
     {
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Marsh, TileVariant.EdgeBL), new TileInfo(TileType.Marsh, TileVariant.Body1), new TileInfo(TileType.Marsh, TileVariant.EdgeTL), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Marsh, TileVariant.Body2), new TileInfo(TileType.Marsh, TileVariant.Body2), new TileInfo(TileType.Marsh, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Marsh, TileVariant.EdgeBR), new TileInfo(TileType.Marsh, TileVariant.Body1), new TileInfo(TileType.Marsh, TileVariant.EdgeTR), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Mountain, TileVariant.PillarBase), new TileInfo(TileType.Mountain, TileVariant.Pillar), new TileInfo(TileType.Mountain, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Water, TileVariant.EdgeBL), new TileInfo(TileType.Water, TileVariant.EdgeTL), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Water, TileVariant.EdgeBR), new TileInfo(TileType.Water, TileVariant.EdgeTR), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Tree, TileVariant.Body1), new TileInfo(TileType.Mountain, TileVariant.PillarBase), new TileInfo(TileType.Mountain, TileVariant.Pillar), new TileInfo(TileType.Mountain, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-        { new TileInfo(TileType.Mountain, TileVariant.PillarBase), new TileInfo(TileType.Mountain, TileVariant.Pillar), new TileInfo(TileType.Mountain, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1), new TileInfo(TileType.Grass, TileVariant.Body1) },
-    };
+        if (string.IsNullOrEmpty(_levelName))
+        {
+            GenerateGrid();
+        }
+        else
+        {
+            LoadGrid(_levelName);
+        }
+    }
     public void GenerateGrid()
     {
-        _tiles = new Dictionary<Vector2, Tile>();
-        for (int x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                TileInfo info = _levelLayout[x, y];
-                Tile spawnedTile = GenerateTile(x, y, info.type, info.variant);
-                spawnedTile.Init(x, y);
-            }
-        }
-        _cam.position = new Vector3(_width / 2f - 0.5f, _height / 2f - 0.5f, -10);
-        GameManager.Instance.UpdateGameState(GameState.SpawnEnemies);
+        LoadGrid("AllGrass");
     }
 
     public Tile GenerateTile(int x, int y, TileType type, TileVariant variant)
@@ -110,32 +95,20 @@ public class GridManager : MonoBehaviour
         return _tilePrefabs[0].prefab;
     }
 
-    public void LoadGrid()
+    
+    private string GetSavePath(string levelName)
     {
-        if (!File.Exists(SavePath))
-        {
-            GenerateGrid();
-            return;
-        }
-
-        var levelData = JsonUtility.FromJson<LevelData>(File.ReadAllText(SavePath));
-        _width = levelData.width;
-        _height = levelData.height;
-        _tiles = new Dictionary<Vector2, Tile>();
-
-        foreach (var data in levelData.tileList)
-        {
-            var tile = GenerateTile(data.posX, data.posY, data.tileType, data.tileVariant);
-            tile.Init(data.posX, data.posY);
-        }
-
-        _cam.position = new Vector3(_width / 2f - 0.5f, _height / 2f - 0.5f, -10);
-        GameManager.Instance.UpdateGameState(GameState.SpawnEnemies);
+        return Path.Combine(Application.streamingAssetsPath, $"Levels/{levelName}.json");
     }
 
-    public void SaveGrid()
+    #if UNITY_EDITOR
+    public void SaveGrid(string levelName)
     {
-        var levelData = new LevelData { width = _width, height = _height };
+        var levelData = new LevelData 
+        { 
+            width = _width, 
+            height = _height 
+        };
         foreach (var kvp in _tiles)
         {
             levelData.tileList.Add(new TileData
@@ -147,7 +120,50 @@ public class GridManager : MonoBehaviour
                 tileVariant = kvp.Value.TileVariant
             });
         }
-        File.WriteAllText(SavePath, JsonUtility.ToJson(levelData, true));
+        File.WriteAllText(GetSavePath(levelName), JsonUtility.ToJson(levelData, true));
+        UnityEditor.AssetDatabase.Refresh();
+    }
+    #endif
+
+    public void LoadGrid(string levelName)
+    {
+        string path = GetSavePath(levelName);
+        if (!File.Exists(path))
+        {
+            Debug.LogError($"Level {levelName} not found at {path}, defaulting to sample grid");
+            GenerateGrid();
+            return;
+        }
+
+        var levelData = JsonUtility.FromJson<LevelData>(File.ReadAllText(path));
+        _width = levelData.width;
+        _height = levelData.height;
+        _tiles = new Dictionary<Vector2, Tile>();
+
+        foreach (var data in levelData.tileList)
+        {
+            var tile = GenerateTile(data.posX, data.posY, data.tileType, data.tileVariant);
+            tile.Init(data.posX, data.posY);
+        }
+
+        _cam.position = new Vector3(_width / 2f - 0.5f, _height / 2f - 0.5f, -10);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.UpdateGameState(GameState.SpawnEnemies);    
+        }
+    }
+    
+    public void PlaceTile(Vector2 pos, TileType type, TileVariant variant)
+    {
+        if (!_tiles.TryGetValue(pos, out var oldTile))
+        {
+            return;
+        }
+        int x = (int)pos.x;
+        int y = (int)pos.y;
+        Destroy(oldTile.gameObject);
+        var newTile = GenerateTile(x, y, type, variant);
+        newTile.Init(x, y);
     }
 
     public Tile GetEnemySpawnTile()
@@ -171,10 +187,11 @@ public class GridManager : MonoBehaviour
             return tile;
         return null;
     }
+
     public List<Tile> GetNeighbourTiles(Tile root)
     {
         var nbs = new List<Tile>();
-        Vector2 rootPos = root.gridPos;
+        Vector2 rootPos = root.GridPos;
         Vector2[] directions =
         {
             Vector2.up,
@@ -192,6 +209,45 @@ public class GridManager : MonoBehaviour
         }
         return nbs;
     }
+    public List<Tile> GetTileInAOERAnge(Tile origin, int range)
+    {
+        var dists = new Dictionary<Tile, int>();
+        var vis = new HashSet<Tile>();
+        var q = new Queue<Tile>();
+
+        foreach (Tile tile in _tiles.Values)
+        {
+            dists[tile] = int.MaxValue;
+        }
+        dists[origin] = 0;
+        q.Enqueue(origin);
+        while (q.Count > 0)
+        {
+            Tile curr = q.Dequeue();
+            if (!vis.Add(curr))
+            {
+                continue;
+            }
+            List<Tile> nbs = GetNeighbourTiles(curr);
+            foreach(Tile nb in nbs)
+            {
+                if (vis.Contains(nb))
+                {
+                    continue;
+                }
+                if (dists[curr] + 1 <= range)
+                {
+                    dists[nb] = dists[curr] + 1;
+                    q.Enqueue(nb);
+                }
+            }
+        }
+        return dists
+            .Where(kvp => kvp.Value <= range && kvp.Key != origin)
+            .Select(kvp => kvp.Key)
+            .ToList();
+    }
+
     public List<Tile> GetReachableTiles(Tile from, int moveRange)
     {
         var dists = new Dictionary<Tile, int>();
