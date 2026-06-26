@@ -4,6 +4,8 @@ public class Mitigate : Attacks
 {
     public float chance;
     public float perReduction;
+    public float counterAttackChance;
+    public int counterAttackDmg;
     protected void NegateDmg(BaseHero unit)
     {
         if (Random.value < chance)
@@ -15,7 +17,7 @@ public class Mitigate : Attacks
     {
         if (Random.value < chance)
         {
-            unit.reducedDmg = perReduction;
+            unit.reducedDmg = 1 - perReduction;
         }
     }
     protected void ReduceOrNegate(BaseHero unit)
@@ -26,7 +28,7 @@ public class Mitigate : Attacks
         } 
         else
         {
-            unit.reducedDmg = perReduction;    
+            unit.reducedDmg = 1 - perReduction;    
         }
     }
 }

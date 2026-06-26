@@ -13,4 +13,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
         Application.Quit();
         Debug.Log("Application has closed");
     }
+    public void RestartScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

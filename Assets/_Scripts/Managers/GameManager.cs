@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
                 EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.MovementPhase:
+                UnitManager.Instance.ResetMovedState();
                 break;
             case GameState.AttackPhase:
                 UnitManager.Instance.UpdateAllTargetLists();
@@ -43,10 +44,8 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.SetEnemyAttacks();
                 break;
             case GameState.Victory:
-                //HandleVictory();
                 break;
             case GameState.Defeat:
-                //HandleDefeat();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);

@@ -168,7 +168,7 @@ public class Tile : MonoBehaviour
             }
             else if(UnitManager.Instance.SelectedHero != null && OccupiedUnit == null && UnitManager.Instance.ReachableTiles.Contains(this))
             {
-                UnitManager.Instance.SelectedHero.PreviousTile = UnitManager.Instance.SelectedHero.OccupiedTile;
+                UnitManager.Instance.SelectedHero.hasMoved = true;
                 UnitManager.Instance.SelectedHero.SetDestination(this);
                 if (UnitManager.Instance.AllMovementsSelected())
                 {

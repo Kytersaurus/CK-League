@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using Clrain.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UnitManager : MonoBehaviour
@@ -237,7 +238,17 @@ public class UnitManager : MonoBehaviour
             if (unit.Alive && unit.SelectedAttack != null)
             {
                 unit.SelectedAttack.Execute(unit, unit.Target);
+                unit.Target.attackedBy = unit;
                 unit.SelectedAttack = null;
+            }
+        }
+        foreach (BaseUnit unit in _remainingUnits)
+        {
+            if (unit.counterAtk)
+            {
+                unit.attackedBy.TakeDamage(unit.counterAtkDmg);
+                unit.counterAtk = false;
+                unit.attackedBy = null;
             }
         }
         SetSelectedHero(null);
@@ -294,5 +305,13 @@ public class UnitManager : MonoBehaviour
     public List<BaseUnit> GetRemainingHeroes()
     {
         return _remainingHeroes;
+    }
+    
+    public void ResetMovedState()
+    {
+        foreach (BaseUnit unit in _remainingUnits)
+        {
+            unit.hasMoved = false;
+        }
     }
 }
