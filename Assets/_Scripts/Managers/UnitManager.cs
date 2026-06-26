@@ -82,18 +82,18 @@ public class UnitManager : MonoBehaviour
             attackBarScript.flipped = hero.OccupiedTile.GridPos.y < 3;
             attackBarScript.Refresh();
         }   
-        if (GameManager.Instance.State == GameState.MovementPhase)
+        /*if (GameManager.Instance.State == GameState.MovementPhase)
         {
             ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
             foreach (Tile tile in ReachableTiles)
             {
                 tile.highlight.SetActive(true);
             }    
-        }
+        }*/
         
         if(GameManager.Instance.State == GameState.MovementPhase)
         {
-            ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
+            ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero, SelectedHero.moveRange);
             foreach (Tile tile in ReachableTiles)
             {
                 tile.highlight.SetActive(true);
@@ -269,7 +269,14 @@ public class UnitManager : MonoBehaviour
         {
             if(unit.DestinationTile != null)
             {
-                unit.DestinationTile.SetUnit(unit);
+                //unit.transform.Translate(unit.DestinationTile.transform.position * 5f * Time.deltaTime);
+                Tile nextTile;
+                while(unit.Path.Count != 0)
+                {
+                    nextTile = unit.Path.Dequeue();
+                    nextTile.SetUnit(unit);
+                }
+                //unit.DestinationTile.SetUnit(unit);
             }
         }
         

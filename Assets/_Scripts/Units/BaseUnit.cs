@@ -18,6 +18,8 @@ public class BaseUnit : MonoBehaviour
     public string UnitDescription;
     public int maxHealth;
     public int CurrentHealth, AttackRange, AttackPower, AttackSpeed;
+    public Dictionary<Tile, Tile> PathDictionary = new Dictionary<Tile, Tile>();
+    public Queue<Tile> Path = new Queue<Tile>();
     public Tile DestinationTile;
     public Tile PreviousTile;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -88,7 +90,19 @@ public class BaseUnit : MonoBehaviour
     public void SetDestination(Tile tile)
     {
         DestinationTile = tile;
+        ConstructPath(tile);
         UnitManager.Instance.DeselectHero();
+    }
+
+    public void ConstructPath(Tile destination)
+    {
+        Path.Clear();
+        if(destination == OccupiedTile)
+        {
+            return;
+        }
+        ConstructPath(PathDictionary[destination]);
+        Path.Enqueue(destination);
     }
 }
 

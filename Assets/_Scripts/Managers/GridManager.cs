@@ -5,7 +5,8 @@ using System.IO;
 using Clrain.Collections;
 using UnityEngine.Rendering;
 using UnityEditor.PackageManager.UI;
-using NUnit.Framework; //priority queue script
+using NUnit.Framework;
+using Unity.VisualScripting; //priority queue script
 
 [System.Serializable]
 public class TileEntry
@@ -248,15 +249,18 @@ public class GridManager : MonoBehaviour
             .ToList();
     }
 
-    public List<Tile> GetReachableTiles(Tile from, int moveRange)
+    public List<Tile> GetReachableTiles(BaseUnit unit, int moveRange)
     {
+        Tile from = unit.OccupiedTile;
         var dists = new Dictionary<Tile, int>();
         var vis = new HashSet<Tile>(); 
         var pq = new PriorityQueue<Tile, int>(); //using pq script from internet as unity does not support it natively
+        var previousTile = new Dictionary<Tile, Tile>();
         
         foreach (Tile tile in _tiles.Values)
         {
             dists[tile] = int.MaxValue;
+            previousTile[tile] = null;
         }
         dists[from] = 0;
         pq.Enqueue(from, 0);
@@ -283,10 +287,12 @@ public class GridManager : MonoBehaviour
                 if (newDist <= moveRange && newDist < dists[nb])
                 {
                     dists[nb] = newDist;
+                    previousTile[nb] = from;
                     pq.Enqueue(nb, newDist);
                 }
             }
         }
+        unit.PathDictionary = previousTile;
         return dists
         //only return list of tiles in range
             .Where(kvp => kvp.Value <= moveRange && kvp.Key != from)
