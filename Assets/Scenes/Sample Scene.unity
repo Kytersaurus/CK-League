@@ -1248,8 +1248,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47d402e467b93cb449cda225c93dfa47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitManager
+  _units:
+  - {fileID: 11400000, guid: 8766a9ed4bf54734dabcfcfbf08b4a87, type: 2}
+  - {fileID: 11400000, guid: 4bd6a673c94aaa643be181ade50f0015, type: 2}
+  - {fileID: 11400000, guid: eff29ff97823d894ab14c4c4a5c40acd, type: 2}
+  - {fileID: 11400000, guid: 990af64b3a31dd5489bf54156722ca33, type: 2}
+  - {fileID: 11400000, guid: 158c4968c567bab489c415ca280616c3, type: 2}
+  - {fileID: 11400000, guid: 6da3d026eb5d3674990d93c28626853b, type: 2}
   SelectedHero: {fileID: 0}
   _canvas: {fileID: 994186588}
+  SpecificSpawn: 0
 --- !u!4 &832267232
 Transform:
   m_ObjectHideFlags: 0
