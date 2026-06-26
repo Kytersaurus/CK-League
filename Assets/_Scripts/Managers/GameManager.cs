@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
                 EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.MovementPhase:
+                
                 break;
             case GameState.AttackPhase:
                 UnitManager.Instance.UpdateAllTargetLists();

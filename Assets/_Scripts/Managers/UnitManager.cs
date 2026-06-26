@@ -1,19 +1,22 @@
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using Clrain.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class UnitManager : MonoBehaviour
 {
     public static UnitManager Instance;
 
-    private List<ScriptableUnit> _units, _heroes;
+    private List<ScriptableUnit> _units;
     private List<BaseUnit> _remainingHeroes = new List<BaseUnit>();
     private List<BaseUnit> _remainingEnemies = new List<BaseUnit>();
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
 
     public BaseHero SelectedHero;
+    private PriorityQueue<BaseUnit, int> _movementQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
     private GameObject _attackBar;
@@ -24,7 +27,6 @@ public class UnitManager : MonoBehaviour
         Instance = this;
 
         _units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
-        _heroes = _units.Where(u=>u.Faction == Faction.Hero).ToList();
     }
 
     public void SpawnEnemies()
@@ -82,18 +84,18 @@ public class UnitManager : MonoBehaviour
             attackBarScript.flipped = hero.OccupiedTile.GridPos.y < 3;
             attackBarScript.Refresh();
         }   
-        if (GameManager.Instance.State == GameState.MovementPhase)
+        /*if (GameManager.Instance.State == GameState.MovementPhase)
         {
             ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
             foreach (Tile tile in ReachableTiles)
             {
                 tile.highlight.SetActive(true);
             }    
-        }
+        }*/
         
         if(GameManager.Instance.State == GameState.MovementPhase)
         {
-            ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero.OccupiedTile, SelectedHero.moveRange);    
+            ReachableTiles = GridManager.Instance.GetReachableTiles(SelectedHero, SelectedHero.moveRange);
             foreach (Tile tile in ReachableTiles)
             {
                 tile.highlight.SetActive(true);
@@ -262,14 +264,81 @@ public class UnitManager : MonoBehaviour
             unit.Target = null;
         }
     }
+    /*public void FillMovementQueue()
+    {
+        var sortedRemainingUnits = _remainingUnits.OrderBy(n=>n.moveRange).ToList();
+        foreach(BaseUnit unit in sortedRemainingUnits)
+        {
+            int tempMoveRange = unit.moveRange;
+            while(tempMoveRange > 0)
+            {
+                _movementQueue.Enqueue(unit, tempMoveRange);
+                tempMoveRange--;
+            }
+        }
+    }*/
+
+    public BaseUnit FindClosestTarget(BaseUnit unit)
+    {
+        BaseUnit target = null;
+        var shortestDistance = float.MaxValue;
+        if(unit.Faction == Faction.Enemy)
+        {
+            foreach(BaseHero hero in _remainingHeroes)
+            {
+                var distance = Vector2.Distance(unit.OccupiedTile.transform.position, hero.OccupiedTile.transform.position);
+                if(target == null || distance < shortestDistance)
+                {
+                    target = hero;
+                    shortestDistance = distance;
+                }
+            }
+        }
+        return target;
+    }
+
+    public void SetEnemyMovement()
+    {
+        foreach(BaseUnit enemy in _remainingEnemies)
+        {
+            BaseHero target = (BaseHero)FindClosestTarget(enemy);
+            Tile closestTileToTarget = GridManager.Instance.GetEnemyPath(enemy, target);
+            ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
+            /*float closestDistance = Vector2.Distance(enemy.OccupiedTile.transform.position, target.OccupiedTile.transform.position);
+            ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
+            foreach(Tile tile in ReachableTiles)
+            {
+                var distance = Vector2.Distance(tile.transform.position, target.OccupiedTile.transform.position);
+                if(distance < closestDistance)
+                {
+                    closestTileToTarget = tile;
+                    closestDistance = distance;
+                }
+            }*/
+            enemy.SetDestination(closestTileToTarget);
+        }
+    }
 
     public void ExecuteAllMovements()
     {
-        foreach(BaseUnit unit in _remainingUnits)
+        var unitList = _remainingUnits.OrderByDescending(n=>n.moveRange).ToList();
+        foreach(BaseUnit unit in unitList)
         {
             if(unit.DestinationTile != null)
             {
-                unit.DestinationTile.SetUnit(unit);
+                Tile nextTile;
+                while(unit.Path.Count != 0)
+                {
+                    nextTile = unit.Path.Dequeue();
+                    if(nextTile.OccupiedUnit == null)
+                    {
+                        nextTile.SetUnit(unit);
+                    }
+                    else
+                    {
+                        unit.Path.Clear();
+                    }
+                }
             }
         }
         
