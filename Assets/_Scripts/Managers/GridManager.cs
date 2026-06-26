@@ -357,7 +357,7 @@ public class GridManager : MonoBehaviour
         
         Tile validTile = target.OccupiedTile;
         var reachableTiles = GetReachableTiles(unit, unit.moveRange);
-        while (!reachableTiles.Contains(validTile))
+        while (!reachableTiles.Contains(validTile) && validTile != unit.OccupiedTile)
         {
             validTile = previousTile[validTile];
         }

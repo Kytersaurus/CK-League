@@ -25,7 +25,6 @@ public class BaseUnit : MonoBehaviour
     public bool hasMoved;
     public bool immune;
     public float reducedDmg = 1;
-    public int moveRange;
     public BaseUnit attackedBy;
     public bool counterAtk;
     public int counterAtkDmg;
