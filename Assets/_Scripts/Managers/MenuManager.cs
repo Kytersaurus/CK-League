@@ -9,6 +9,8 @@ public class MenuManager : MonoBehaviour
     public static MenuManager Instance;
 
     [SerializeField] private GameObject _showPhaseObject;
+    [SerializeField] private GameObject _victoryPanel;
+    [SerializeField] private GameObject _defeatPanel;
     public GameObject _pauseMenu;
     public bool popUpActive;
 
@@ -31,10 +33,12 @@ public class MenuManager : MonoBehaviour
         else if(currentState == GameState.Victory)
         {
             phaseName = "Victory";
+            _victoryPanel.SetActive(true);
         }
         else if(currentState == GameState.Defeat)
         {
             phaseName = "Defeat";
+            _defeatPanel.SetActive(true);
         }
         else
         {
@@ -47,7 +51,7 @@ public class MenuManager : MonoBehaviour
     }
     void Update()
     {
-        if (!UnitManager.Instance.IsAttackBarActive && Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (UnitManager.Instance.SelectedHero == null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (!_pauseMenu.activeSelf)
             {
@@ -60,16 +64,20 @@ public class MenuManager : MonoBehaviour
                 popUpActive = false;
             }
         }
-        if (GameManager.Instance.State == GameState.AttackPhase)
+        if (GameManager.Instance.State == GameState.AttackPhase || GameManager.Instance.State == GameState.MovementPhase)
         {
-            if (!popUpActive)
+            if (!popUpActive && (UnitManager.Instance.AllAttacksSelected() || UnitManager.Instance.AllMovementsSelected()))
             {
                 EndTurnButton.Instance.ActivateEndTurnButton();
             }
-            else if (popUpActive)
+            else
             {
                 EndTurnButton.Instance.DeactivateEndTurnButton();
             }
+        }
+        if (UnitManager.Instance.SelectedHero != null && Keyboard.current.escapeKey.wasPressedThisFrame )
+        {
+            UnitManager.Instance.SetSelectedHero(null);
         }
     }
 }

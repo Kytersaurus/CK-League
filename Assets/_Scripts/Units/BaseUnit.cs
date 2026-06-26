@@ -22,7 +22,14 @@ public class BaseUnit : MonoBehaviour
     public Dictionary<Tile, Tile> PathDictionary = new Dictionary<Tile, Tile>();
     public Queue<Tile> Path = new Queue<Tile>();
     public Tile DestinationTile;
-    public Tile PreviousTile;
+    public bool hasMoved;
+    public bool immune;
+    public float reducedDmg = 1;
+    public int moveRange;
+    public BaseUnit attackedBy;
+    public bool counterAtk;
+    public int counterAtkDmg;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()

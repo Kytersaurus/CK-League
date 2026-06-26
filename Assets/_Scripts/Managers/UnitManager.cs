@@ -3,6 +3,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using Clrain.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -10,7 +11,7 @@ public class UnitManager : MonoBehaviour
 {
     public static UnitManager Instance;
 
-    private List<ScriptableUnit> _units;
+    [SerializeField] private List<ScriptableUnit> _units;
     private List<BaseUnit> _remainingHeroes = new List<BaseUnit>();
     private List<BaseUnit> _remainingEnemies = new List<BaseUnit>();
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
@@ -22,11 +23,14 @@ public class UnitManager : MonoBehaviour
     private GameObject _attackBar;
     public bool IsAttackBarActive => _attackBar != null;
     [SerializeField] private Canvas _canvas;
+    public bool SpecificSpawn;
     void Awake()
     {
         Instance = this;
-
-        _units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
+        
+        // _units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
+        // _heroes = _units.Where(u=>u.Faction == Faction.Hero).ToList();
+        
     }
 
     public void SpawnEnemies()
@@ -36,7 +40,15 @@ public class UnitManager : MonoBehaviour
             if(unit.Faction == Faction.Enemy)
             {
                 var spawnedEnemy = Instantiate(unit.UnitPrefab);
-                var spawnTile = GridManager.Instance.GetEnemySpawnTile();
+                Tile spawnTile;
+                if (SpecificSpawn)
+                {
+                    spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, false);
+                }
+                else
+                {
+                    spawnTile = GridManager.Instance.GetEnemySpawnTile();;
+                }
                 spawnTile.SetUnit(spawnedEnemy);
                 _remainingEnemies.Add(spawnedEnemy);
                 _remainingUnits.Add(spawnedEnemy);
@@ -53,13 +65,20 @@ public class UnitManager : MonoBehaviour
             if(unit.Faction == Faction.Hero)
             {
                 var spawnedHero = Instantiate(unit.UnitPrefab);
-                var spawnTile = GridManager.Instance.GetHeroSpawnTile();
+                Tile spawnTile;
+                if (SpecificSpawn)
+                {
+                    spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, true);
+                }
+                else
+                {
+                    spawnTile = GridManager.Instance.GetHeroSpawnTile();
+                }
                 spawnTile.SetUnit(spawnedHero);
                 _remainingHeroes.Add(spawnedHero);
                 _remainingUnits.Add(spawnedHero);
             }
         }
-        //GameManager.Instance.UpdateGameState(GameState.MovementPhase);
     }
 
     public void SetSelectedHero(BaseHero hero)
@@ -239,7 +258,17 @@ public class UnitManager : MonoBehaviour
             if (unit.Alive && unit.SelectedAttack != null)
             {
                 unit.SelectedAttack.Execute(unit, unit.Target);
+                unit.Target.attackedBy = unit;
                 unit.SelectedAttack = null;
+            }
+        }
+        foreach (BaseUnit unit in _remainingUnits)
+        {
+            if (unit.counterAtk)
+            {
+                unit.attackedBy.TakeDamage(unit.counterAtkDmg);
+                unit.counterAtk = false;
+                unit.attackedBy = null;
             }
         }
         SetSelectedHero(null);
@@ -363,5 +392,13 @@ public class UnitManager : MonoBehaviour
     public List<BaseUnit> GetRemainingHeroes()
     {
         return _remainingHeroes;
+    }
+    
+    public void ResetMovedState()
+    {
+        foreach (BaseUnit unit in _remainingUnits)
+        {
+            unit.hasMoved = false;
+        }
     }
 }

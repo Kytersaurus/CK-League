@@ -131,7 +131,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
+  m_LocalScale: {x: 2.7, y: 2.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3937745615201340750}
@@ -217,8 +217,8 @@ MonoBehaviour:
   healthBar: {fileID: 2743834586076405301}
   moveSet:
   - {fileID: 11400000, guid: 5b01f7a79474ad44885c296f7ebc9534, type: 2}
-  - {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
-  - {fileID: 11400000, guid: 5b01f7a79474ad44885c296f7ebc9534, type: 2}
+  - {fileID: 11400000, guid: 7b1d897e0ce77aa44804a4e0dbde01cb, type: 2}
+  - {fileID: 11400000, guid: 57c8faa7da48e2842be9f1cf5ccf8b1c, type: 2}
   - {fileID: 11400000, guid: 694c893fb0822fa4caabe93c974e238b, type: 2}
   UnitIcon: {fileID: 3278477544744904923, guid: 245fdeba7598a35438df4a529ed1e92b, type: 3}
   SelectedAttack: {fileID: 0}
@@ -230,9 +230,12 @@ MonoBehaviour:
   AttackSpeed: 3
   DestinationTile: {fileID: 0}
   PreviousTile: {fileID: 0}
-  moveRange: 2
   immune: 0
-  reducedDmg: 0
+  reducedDmg: 1
+  moveRange: 2
+  attackedBy: {fileID: 0}
+  counterAtk: 0
+  counterAtkDmg: 0
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
 --- !u!1001 &240034667750404394
 PrefabInstance:
@@ -276,11 +279,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.01
+      value: 0.01753182
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.01
+      value: 0.01753182
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalScale.z
@@ -320,7 +323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.24
+      value: 0.273
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

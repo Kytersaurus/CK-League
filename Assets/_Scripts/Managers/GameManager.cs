@@ -32,11 +32,16 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.SpawnHeroes:
                 UnitManager.Instance.SpawnHeroes();
+                if (UnitManager.Instance.SpecificSpawn)
+                {
+                    EndTurnButton.Instance.EndTurn();
+                    return;
+                }
                 EndTurnButton.Instance.ChangeText("Start");
                 EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.MovementPhase:
-                
+                UnitManager.Instance.ResetMovedState();
                 break;
             case GameState.AttackPhase:
                 UnitManager.Instance.UpdateAllTargetLists();
@@ -44,10 +49,8 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.SetEnemyAttacks();
                 break;
             case GameState.Victory:
-                //HandleVictory();
                 break;
             case GameState.Defeat:
-                //HandleDefeat();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
