@@ -98,11 +98,11 @@ public class Tile : MonoBehaviour
         {
             if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && OccupiedUnit.Faction == Faction.Enemy)
             {
-                highlightSelect.SetActive(true);    
+                highlightSelect.SetActive(true);
             }
             else if (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero && UnitManager.Instance.SelectedHero == null)
             {
-                highlightSelect.SetActive(true);    
+                highlightSelect.SetActive(true);
             }
             else
             {
@@ -170,6 +170,7 @@ public class Tile : MonoBehaviour
             {
                 UnitManager.Instance.SelectedHero.hasMoved = true;
                 UnitManager.Instance.SelectedHero.SetDestination(this);
+                //UnitManager.Instance.SelectedHero.ConstructPath(this);
                 if (UnitManager.Instance.AllMovementsSelected())
                 {
                     EndTurnButton.Instance.ActivateEndTurnButton();
