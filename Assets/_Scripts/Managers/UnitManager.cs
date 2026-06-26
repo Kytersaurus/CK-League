@@ -8,12 +8,13 @@ public class UnitManager : MonoBehaviour
 {
     public static UnitManager Instance;
 
-    private List<ScriptableUnit> _units, _heroes;
+    private List<ScriptableUnit> _units;
     private List<BaseUnit> _remainingHeroes = new List<BaseUnit>();
     private List<BaseUnit> _remainingEnemies = new List<BaseUnit>();
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
 
     public BaseHero SelectedHero;
+    private PriorityQueue<BaseUnit, int> _movementQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     public List<Tile> ReachableTiles {get; private set;} = new List<Tile>();
     private GameObject _attackBar;
@@ -24,7 +25,6 @@ public class UnitManager : MonoBehaviour
         Instance = this;
 
         _units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
-        _heroes = _units.Where(u=>u.Faction == Faction.Hero).ToList();
     }
 
     public void SpawnEnemies()
@@ -262,6 +262,19 @@ public class UnitManager : MonoBehaviour
             unit.Target = null;
         }
     }
+    /*public void FillMovementQueue()
+    {
+        var sortedRemainingUnits = _remainingUnits.OrderBy(n=>n.moveRange).ToList();
+        foreach(BaseUnit unit in sortedRemainingUnits)
+        {
+            int tempMoveRange = unit.moveRange;
+            while(tempMoveRange > 0)
+            {
+                _movementQueue.Enqueue(unit, tempMoveRange);
+                tempMoveRange--;
+            }
+        }
+    }*/
 
     public void ExecuteAllMovements()
     {
@@ -269,14 +282,19 @@ public class UnitManager : MonoBehaviour
         {
             if(unit.DestinationTile != null)
             {
-                //unit.transform.Translate(unit.DestinationTile.transform.position * 5f * Time.deltaTime);
                 Tile nextTile;
                 while(unit.Path.Count != 0)
                 {
                     nextTile = unit.Path.Dequeue();
-                    nextTile.SetUnit(unit);
+                    if(nextTile.OccupiedUnit == null)
+                    {
+                        nextTile.SetUnit(unit);
+                    }
+                    else
+                    {
+                        unit.Path.Clear();
+                    }
                 }
-                //unit.DestinationTile.SetUnit(unit);
             }
         }
         
