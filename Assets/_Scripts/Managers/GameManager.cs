@@ -32,6 +32,11 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.SpawnHeroes:
                 UnitManager.Instance.SpawnHeroes();
+                if (UnitManager.Instance.SpecificSpawn)
+                {
+                    EndTurnButton.Instance.EndTurn();
+                    return;
+                }
                 EndTurnButton.Instance.ChangeText("Start");
                 EndTurnButton.Instance.ActivateEndTurnButton();
                 break;

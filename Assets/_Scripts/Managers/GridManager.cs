@@ -180,6 +180,21 @@ public class GridManager : MonoBehaviour
             .OrderBy(_ => Random.value)
             .First().Value;
     }
+    public Tile GetSpecificSpawnTile(int x, int y, bool isHero)
+    {
+        var key = new Vector2(x, y);
+        if (!_tiles.TryGetValue(key, out Tile tile))
+        {
+            Debug.LogError("Tile for unit spawn does not exist");
+            return isHero ? GetHeroSpawnTile() : GetEnemySpawnTile();
+        }
+        if (!tile.Walkable)
+        {
+            Debug.LogError("Tile fpr unit spawn is blocked by an obstacle");
+            return isHero ? GetHeroSpawnTile() : GetEnemySpawnTile();
+        }
+        return tile;
+    }
 
     public Tile GetTileAtPosition(Vector2 pos)
     {
