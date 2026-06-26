@@ -16,7 +16,7 @@ MonoBehaviour:
   damage: 0
   icon: {fileID: 1895284693935528863, guid: 8361bdeaf3614a24784930e7d97a1354, type: 3}
   attackDesc: Negate or reduce incoming enemy attacks. Chance to counterattack.
-  chance: 0.1
+  chance: 0
   perReduction: 0.3
-  counterAttackChance: 0.4
+  counterAttackChance: 1
   counterAttackDmg: 20

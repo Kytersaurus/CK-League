@@ -66,7 +66,7 @@ public class MenuManager : MonoBehaviour
         }
         if (GameManager.Instance.State == GameState.AttackPhase || GameManager.Instance.State == GameState.MovementPhase)
         {
-            if (!popUpActive && (UnitManager.Instance.AllAttacksSelected() || UnitManager.Instance.AllMovementsSelected()))
+            if (!popUpActive && (UnitManager.Instance.AllAttacksSelected() || GameManager.Instance.State == GameState.MovementPhase))
             {
                 EndTurnButton.Instance.ActivateEndTurnButton();
             }
