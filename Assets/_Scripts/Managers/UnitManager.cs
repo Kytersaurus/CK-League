@@ -3,6 +3,7 @@ using System.Dynamic;
 using System.Linq;
 using Clrain.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class UnitManager : MonoBehaviour
 {
@@ -275,6 +276,46 @@ public class UnitManager : MonoBehaviour
             }
         }
     }*/
+
+    public BaseUnit FindClosestTarget(BaseUnit unit)
+    {
+        BaseUnit target = null;
+        var shortestDistance = float.MaxValue;
+        if(unit.Faction == Faction.Enemy)
+        {
+            foreach(BaseHero hero in _remainingHeroes)
+            {
+                var distance = Vector2.Distance(unit.OccupiedTile.transform.position, hero.OccupiedTile.transform.position);
+                if(target == null || distance < shortestDistance)
+                {
+                    target = hero;
+                    shortestDistance = distance;
+                }
+            }
+        }
+        return target;
+    }
+
+    public void SetEnemyMovement()
+    {
+        foreach(BaseUnit enemy in _remainingEnemies)
+        {
+            BaseHero target = (BaseHero)FindClosestTarget(enemy);
+            Tile closestTileToTarget = enemy.OccupiedTile;
+            float closestDistance = Vector2.Distance(enemy.OccupiedTile.transform.position, target.OccupiedTile.transform.position);
+            ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
+            foreach(Tile tile in ReachableTiles)
+            {
+                var distance = Vector2.Distance(tile.transform.position, target.OccupiedTile.transform.position);
+                if(distance < closestDistance)
+                {
+                    closestTileToTarget = tile;
+                    closestDistance = distance;
+                }
+            }
+            enemy.SetDestination(closestTileToTarget);
+        }
+    }
 
     public void ExecuteAllMovements()
     {
