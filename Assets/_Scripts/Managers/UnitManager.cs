@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using Clrain.Collections;
 using UnityEngine;
@@ -301,8 +302,9 @@ public class UnitManager : MonoBehaviour
         foreach(BaseUnit enemy in _remainingEnemies)
         {
             BaseHero target = (BaseHero)FindClosestTarget(enemy);
-            Tile closestTileToTarget = enemy.OccupiedTile;
-            float closestDistance = Vector2.Distance(enemy.OccupiedTile.transform.position, target.OccupiedTile.transform.position);
+            Tile closestTileToTarget = GridManager.Instance.GetEnemyPath(enemy, target);
+            ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
+            /*float closestDistance = Vector2.Distance(enemy.OccupiedTile.transform.position, target.OccupiedTile.transform.position);
             ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
             foreach(Tile tile in ReachableTiles)
             {
@@ -312,14 +314,15 @@ public class UnitManager : MonoBehaviour
                     closestTileToTarget = tile;
                     closestDistance = distance;
                 }
-            }
+            }*/
             enemy.SetDestination(closestTileToTarget);
         }
     }
 
     public void ExecuteAllMovements()
     {
-        foreach(BaseUnit unit in _remainingUnits)
+        var unitList = _remainingUnits.OrderByDescending(n=>n.moveRange).ToList();
+        foreach(BaseUnit unit in unitList)
         {
             if(unit.DestinationTile != null)
             {

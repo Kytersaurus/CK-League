@@ -287,7 +287,7 @@ public class GridManager : MonoBehaviour
                 if (newDist <= moveRange && newDist < dists[nb])
                 {
                     dists[nb] = newDist;
-                    previousTile[nb] = from;
+                    previousTile[nb] = curr;
                     pq.Enqueue(nb, newDist);
                 }
             }
@@ -298,5 +298,55 @@ public class GridManager : MonoBehaviour
             .Where(kvp => kvp.Value <= moveRange && kvp.Key != from)
             .Select(kvp => kvp.Key)
             .ToList();
+    }
+
+    public Tile GetEnemyPath(BaseUnit unit, BaseUnit target)
+    {
+        Tile from = unit.OccupiedTile;
+        var dists = new Dictionary<Tile, int>();
+        var vis = new HashSet<Tile>(); 
+        var pq = new PriorityQueue<Tile, int>(); //using pq script from internet as unity does not support it natively
+        var previousTile = new Dictionary<Tile, Tile>();
+        
+        foreach (Tile tile in _tiles.Values)
+        {
+            dists[tile] = int.MaxValue;
+            previousTile[tile] = null;
+        }
+        dists[from] = 0;
+        pq.Enqueue(from, 0);
+
+        while (pq.Count > 0 && !vis.Contains(target.OccupiedTile))
+        {
+            Tile curr = pq.Dequeue();
+            List<Tile> nbs = GetNeighbourTiles(curr);
+            if (!vis.Add(curr))
+            {
+                continue;
+            }
+            foreach (Tile nb in nbs)
+            {
+                if (vis.Contains(nb) || (!nb.Walkable && nb != target.OccupiedTile))
+                {
+                    continue;
+                }
+                int newDist = dists[curr] + nb.MoveCost;
+                if (newDist < dists[nb])
+                {
+                    dists[nb] = newDist;
+                    previousTile[nb] = curr;
+                    pq.Enqueue(nb, newDist);
+                }
+            }
+        }
+        
+        Tile validTile = target.OccupiedTile;
+        var reachableTiles = GetReachableTiles(unit, unit.moveRange);
+        while (!reachableTiles.Contains(validTile))
+        {
+            validTile = previousTile[validTile];
+        }
+        return validTile;
+                                                       
     }
 }
