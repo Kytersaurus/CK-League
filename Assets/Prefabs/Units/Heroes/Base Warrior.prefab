@@ -228,11 +228,11 @@ MonoBehaviour:
   AttackRange: 1
   AttackPower: 0
   AttackSpeed: 0
+  moveRange: 2
   DestinationTile: {fileID: 0}
-  PreviousTile: {fileID: 0}
+  hasMoved: 0
   immune: 0
   reducedDmg: 1
-  moveRange: 2
   attackedBy: {fileID: 0}
   counterAtk: 0
   counterAtkDmg: 0

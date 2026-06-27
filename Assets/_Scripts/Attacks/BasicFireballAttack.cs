@@ -5,7 +5,7 @@ public class BasicFireballAttack : FireAttack
 {
     public override void Execute(BaseUnit attacker, BaseUnit target)
     {
-        target.TakeDamage(damage);
+        target.TakeDamage(CalculateDmg(target. reducedDmg ,damage));
         FireAOEAttack(target.OccupiedTile, aoeRange);
     }
 }

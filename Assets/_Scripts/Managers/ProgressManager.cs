@@ -1,12 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Linq.Expressions;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-[System.Serializable]
+ [System.Serializable]
 public class ProgressData
 {
     public List<string> unlockedLevels = new List<string>();
@@ -19,17 +15,9 @@ public class ProgressManager : MonoBehaviour
     private string _savePath => Path.Combine(Application.persistentDataPath, "progress.json");
     void Awake()
     {
-        if (Instance  == null)
-        {
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-        LoadProgress();    
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-        Debug.Log(Application.persistentDataPath);
+        LoadProgress();
+        Levels = new List<string> {"Tutorial", "Level 1", "Level 2"};
     }
 
     

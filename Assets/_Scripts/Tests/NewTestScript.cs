@@ -19,7 +19,7 @@ public class NewTestScript
     [UnitySetUp]
     public IEnumerator Setup()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Sample Scene");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Level 1");
         while (!asyncLoad.isDone)
         {
             yield return null;
@@ -53,4 +53,5 @@ public class NewTestScript
         Assert.AreEqual(GameState.Defeat, GameManager.Instance.State);
         yield return null;
     }
+    
 }
