@@ -344,7 +344,7 @@ MonoBehaviour:
   highlightSelect: {fileID: 8180776743017709420}
   highlightError: {fileID: 385731349539450447}
   _isWalkable: 1
-  _movementCost: 3
+  _movementCost: 2
   _tileType: 2
   _tileVariant: 4
   OccupiedUnit: {fileID: 0}
