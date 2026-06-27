@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef69eefd33eea9e419babf11ff612800, type: 3}
+  m_Name: Archer
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableUnit
+  Faction: 0
+  UnitPrefab: {fileID: 6578676962674491697, guid: f2e68d5fe185d6c449cb47ebc8dcfa6c, type: 3}
+  spawnX: 0
+  spawnY: 7

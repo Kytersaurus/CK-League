@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,8 +8,10 @@ using UnityEngine.UI;
 
 public class AttackToolBarScript : MonoBehaviour
 {
+    public static AttackToolBarScript Instance;
     private BaseUnit _selectedUnit;
     [SerializeField] private Image _profileIcon;
+    [SerializeField] private List<GameObject> _attackButtonsObj;
     [SerializeField] private List<Toggle> _attackButtons;
     [SerializeField] private List<Image> _attackButtonIcons;
     [SerializeField] private TextMeshProUGUI _unitDescription;
@@ -19,6 +22,7 @@ public class AttackToolBarScript : MonoBehaviour
     public bool flipped;
     void Awake()
     {
+        Instance = this;
         Refresh();
     }
     void Update()
@@ -51,5 +55,12 @@ public class AttackToolBarScript : MonoBehaviour
             var buttonScript = _attackButtons[i].GetComponent<AttackButtonScript>();
             buttonScript.attack = attacks[i];
         } 
+    }
+    public void SetButtonsActive(bool state)
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            _attackButtonsObj[i].SetActive(state);
+        }
     }
 }

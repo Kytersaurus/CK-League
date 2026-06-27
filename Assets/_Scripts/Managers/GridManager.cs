@@ -191,7 +191,7 @@ public class GridManager : MonoBehaviour
         }
         if (!tile.Walkable)
         {
-            Debug.LogError("Tile fpr unit spawn is blocked by an obstacle");
+            Debug.LogError("Tile for unit spawn is blocked by an obstacle");
             return isHero ? GetHeroSpawnTile() : GetEnemySpawnTile();
         }
         return tile;

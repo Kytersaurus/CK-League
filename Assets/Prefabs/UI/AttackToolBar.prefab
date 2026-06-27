@@ -1051,6 +1051,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackToolBarScript
   _profileIcon: {fileID: 3206574311554333130}
+  _attackButtonsObj:
+  - {fileID: 6344736924516809908}
+  - {fileID: 5690616591734674852}
+  - {fileID: 8426375744909742943}
+  - {fileID: 7801235921216445163}
   _attackButtons:
   - {fileID: 1195575960011070798}
   - {fileID: 8329985658740251843}
