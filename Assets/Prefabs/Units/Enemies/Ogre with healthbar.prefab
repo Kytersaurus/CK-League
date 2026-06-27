@@ -122,9 +122,14 @@ MonoBehaviour:
   AttackRange: 1
   AttackPower: 20
   AttackSpeed: 1
-  moveRange: 1
+  moveRange: 2
   DestinationTile: {fileID: 0}
-  PreviousTile: {fileID: 0}
+  hasMoved: 0
+  immune: 0
+  reducedDmg: 1
+  attackedBy: {fileID: 0}
+  counterAtk: 0
+  counterAtkDmg: 0
 --- !u!1 &2762809049444436295
 GameObject:
   m_ObjectHideFlags: 0

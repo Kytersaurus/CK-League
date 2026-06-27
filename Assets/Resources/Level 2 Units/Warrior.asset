@@ -15,4 +15,4 @@ MonoBehaviour:
   Faction: 0
   UnitPrefab: {fileID: 8701891561292654473, guid: d4a0048e40d0cfe43a48f3fd4bb1bc6d, type: 3}
   spawnX: 0
-  spawnY: 7
+  spawnY: 1

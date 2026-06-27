@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 [System.Serializable]
@@ -27,12 +29,10 @@ public class ProgressManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        Debug.Log(Application.persistentDataPath);
     }
 
-    void Update()
-    {
-        
-    }
+    
     public bool CheckLevelUnlock(string levelName)
     {
         return _progressData.unlockedLevels.Contains(levelName);
@@ -67,6 +67,11 @@ public class ProgressManager : MonoBehaviour
     {
         string currentLevel = SceneManager.GetActiveScene().name;
         int index = Levels.IndexOf(currentLevel);
+        if (index == -1 || index > Levels.Count)
+        {
+            Debug.LogError("The level is not found in levels list");
+            return;
+        }
         UnlockLevel(Levels[index+1]);
     }
 }
