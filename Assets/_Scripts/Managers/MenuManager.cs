@@ -34,6 +34,7 @@ public class MenuManager : MonoBehaviour
         {
             phaseName = "Victory";
             _victoryPanel.SetActive(true);
+            ProgressManager.Instance.LevelComplete();
         }
         else if(currentState == GameState.Defeat)
         {

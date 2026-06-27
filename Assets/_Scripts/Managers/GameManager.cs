@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(newState);
 
     }
+    
 }
 
 public enum GameState
