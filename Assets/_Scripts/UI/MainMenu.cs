@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,5 +17,12 @@ public class NewMonoBehaviourScript : MonoBehaviour
     public void RestartScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    public void LevelComplete()
+    {
+        List<string> levels = ProgressManager.Instance.Levels;
+        string currentLevel = SceneManager.GetActiveScene().name;
+        int index = levels.IndexOf(currentLevel);
+        ProgressManager.Instance.UnlockLevel(levels[index+1]);
     }
 }

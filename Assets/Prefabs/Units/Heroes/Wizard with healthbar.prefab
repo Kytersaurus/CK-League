@@ -219,7 +219,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 509b6a188c187ec4ebd262e635bd35c1, type: 2}
   - {fileID: 11400000, guid: 694c893fb0822fa4caabe93c974e238b, type: 2}
   - {fileID: 11400000, guid: 53a8ad70b3ada4c4f92b8d4e66e74d50, type: 2}
-  - {fileID: 11400000, guid: b46ff3e78d343974fb87ea422f35545b, type: 2}
+  - {fileID: 11400000, guid: 57c8faa7da48e2842be9f1cf5ccf8b1c, type: 2}
   UnitIcon: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
   SelectedAttack: {fileID: 0}
   UnitDescription: Standard Mage, lacks in health and move range but attacks are
@@ -229,8 +229,14 @@ MonoBehaviour:
   AttackRange: 3
   AttackPower: 70
   AttackSpeed: 3
-  DestinationTile: {fileID: 0}
   moveRange: 1
+  DestinationTile: {fileID: 0}
+  hasMoved: 0
+  immune: 0
+  reducedDmg: 1
+  attackedBy: {fileID: 0}
+  counterAtk: 0
+  counterAtkDmg: 0
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
 --- !u!1001 &240034667750404394
 PrefabInstance:

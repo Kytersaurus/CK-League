@@ -370,7 +370,7 @@ public class UnitManager : MonoBehaviour
                 }
             }
         }
-        
+        SetSelectedHero(null);
     }
 
     public bool AllMovementsSelected()

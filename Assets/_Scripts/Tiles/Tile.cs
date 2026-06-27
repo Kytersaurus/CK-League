@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum TileType
 {
@@ -129,6 +130,10 @@ public class Tile : MonoBehaviour
     void OnMouseDown()
     {
         if (MenuManager.Instance != null && MenuManager.Instance.popUpActive)
+        {
+            return;
+        }
+        if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
