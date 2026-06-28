@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class AttackToolBarScript : MonoBehaviour
@@ -38,7 +35,7 @@ public class AttackToolBarScript : MonoBehaviour
             return;
         }
         RectTransform _rect = _attackBar.GetComponent<RectTransform>();
-        _rect.anchoredPosition = new Vector2(0, flipped ? 145 : -225);
+        _rect.anchoredPosition = new Vector2(0, flipped ? 370 : -541);
 
         foreach (var tooltip in _tooltips)
         {

@@ -29,6 +29,7 @@ public class LevelEditor : MonoBehaviour
         {
             EditingMode = !EditingMode;
         }
+        #if UNITY_EDITOR
         if (Keyboard.current.sKey.wasPressedThisFrame && EditingMode)
         {
             if (string.IsNullOrEmpty(_saveName))
@@ -39,6 +40,8 @@ public class LevelEditor : MonoBehaviour
             Debug.Log($"Level {_saveName} saved");
             GridManager.Instance.SaveGrid(_saveName);
         }
+        #endif
+        
         if (Keyboard.current.lKey.wasPressedThisFrame && EditingMode)
         {
             GridManager.Instance.LoadGrid(_saveName);
