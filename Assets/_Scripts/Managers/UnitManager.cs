@@ -33,6 +33,14 @@ public class UnitManager : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        BaseUnit.OnUnitDeath += KillUnit;
+    }
+    private void OnDisable()
+    {
+        BaseUnit.OnUnitDeath -= KillUnit;
+    }
     public void SpawnEnemies()
     {
         foreach(ScriptableUnit unit in _units)
