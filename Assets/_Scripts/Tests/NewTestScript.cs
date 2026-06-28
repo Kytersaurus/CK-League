@@ -19,7 +19,7 @@ public class NewTestScript
     [UnitySetUp]
     public IEnumerator Setup()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Level 1");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Tutorial");
         while (!asyncLoad.isDone)
         {
             yield return null;

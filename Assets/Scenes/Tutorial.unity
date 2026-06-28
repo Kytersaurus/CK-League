@@ -2531,7 +2531,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: VICTORY You just beat the tutorial!
+  m_text: VICTORY! You just beat the tutorial!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 35ffd559bc8b0fc47818509b0fe9553c, type: 2}
   m_sharedMaterial: {fileID: -8874916238243864684, guid: 35ffd559bc8b0fc47818509b0fe9553c, type: 2}

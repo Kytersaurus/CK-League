@@ -55,9 +55,14 @@ public class ProgressManager : MonoBehaviour
     {
         string currentLevel = SceneManager.GetActiveScene().name;
         int index = Levels.IndexOf(currentLevel);
-        if (index == -1 || index > Levels.Count)
+        if (index == -1 || index >= Levels.Count)
         {
-            Debug.LogError("The level is not found in levels list");
+            Debug.Log("The level is not found in levels list");
+            return;
+        }
+        if (index+1 == Levels.Count)
+        {
+            Debug.Log("There is no next level");
             return;
         }
         UnlockLevel(Levels[index+1]);
