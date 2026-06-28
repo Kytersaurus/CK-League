@@ -29,6 +29,8 @@ public class BaseUnit : MonoBehaviour
     public bool counterAtk;
     public int counterAtkDmg;
 
+    public static event Action<BaseUnit> OnUnitDeath;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
@@ -42,7 +44,8 @@ public class BaseUnit : MonoBehaviour
         if(CurrentHealth <= 0)
         {
             CurrentHealth = 0;
-            UnitManager.Instance.KillUnit(this);
+            OnUnitDeath?.Invoke(this);
+            //UnitManager.Instance.KillUnit(this);
         }
         else
         {
