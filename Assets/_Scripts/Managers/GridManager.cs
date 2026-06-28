@@ -355,6 +355,10 @@ public class GridManager : MonoBehaviour
             }
         }
         
+        if(dists[target.OccupiedTile] == int.MaxValue)
+        {
+            return unit.OccupiedTile;
+        }
         Tile validTile = target.OccupiedTile;
         var reachableTiles = GetReachableTiles(unit, unit.moveRange);
         while (!reachableTiles.Contains(validTile) && validTile != unit.OccupiedTile)

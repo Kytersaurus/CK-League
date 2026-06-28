@@ -53,5 +53,4 @@ public class NewTestScript
         Assert.AreEqual(GameState.Defeat, GameManager.Instance.State);
         yield return null;
     }
-    
 }
