@@ -91,7 +91,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Wizard
   OccupiedTile: {fileID: 0}
   Faction: 0
+  Action: 0
+  Alive: 1
+  TargetsList: []
+  Target: {fileID: 0}
+  healthBar: {fileID: 0}
+  moveSet: []
+  UnitIcon: {fileID: 0}
+  SelectedAttack: {fileID: 0}
+  UnitDescription: 
   maxHealth: 100
   CurrentHealth: 100
   AttackRange: 3
-  healthBar: {fileID: 0}
+  AttackPower: 0
+  AttackSpeed: 4
+  moveRange: 0
+  DestinationTile: {fileID: 0}
+  hasMoved: 0
+  immune: 0
+  reducedDmg: 1
+  attackedBy: {fileID: 0}
+  counterAtk: 0
+  counterAtkDmg: 0
+  attackToolBar: {fileID: 0}

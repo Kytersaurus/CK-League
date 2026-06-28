@@ -228,7 +228,7 @@ MonoBehaviour:
   AttackRange: 2
   AttackPower: 10
   AttackSpeed: 2
-  moveRange: 5
+  moveRange: 3
   DestinationTile: {fileID: 0}
   hasMoved: 0
   immune: 0
