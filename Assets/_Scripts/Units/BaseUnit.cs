@@ -30,13 +30,14 @@ public class BaseUnit : MonoBehaviour
     public int counterAtkDmg;
 
     public static event Action<BaseUnit> OnUnitDeath;
+    public static event Action OnUnitAction;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void Awake()
     {
         CurrentHealth = maxHealth;
-        healthBar.setMaxHealth(maxHealth);
+        healthBar.SetMaxHealth(maxHealth);
     }
     public void TakeDamage (int damage)
     {
@@ -45,11 +46,10 @@ public class BaseUnit : MonoBehaviour
         {
             CurrentHealth = 0;
             OnUnitDeath?.Invoke(this);
-            //UnitManager.Instance.KillUnit(this);
         }
         else
         {
-            healthBar.setHealth(CurrentHealth);
+            healthBar.SetHealth(CurrentHealth);
         }
     }
 
@@ -88,13 +88,14 @@ public class BaseUnit : MonoBehaviour
         {
             CurrentHealth = maxHealth;
         }
-        healthBar.setHealth(CurrentHealth);
+        healthBar.SetHealth(CurrentHealth);
     }
 
     public void SetTarget(BaseUnit targetUnit)
     {
         Target = targetUnit;
-        UnitManager.Instance.DeselectHero();
+        OnUnitAction?.Invoke();
+        //UnitManager.Instance.DeselectHero();
     }
     
     public void SetDestination(Tile tile)
@@ -102,10 +103,11 @@ public class BaseUnit : MonoBehaviour
         DestinationTile = tile;
         Path.Clear();
         ConstructPath(tile);
-        if(UnitManager.Instance.SelectedHero != null)
+        OnUnitAction?.Invoke();
+        /*if(UnitManager.Instance.SelectedHero != null)
         {
             UnitManager.Instance.DeselectHero();
-        }
+        }*/
     }
 
     public void ConstructPath(Tile destination)
