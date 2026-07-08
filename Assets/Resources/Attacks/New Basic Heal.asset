@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aaaf2baa43a4f24ba5a3da99ed404cf, type: 3}
+  m_Name: New Basic Heal
+  m_EditorClassIdentifier: Assembly-CSharp::BasicHeal
+  attackName: Basic Heal Spell
+  damage: 0
+  range: 0
+  icon: {fileID: -7125717687315017858, guid: 6781b6e08d08912409e53ca2f3c5455c, type: 3}
+  attackDesc: Heals the unit for a small amount of health.
+  healAmount: 20

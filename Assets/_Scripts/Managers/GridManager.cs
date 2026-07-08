@@ -143,8 +143,8 @@ public class GridManager : MonoBehaviour
             var tile = GenerateTile(data.posX, data.posY, data.tileType, data.tileVariant);
             tile.Init(data.posX, data.posY);
         }
-
-        _cam.position = new Vector3(_width / 2f - 0.5f, _height / 2f - 0.5f, -10);
+        //_cam.position = new Vector3(_width / 2f - 1.5f, _height / 2f - 1f, -10);
+        _cam.position = new Vector3(_width / 2f - 0.5f, _height / 2f - 1f, -10);
         if (GameManager.Instance != null)
         {
             GameManager.Instance.UpdateGameState(GameState.SpawnEnemies);    

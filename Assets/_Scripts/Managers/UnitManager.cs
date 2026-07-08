@@ -104,7 +104,6 @@ public class UnitManager : MonoBehaviour
         {
             _attackBar = Instantiate(hero.attackToolBar, _canvas.transform);
             var attackBarScript = _attackBar.GetComponent<AttackToolBarScript>();
-            attackBarScript.flipped = hero.OccupiedTile.GridPos.y < 3;
             attackBarScript.Refresh();
         }   
         /*if (GameManager.Instance.State == GameState.MovementPhase)
