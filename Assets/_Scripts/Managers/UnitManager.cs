@@ -64,24 +64,33 @@ public class UnitManager : MonoBehaviour
 
     public void SpawnHeroes()
     {
-        foreach(ScriptableUnit unit in _units)
+        List<(ScriptableUnit, UnitSaveData)> heroUnits = TeamManager.Instance.LoadTeamUnits();
+        foreach(var (unit, data) in heroUnits)
         {
-            if(unit.Faction == Faction.Hero)
+            var spawnedHero = Instantiate(unit.UnitPrefab) as BaseHero;
+            spawnedHero.guid = data.guid;
+            spawnedHero.className = data.className;
+            spawnedHero.level = data.level;
+            spawnedHero.experience = data.experience;
+
+            var attacks = TeamManager.Instance.AllAttacks;
+            spawnedHero.moveSet = data.attackNames
+                .Select(name => attacks.FirstOrDefault(a => a.attackName == name))
+                .Where(a => a != null)
+                .ToList();
+
+            Tile spawnTile;
+            if (SpecificSpawn)
             {
-                var spawnedHero = Instantiate(unit.UnitPrefab);
-                Tile spawnTile;
-                if (SpecificSpawn)
-                {
-                    spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, true);
-                }
-                else
-                {
-                    spawnTile = GridManager.Instance.GetHeroSpawnTile();
-                }
-                spawnTile.SetUnit(spawnedHero);
-                _remainingHeroes.Add(spawnedHero);
-                _remainingUnits.Add(spawnedHero);
+                spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, true);
             }
+            else
+            {
+                spawnTile = GridManager.Instance.GetHeroSpawnTile();
+            }
+            spawnTile.SetUnit(spawnedHero);
+            _remainingHeroes.Add(spawnedHero);
+            _remainingUnits.Add(spawnedHero);
         }
     }
 
@@ -272,6 +281,10 @@ public class UnitManager : MonoBehaviour
                 unit.attackedBy.TakeDamage(unit.counterAtkDmg);
                 unit.counterAtk = false;
                 unit.attackedBy = null;
+            }
+            if (unit is BaseHero hero)
+            {
+                TeamManager.Instance.UpdateUnitData(hero);
             }
         }
         SetSelectedHero(null);
