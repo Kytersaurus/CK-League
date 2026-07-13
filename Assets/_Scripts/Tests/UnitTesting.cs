@@ -4,10 +4,10 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-public class NewTestScript1
+public class UnitTesting
 {
     [UnityTest]
-    public IEnumerator TestDamage()
+    public IEnumerator TestAttacks()
     {
         BaseUnit hero = MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Heroes/Warrior").UnitPrefab);
         BaseUnit enemy = MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Enemies/Ogre").UnitPrefab);
@@ -19,6 +19,21 @@ public class NewTestScript1
         enemy.immune = false;
         attackUsed.Execute(hero, enemy);
         Assert.AreEqual(70, enemy.CurrentHealth);
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator TestMovementOnEmptyTileInRange()
+    {
+
+        //WIP
+        GridManager gridManager = new GridManager();
+        UnitManager unitManager = new UnitManager();
+        GameManager gameManager = new GameManager();
+        BaseUnit hero = MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Heroes/Warrior").UnitPrefab);
+        Tile startTile = gridManager.GetTileAtPosition(new Vector2(0,0));
+        startTile.SetUnit(hero);
+
         yield return null;
     }
 }
