@@ -35,6 +35,7 @@ public class TeamEditor : MonoBehaviour
         RefreshAttacksList();
         TeamManager.Instance.ActiveTeamSlot = 0;
         RefreshTeam(false);
+        SetAllTogglesOff();
     }
 
     // Update is called once per frame
