@@ -38,6 +38,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Transform _cam;
     private Dictionary<Vector2, Tile> _tiles;
     [SerializeField] private string _levelName;
+    public List<Tile> SpawnTiles {get; private set;}
     void Awake()
     {
         Instance = this;
@@ -54,7 +55,14 @@ public class GridManager : MonoBehaviour
         }
     }
     //Level
-    
+    public void SpawnCamPosition()
+    {
+        _cam.position = new Vector3(_width / 2f - 1.5f, _height / 2f - 1f, -10);
+    }
+    public void DefaultCamPosition()
+    {
+        _cam.position = new Vector3(_width / 2f - 0.5f, _height / 2f - 1f, -10);
+    }
     public void SetupGrid()
     {
         if (string.IsNullOrEmpty(_levelName))
@@ -91,7 +99,24 @@ public class GridManager : MonoBehaviour
         }
         return _tilePrefabs[0].prefab;
     }
-
+    public void GetSpawnTiles()
+    {
+        SpawnTiles = _tiles
+                        .Where(kvp => kvp.Key.x <= UnitManager.Instance.SpawnBox.x && kvp.Key.y >= UnitManager.Instance.SpawnBox.y)
+                        .Select(kvp => kvp.Value)
+                        .ToList();
+    }
+    public void HighlightSpawnTiles(bool isActive)
+    {
+        if (SpawnTiles == null || SpawnTiles.Count == 0)
+        {
+            return;
+        }
+        foreach (Tile tile in SpawnTiles)
+        {
+            tile.highlight.SetActive(isActive);
+        }
+    }
     
     private string GetSavePath(string levelName)
     {
@@ -143,8 +168,7 @@ public class GridManager : MonoBehaviour
             var tile = GenerateTile(data.posX, data.posY, data.tileType, data.tileVariant);
             tile.Init(data.posX, data.posY);
         }
-        //_cam.position = new Vector3(_width / 2f - 1.5f, _height / 2f - 1f, -10);
-        _cam.position = new Vector3(_width / 2f - 0.5f, _height / 2f - 1f, -10);
+        DefaultCamPosition();
         if (GameManager.Instance != null)
         {
             GameManager.Instance.UpdateGameState(GameState.SpawnEnemies);    

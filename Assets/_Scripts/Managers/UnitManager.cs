@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Clrain.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitManager : MonoBehaviour
 {
@@ -11,6 +14,7 @@ public class UnitManager : MonoBehaviour
     private List<BaseUnit> _remainingHeroes = new List<BaseUnit>();
     private List<BaseUnit> _remainingEnemies = new List<BaseUnit>();
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
+    private List<BaseHero> _allUnitsUsedInStage = new List<BaseHero>();
 
     public BaseHero SelectedHero;
     private PriorityQueue<BaseUnit, int> _movementQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
@@ -19,7 +23,16 @@ public class UnitManager : MonoBehaviour
     private GameObject _attackBar;
     public bool IsAttackBarActive => _attackBar != null;
     [SerializeField] private Canvas _canvas;
-    public bool SpecificSpawn;
+    public bool SpecificHeroSpawn, SpecificEnemySpawn;
+    public UnitSaveData UnitToSpawn;
+    [SerializeField] Toggle _unitSpawnToggle;
+    [SerializeField] Transform _spawnPanel;
+    [SerializeField] ToggleGroup _unitSpawnToggleGroup;
+    [SerializeField] GameObject _spawnPanelObj, _teamSelectToggles;
+    private bool _teamIsSelected = false;
+    private List<Toggle> _unitSpawnToggles = new List<Toggle>();
+    public List<UnitSaveData> _selectedTeamData;
+    public Vector2 SpawnBox = new Vector2();
     void Awake()
     {
         Instance = this;
@@ -37,6 +50,10 @@ public class UnitManager : MonoBehaviour
     {
         BaseUnit.OnUnitDeath -= KillUnit;
     }
+    public List<BaseUnit> GetHeroesList()
+    {
+        return _remainingHeroes;
+    }
     public void SpawnEnemies()
     {
         foreach(ScriptableUnit unit in _units)
@@ -45,7 +62,7 @@ public class UnitManager : MonoBehaviour
             {
                 var spawnedEnemy = Instantiate(unit.UnitPrefab);
                 Tile spawnTile;
-                if (SpecificSpawn)
+                if (SpecificEnemySpawn)
                 {
                     spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, false);
                 }
@@ -61,36 +78,121 @@ public class UnitManager : MonoBehaviour
 
         GameManager.Instance.UpdateGameState(GameState.SpawnHeroes);
     }
-
-    public void SpawnHeroes()
+    public void SpawnPanelActive(bool isActive)
     {
-        List<(ScriptableUnit, UnitSaveData)> heroUnits = TeamManager.Instance.LoadTeamUnits();
-        foreach(var (unit, data) in heroUnits)
+        _spawnPanelObj.SetActive(isActive);
+        if (isActive)
         {
-            var spawnedHero = Instantiate(unit.UnitPrefab) as BaseHero;
-            spawnedHero.guid = data.guid;
-            spawnedHero.className = data.className;
-            spawnedHero.level = data.level;
-            spawnedHero.experience = data.experience;
+            GridManager.Instance.SpawnCamPosition();
+        }
+        else
+        {
+            GridManager.Instance.DefaultCamPosition();
+        }
+    }
+    public void SelectTeam()
+    {
+        if (_selectedTeamData == null || _selectedTeamData.Count == 0)
+        {
+            Debug.Log("Selected team has no units!");
+            return;
+        }
+        _teamIsSelected = true;
+        _teamSelectToggles.SetActive(false);
+        RefreshTeam();
+    }
+    public void LoadTeam(int slot)
+    {
+        TeamManager.Instance.ActiveTeamSlot = slot;
+        _selectedTeamData = TeamManager.Instance.LoadTeamData();
+        RefreshTeam();
+    }
+    public void RefreshTeam()
+    {
+        if (_unitSpawnToggles == null)
+        {
+            _unitSpawnToggles = new List<Toggle>();
+        }
+        foreach (Toggle toggle in _unitSpawnToggles)
+        {
+            Destroy(toggle.gameObject);
+        }
+        _unitSpawnToggles.Clear();
 
-            var attacks = TeamManager.Instance.AllAttacks;
-            spawnedHero.moveSet = data.attackNames
-                .Select(name => attacks.FirstOrDefault(a => a.attackName == name))
-                .Where(a => a != null)
-                .ToList();
+        if (_selectedTeamData == null || _selectedTeamData.Count == 0)
+        {
+            return;
+        }
 
-            Tile spawnTile;
-            if (SpecificSpawn)
+        int x = 0, y = 340;
+        foreach (UnitSaveData unit in _selectedTeamData)
+        {
+
+            Toggle unitSelect = Instantiate(_unitSpawnToggle, _spawnPanel);
+            RectTransform rect = unitSelect.GetComponent<RectTransform>();
+            rect.anchoredPosition = new Vector2(x, y);
+            unitSelect.group = _unitSpawnToggleGroup;
+            ScriptableUnit scriptUnit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == unit.unitName);
+            if (scriptUnit == null)
             {
-                spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, true);
+                Debug.LogError($"{unit.guid}'s unitname does not match any prefabs");
             }
-            else
+            ToggleSelectSpawn toggleScript = unitSelect.GetComponent<ToggleSelectSpawn>();
+            toggleScript.SetExistingUnit(unit);
+
+            TMP_Text unitName = unitSelect.GetComponentInChildren<TMP_Text>();
+            unitName.text = unit.unitName;
+
+            BaseHero hero = scriptUnit.UnitPrefab as BaseHero;
+            Image unitSprite = unitSelect.GetComponentInChildren<Image>();
+            unitSprite.sprite = hero.UnitIcon;
+
+            if (!_teamIsSelected)
             {
-                spawnTile = GridManager.Instance.GetHeroSpawnTile();
+                unitSelect.interactable = false;
             }
-            spawnTile.SetUnit(spawnedHero);
-            _remainingHeroes.Add(spawnedHero);
-            _remainingUnits.Add(spawnedHero);
+            _unitSpawnToggles.Add(unitSelect);
+            y -= 100;
+        }
+    }
+    public void SpawnHero(int x, int y)
+    {
+        UnitSaveData data = UnitToSpawn;
+        ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == data.unitName);
+
+
+        BaseHero spawnedHero = Instantiate(unit.UnitPrefab) as BaseHero;
+        spawnedHero.guid = data.guid;
+        spawnedHero.unitName = data.unitName;
+        spawnedHero.className = data.className;
+        spawnedHero.level = data.level;
+        spawnedHero.experience = data.experience;
+
+        var attacks = TeamManager.Instance.AllAttacks;
+        spawnedHero.moveSet = data.attackNames
+            .Select(name => attacks.FirstOrDefault(a => a.attackName == name))
+            .Where(a => a != null)
+            .ToList();
+
+        Tile spawnTile = GridManager.Instance.GetSpecificSpawnTile(x, y, true);;
+        
+        spawnTile.SetUnit(spawnedHero);
+        _remainingHeroes.Add(spawnedHero);
+        _remainingUnits.Add(spawnedHero);
+        _selectedTeamData.Remove(UnitToSpawn);
+        UnitToSpawn = null;
+        RefreshTeam();
+        GridManager.Instance.HighlightSpawnTiles(false);
+    }
+    public void SaveUnitProgress()
+    {
+        if (_allUnitsUsedInStage == null || _allUnitsUsedInStage.Count == 0)
+        {
+            return;
+        }
+        foreach (BaseHero hero in _allUnitsUsedInStage)
+        {
+            TeamManager.Instance.UpdateUnitData(hero);
         }
     }
 
@@ -281,10 +383,6 @@ public class UnitManager : MonoBehaviour
                 unit.attackedBy.TakeDamage(unit.counterAtkDmg);
                 unit.counterAtk = false;
                 unit.attackedBy = null;
-            }
-            if (unit is BaseHero hero)
-            {
-                TeamManager.Instance.UpdateUnitData(hero);
             }
         }
         SetSelectedHero(null);

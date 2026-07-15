@@ -31,12 +31,13 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.SpawnEnemies();
                 break;
             case GameState.SpawnHeroes:
-                UnitManager.Instance.SpawnHeroes();
-                if (UnitManager.Instance.SpecificSpawn)
+                if (UnitManager.Instance.SpecificHeroSpawn)
                 {
                     EndTurnButton.Instance.EndTurn();
                     return;
                 }
+                UnitManager.Instance.SpawnPanelActive(true);
+                GridManager.Instance.GetSpawnTiles();
                 EndTurnButton.Instance.ChangeText("Start");
                 EndTurnButton.Instance.ActivateEndTurnButton();
                 break;

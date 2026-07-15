@@ -53,7 +53,6 @@ public class Tile : MonoBehaviour
         {
             return;
         }
-        
         #if UNITY_EDITOR
         if (LevelEditor.Instance != null && LevelEditor.Instance.EditingMode)
         {
@@ -69,7 +68,7 @@ public class Tile : MonoBehaviour
         
         if (GameManager.Instance.State == GameState.SpawnHeroes)
         {
-            if (Walkable || (OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero))
+            if (UnitManager.Instance.UnitToSpawn != null && Walkable && GridManager.Instance.SpawnTiles.Contains(this))
             {
                 highlightSelect.SetActive(true);
             }
@@ -146,21 +145,9 @@ public class Tile : MonoBehaviour
         }
         #endif
         
-        if(GameManager.Instance.State == GameState.SpawnHeroes && (Walkable || OccupiedUnit.Faction == Faction.Hero))
+        if(GameManager.Instance.State == GameState.SpawnHeroes && UnitManager.Instance.UnitToSpawn != null && Walkable && GridManager.Instance.SpawnTiles.Contains(this))
         {
-            if(UnitManager.Instance.SelectedHero != null)
-            {
-                if(OccupiedUnit != null && OccupiedUnit.Faction == Faction.Hero)
-                {
-                    UnitManager.Instance.SelectedHero.OccupiedTile.SetUnit(OccupiedUnit);
-                }
-                SetUnit(UnitManager.Instance.SelectedHero);
-                UnitManager.Instance.DeselectHero();
-            }
-            else if(UnitManager.Instance.SelectedHero == null && OccupiedUnit != null)
-            {
-                UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
-            }
+            UnitManager.Instance.SpawnHero((int)this.GridPos.x, (int)this.GridPos.y);
         }
         //Movement Phase
         else if(GameManager.Instance.State == GameState.MovementPhase)
