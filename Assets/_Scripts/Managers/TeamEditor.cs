@@ -19,28 +19,46 @@ public class TeamEditor : MonoBehaviour
     [SerializeField] private Image _selectedUnitImage,  _selectedAttackImage;
     [SerializeField] private TextMeshProUGUI _selectedUnitDesc,_selectedAttackDesc;
     [SerializeField] private ToggleGroup _newUnitToggleGroup, _existingUnitToggleGroup, _attacksToggleGroup;
-    [SerializeField] private Toggle _unitToggle;
+    [SerializeField] private Toggle _unitToggle, _newUnitPanelToggle, _attacksPanelToggle;
+    [SerializeField] private List<Toggle> _teamSelectToggles;
     [SerializeField] private Button _deselectUnitButton, _deselectAttackButton, _addUnitToTeamButton, _deleteUnitButton, _saveUnitButton, _addAttackButton, _removeAttackButton, _saveTeamButton, _deleteTeamButton, _removeUnitFromTeamButton;
     private List<Toggle> _newUnitsList, _existingUnitsList, _attacksList, _unitAttacksList, _teamUnitsList;
     public bool TeamSaved;
+    [SerializeField] GameObject _popUp, _popUpConfirmSwitchNoSave, _popUpConfirmDeleteTeam, _popUpConfirmDeleteUnit;
+    private PopUpScript _popUpScript;
+    private int _prevTeamSlot, _teamSlot;
     void Awake()
     {
         Instance = this;
     }
     void Start()
     {
-        //Generate Lists
+        _popUpScript = _popUp.GetComponent<PopUpScript>();
         RefreshNewUnitsList();
         RefreshExistingUnitsList();
         RefreshAttacksList();
         TeamManager.Instance.ActiveTeamSlot = 0;
+        _teamSelectToggles[0].isOn = true;
+        SwitchTeam(0);
+        SetPanelActive(0);
+        PopUpScript popScript = _popUpConfirmSwitchNoSave.GetComponent<PopUpScript>();
+        popScript.DismissPopup();
+        _newUnitPanelToggle.isOn = true;
+        ShowUnitInfo();
+        ShowAttackInfo();
         RefreshTeam(false);
-        SetAllTogglesOff();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (_selectedUnit == null && _newSelectedUnit == null)
+        {
+            _attacksPanelToggle.interactable = false;
+        }
+        if (_selectedUnit != null || _newSelectedUnit != null)
+        {
+            _attacksPanelToggle.interactable = true;
+        }
         if (_selectedUnit == null && _newSelectedUnit == null && _selectedAttack == null)
         {
             _deselectUnitButton.gameObject.SetActive(false);
@@ -58,8 +76,6 @@ public class TeamEditor : MonoBehaviour
         if (_selectedAttack != null)
         {
             _deselectAttackButton.gameObject.SetActive(true);
-            _addAttackButton.gameObject.SetActive(true);
-            _removeAttackButton.gameObject.SetActive(true);
         }
         if (_selectedUnit == null && _newSelectedUnit == null)
         {
@@ -76,12 +92,26 @@ public class TeamEditor : MonoBehaviour
         if (_team == null || _team.Count() == 0 || TeamSaved)
         {
             _saveTeamButton.gameObject.SetActive(false);
-            _deleteTeamButton.gameObject.SetActive(false);
         }
         if (_team != null && _team.Count() > 0 && !TeamSaved)
         {
             _saveTeamButton.gameObject.SetActive(true);
+        }
+        if (!TeamManager.Instance.SavedTeamExists)
+        {
+            _deleteTeamButton.gameObject.SetActive(false);
+        }
+        if (TeamManager.Instance.SavedTeamExists)
+        {
             _deleteTeamButton.gameObject.SetActive(true);
+        }
+        if (!_team.Contains(_selectedUnit))
+        {
+            _removeUnitFromTeamButton.gameObject.SetActive(false);
+        }
+        if (_team.Contains(_selectedUnit))
+        {
+            _removeUnitFromTeamButton.gameObject.SetActive(true);
         }
     }
     public void RefreshNewUnitsList()
@@ -174,7 +204,7 @@ public class TeamEditor : MonoBehaviour
             unitSprite.sprite = hero.UnitIcon;
 
             TMP_Text unitStats = unitSelect.GetComponentInChildren<TMP_Text>();
-            unitStats.text = $"Unit name: {unit.name} \n";
+            unitStats.text = $"{unit.name}";
 
             unitSelect.isOn = false;
             x += 100;
@@ -196,6 +226,7 @@ public class TeamEditor : MonoBehaviour
             }
             _attacksList.Clear();
         }
+        
         int x = -550, y = 180;
         foreach (Attacks attack in _allAttacks)
         {
@@ -294,12 +325,12 @@ public class TeamEditor : MonoBehaviour
     public void ShowUnitInfo()
     {
         bool isActive = _selectedUnit != null || _newSelectedUnit != null;
+        _selectedUnitImage.gameObject.SetActive(isActive);
+        _selectedUnitDesc.gameObject.SetActive(isActive);
         if (!isActive)
         {
             return;
         }
-        _selectedUnitImage.gameObject.SetActive(isActive);
-        _selectedUnitDesc.gameObject.SetActive(isActive);
 
         if (_selectedUnit != null)
         {
@@ -335,6 +366,33 @@ public class TeamEditor : MonoBehaviour
         {
             return;
         }
+        if (_selectedUnit != null)
+        {
+            List<string> attacks = _selectedUnit.attackNames.ToList();
+            if (attacks.Contains(_selectedAttack.attackName))
+            {
+                _addAttackButton.gameObject.SetActive(false);
+                _removeAttackButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                _addAttackButton.gameObject.SetActive(true);
+                _removeAttackButton.gameObject.SetActive(false);
+            }
+        }
+        if (_newSelectedUnit != null)
+        {
+            if (_newSelectedUnit.UnitPrefab.moveSet.Contains(_selectedAttack))
+            {
+                _addAttackButton.gameObject.SetActive(false);
+                _removeAttackButton.gameObject.SetActive(true);
+            }
+            else
+            {
+                _addAttackButton.gameObject.SetActive(true);
+                _removeAttackButton.gameObject.SetActive(false);
+            }
+        }
         _selectedAttackImage.sprite = _selectedAttack.icon;
         _selectedAttackImage.preserveAspect = true;
         _selectedAttackDesc.text = $"Name: {_selectedAttack.attackName}\n" +
@@ -351,15 +409,7 @@ public class TeamEditor : MonoBehaviour
         
         return stats;
     }
-    public void UpdateExistingUnits()
-    {
-        List<UnitSaveData> allExistingUnitData = TeamManager.Instance.GetAllUnitData();
-        _allExistingUnits.Clear();
-        foreach (UnitSaveData unitdata in allExistingUnitData)
-        {
-            _allExistingUnits.Add(unitdata);
-        }
-    }
+    
     public BaseHero GetUnitPrefab(UnitSaveData data)
     {
         ScriptableUnit unit = _allNewUnits.FirstOrDefault(u => u.name == data.unitName);
@@ -393,9 +443,17 @@ public class TeamEditor : MonoBehaviour
     }
     public void DeselectEverything()
     {
-       SetSelectedNewUnit(null);
-       SetSelectedNewUnit(null);
-       SetAttack(null);
+        SetSelectedNewUnit(null);
+        SetSelectedNewUnit(null);
+        SetAttack(null);
+        SetAllTogglesOff();
+        ShowUnitInfo();
+        ShowAttackInfo();
+        if (_attacksPanelToggle.isOn)
+        {
+            SetPanelActive(0);
+            _newUnitPanelToggle.isOn = true;
+        }
     }
     public void AddUnitToTeam()
     {
@@ -410,34 +468,35 @@ public class TeamEditor : MonoBehaviour
         }
         if (_team.Count >= _teamSize)
         {
-            Debug.Log("Team is full");
+            _popUpScript.ShowPopUpAndSetText($"Team is full {_team.Count}/{_teamSize}");
             return;
         }
         if (_selectedUnit != null)
         {
             if (_team.Any(u => u.guid == _selectedUnit.guid))
             {
-                Debug.Log("Unit already on team");
+                _popUpScript.ShowPopUpAndSetText("The unit is already on the team");
                 return;
             }
             _team.Add(_selectedUnit);
             _selectedUnit = null;
+            SetAllTogglesOff();
             TeamSaved = false;
             RefreshTeam(true);
+            ShowUnitInfo();
+            RefreshUnitAttackList();
             return;
         }
         if (_newSelectedUnit != null)
         {
             UnitSaveData unit = CreateAndSaveUnit();
-            if (_team.Any(u => u.guid == unit.guid))
-            {
-                Debug.Log("Unit already on team");
-                return;
-            }
             _team.Add(unit);
             _newSelectedUnit = null;
+            SetAllTogglesOff();
             TeamSaved = false;
             RefreshTeam(true);
+            ShowUnitInfo();
+            RefreshUnitAttackList();
             return;
         }
         
@@ -449,6 +508,10 @@ public class TeamEditor : MonoBehaviour
             return;
         }
         _team.Remove(_selectedUnit);
+        _selectedUnit = null;
+        ShowUnitInfo();
+        RefreshUnitAttackList();
+        SetAllTogglesOff();
         TeamSaved = false;
         RefreshTeam(true);
     }
@@ -461,27 +524,71 @@ public class TeamEditor : MonoBehaviour
         }
         if (_selectedUnit != null)
         {
+            ScriptableUnit unit = _allNewUnits.FirstOrDefault(u => u.name == _selectedUnit.unitName);
+            if (_selectedAttack is MeleeAttack && (unit.UnitPrefab is BaseArcher || unit.UnitPrefab is BaseMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take Melee Attacks");
+                return;
+            }
+            if (!(_selectedAttack is MeleeAttack && !(_selectedAttack is Heals)) && (unit.UnitPrefab is BaseWarrior || unit.UnitPrefab is BaseCavalry))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take ranged attacks");
+                return;
+            }
+            if (_selectedAttack is MagicAttack && !(unit.UnitPrefab is BaseMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take magic attacks");
+                return;
+            }
             List<string> attacks = _selectedUnit.attackNames.ToList();
             if (attacks.Count() >= 4)
             {
-                Debug.Log("Unit has 4 attacks already");
+                _popUpScript.ShowPopUpAndSetText("Selected Unit has 4 attacks already");
+                return;
+            }
+            if (attacks.Contains(_selectedAttack.attackName))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit already has this attack equipped");
                 return;
             }
             attacks.Add(_selectedAttack.attackName);
             _selectedUnit.attackNames = attacks.ToArray();
             RefreshUnitAttackList();
             _selectedAttack = null;
+            SetAllAttackTogglesOff();
         }
         if (_newSelectedUnit != null)
         {
+            ScriptableUnit unit = _newSelectedUnit;
+            if (_selectedAttack is MeleeAttack && (unit.UnitPrefab is BaseArcher || unit.UnitPrefab is BaseMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take Melee Attacks");
+                return;
+            }
+            if (!(_selectedAttack is MeleeAttack && !(_selectedAttack is Heals)) && (unit.UnitPrefab is BaseWarrior || unit.UnitPrefab is BaseCavalry))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take ranged attacks");
+                return;
+            }
+            if (_selectedAttack is MagicAttack && !(unit.UnitPrefab is BaseMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take magic attacks");
+                return;
+            }
             if (_newSelectedUnit.UnitPrefab.moveSet.Count() >= 4)
             {
-                Debug.Log("Unit has 4 attacks already");
+                _popUpScript.ShowPopUpAndSetText("Selected Unit has 4 attacks already");
+                return;
+            }
+            if (_newSelectedUnit.UnitPrefab.moveSet.Contains(_selectedAttack))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit already has this attack equipped");
                 return;
             }
             _newSelectedUnit.UnitPrefab.moveSet.Add(_selectedAttack);
             RefreshUnitAttackList();
             _selectedAttack = null;
+            SetAllAttackTogglesOff();
         }
     }
     public void RemoveAttackFromUnit()
@@ -498,18 +605,52 @@ public class TeamEditor : MonoBehaviour
             _selectedUnit.attackNames = attacks.ToArray();
             RefreshUnitAttackList();
             _selectedAttack = null;
+            ShowAttackInfo();
+            SetAllAttackTogglesOff();
         }
         if (_newSelectedUnit != null)
         {
             _newSelectedUnit.UnitPrefab.moveSet.Remove(_selectedAttack);
             RefreshUnitAttackList();
             _selectedAttack = null;
+            ShowAttackInfo();
+            SetAllAttackTogglesOff();
+        }
+    }
+    public void ConfirmSwitchTeam(int slot)
+    {
+        _prevTeamSlot = TeamManager.Instance.ActiveTeamSlot;
+        _teamSlot = slot;
+        if (TeamManager.Instance.ActiveTeamSlot == slot)
+        {
+            return;
+        }
+        if (!TeamSaved)
+        {
+            PopUpScript popUpConfirmScript = _popUpConfirmSwitchNoSave.GetComponent<PopUpScript>();
+            popUpConfirmScript.ShowPopUpAndSetText("Team is not saved, switching will void all changes");
+            return;
+        }
+        else
+        {
+            SwitchTeam(slot);
         }
     }
     public void SwitchTeam(int slot)
     {
+        if (slot == -1)
+        {
+            slot = _teamSlot;
+        }
+        if (slot == -2)
+        {
+            slot = _prevTeamSlot;
+            _teamSelectToggles[slot].isOn = true;
+            return;
+        }
         TeamManager.Instance.ActiveTeamSlot = slot;
         RefreshTeam(false);
+        TeamSaved = true;
         Debug.Log($"Switched to team {slot+1}");
     }
     public void SaveTeam()
@@ -522,9 +663,15 @@ public class TeamEditor : MonoBehaviour
         TeamManager.Instance.SaveTeam(_team);
         TeamSaved = true;
     }
+    public void ConfirmDeleteTeam()
+    {
+        PopUpScript popUpConfirmScript = _popUpConfirmDeleteTeam.GetComponent<PopUpScript>();
+        popUpConfirmScript.ShowPopUpAndSetText("Confirm Deletion?");
+    }
     public void DeleteTeam()
     {
         TeamManager.Instance.DeleteTeam();
+        _team = null;
         RefreshTeam(true);
     }
     public void RefreshTeam(bool newTeam)
@@ -583,9 +730,33 @@ public class TeamEditor : MonoBehaviour
     {
         CreateAndSaveUnit();
     }
+    public void ConfirmDeleteUnit()
+    {
+        PopUpScript popUpConfirmScript = _popUpConfirmDeleteUnit.GetComponent<PopUpScript>();
+        popUpConfirmScript.ShowPopUpAndSetText("Confirm Deletion?");
+    }
+    public void DeleteUnit()
+    {
+        if (_newSelectedUnit != null)
+        {
+            Debug.Log("Cannot delete prefab");
+            return;
+        }
+        if(_selectedUnit != null)
+        {
+            TeamManager.Instance.DeleteUnit(_selectedUnit.guid);
+        }
+        _selectedUnit = null;
+        ShowUnitInfo();
+        RefreshUnitAttackList();
+        ShowAttackInfo();
+        RefreshExistingUnitsList();
+    }
     public void DeselectAttack()
     {
         SetAttack(null);
+        ShowAttackInfo();
+        SetAllAttackTogglesOff();
     }
     public UnitSaveData CreateAndSaveUnit()
     {
@@ -635,25 +806,58 @@ public class TeamEditor : MonoBehaviour
     }
     public void SetAllTogglesOff()
     {
-        foreach (Toggle toggle in _newUnitsList)
+        if (_newUnitsList != null)
         {
-            toggle.isOn = false;
+            foreach (Toggle toggle in _newUnitsList)
+            {
+                toggle.isOn = false;
+            }
         }
-        foreach (Toggle toggle in _existingUnitsList)
+        if (_existingUnitsList != null)
         {
+            foreach (Toggle toggle in _existingUnitsList)
+            {
             toggle.isOn = false;
+            }
         }
-        foreach (Toggle toggle in _attacksList)
+        if (_attacksList != null)
         {
-            toggle.isOn = false;
+            foreach (Toggle toggle in _attacksList)
+            {
+                toggle.isOn = false;
+            }
         }
-        foreach (Toggle toggle in _unitAttacksList)
+        if (_unitAttacksList != null)
         {
-            toggle.isOn = false;
+            foreach (Toggle toggle in _unitAttacksList)
+            {
+                toggle.isOn = false;
+            }
         }
-        foreach (Toggle toggle in _teamUnitsList)
+        if (_teamUnitsList != null)
         {
-            toggle.isOn = false;
+            foreach (Toggle toggle in _teamUnitsList)
+            {
+                toggle.isOn = false;
+            }
         }
     }
+    public void SetAllAttackTogglesOff()
+    {
+        if (_attacksList != null)
+        {
+            foreach (Toggle toggle in _attacksList)
+            {
+                toggle.isOn = false;
+            }
+        }
+        if (_unitAttacksList != null)
+        {
+            foreach (Toggle toggle in _unitAttacksList)
+            {
+                toggle.isOn = false;
+            }
+        }
+    }
+    
 }

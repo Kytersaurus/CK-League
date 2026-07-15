@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public abstract class FireAttack : Attacks
+public abstract class FireAttack : MagicAttack
 {
     public int aoeDamage;
     public int aoeRange;

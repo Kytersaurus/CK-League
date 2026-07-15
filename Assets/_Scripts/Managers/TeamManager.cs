@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
-using UnityEditor.Connect;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,7 +11,7 @@ public class UnitSaveData
     public string unitName;
     public string className;
     public int level;
-    public int experience;
+    public int experience; 
     public string[] attackNames;
 }
 

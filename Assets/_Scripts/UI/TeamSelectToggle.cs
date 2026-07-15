@@ -12,7 +12,7 @@ public class TeamSelectToggle : MonoBehaviour
     }
     public void SelectTeam(int i)
     {
-        TeamEditor.Instance.SwitchTeam(i);
+        TeamEditor.Instance.ConfirmSwitchTeam(i);
     }
     private void OnToggleChanged(bool isOn)
     {
