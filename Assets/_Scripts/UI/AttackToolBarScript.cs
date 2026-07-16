@@ -15,8 +15,6 @@ public class AttackToolBarScript : MonoBehaviour
     [SerializeField] private Slider _slider;
     [SerializeField] private TextMeshProUGUI _label;
     [SerializeField] private GameObject _attackBar;
-    [SerializeField] private List<GameObject> _tooltips;
-    public bool flipped;
     void Awake()
     {
         Instance = this;
@@ -35,16 +33,12 @@ public class AttackToolBarScript : MonoBehaviour
             return;
         }
         RectTransform _rect = _attackBar.GetComponent<RectTransform>();
-        _rect.anchoredPosition = new Vector2(0, flipped ? 370 : -541);
+        _rect.anchoredPosition = new Vector2(0, -560);
 
-        foreach (var tooltip in _tooltips)
-        {
-            RectTransform toolTipRect = tooltip.GetComponent<RectTransform>();
-            toolTipRect.anchoredPosition = new Vector2(toolTipRect.anchoredPosition.x, flipped ? -toolTipRect.anchoredPosition.y : toolTipRect.anchoredPosition.y);
-        }
          _slider.maxValue = _selectedUnit.maxHealth;
         _profileIcon.sprite = _selectedUnit.UnitIcon;
         _unitDescription.text = _selectedUnit.UnitDescription;
+        
         var attacks = _selectedUnit.moveSet;
         for (int i = 0; i < attacks.Count && i <_attackButtons.Count; i++)
         {

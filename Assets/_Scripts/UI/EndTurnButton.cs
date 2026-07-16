@@ -28,6 +28,8 @@ public class EndTurnButton : MonoBehaviour
         UnitManager.Instance.SetSelectedHero(null);
         if(GameManager.Instance.State == GameState.SpawnHeroes)
         {
+            UnitManager.Instance.SpawnPanelActive(false);
+            GridManager.Instance.HighlightSpawnTiles(false);
             GameManager.Instance.UpdateGameState(GameState.MovementPhase);
             ChangeText("End Turn");
         }

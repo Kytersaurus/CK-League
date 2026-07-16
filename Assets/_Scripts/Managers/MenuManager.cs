@@ -63,6 +63,17 @@ public class MenuManager : MonoBehaviour
                 popUpActive = false;
             }
         }
+        if (GameManager.Instance.State == GameState.SpawnHeroes)
+        {
+            if (UnitManager.Instance.GetHeroesList().Count > 0)
+            {
+                EndTurnButton.Instance.ActivateEndTurnButton();
+            }
+            else
+            {
+                EndTurnButton.Instance.DeactivateEndTurnButton();
+            }
+        }
         if (GameManager.Instance.State == GameState.AttackPhase || GameManager.Instance.State == GameState.MovementPhase)
         {
             if (!popUpActive && (UnitManager.Instance.AllAttacksSelected() || GameManager.Instance.State == GameState.MovementPhase))

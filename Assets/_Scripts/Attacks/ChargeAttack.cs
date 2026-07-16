@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Attacks/ChargeAttack")]
-public class ChargeAttack : Attacks
+public class ChargeAttack : MeleeAttack
 {
     public override void Execute(BaseUnit attacker, BaseUnit target)
     {
