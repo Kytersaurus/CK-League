@@ -4,12 +4,12 @@ public class healthbarScript : MonoBehaviour
 {
     public Slider slider;
     
-    public void setMaxHealth (int health)
+    public void SetMaxHealth (int health)
     {
         slider.maxValue = health;
-        setHealth(health);
+        SetHealth(health);
     }
-    public void setHealth (int health)
+    public void SetHealth (int health)
     {
         slider.value = health;
     }

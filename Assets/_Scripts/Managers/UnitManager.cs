@@ -45,10 +45,12 @@ public class UnitManager : MonoBehaviour
     private void OnEnable()
     {
         BaseUnit.OnUnitDeath += KillUnit;
+        BaseUnit.OnUnitAction += DeselectHero;
     }
     private void OnDisable()
     {
         BaseUnit.OnUnitDeath -= KillUnit;
+        BaseUnit.OnUnitAction -= DeselectHero;
     }
     public List<BaseUnit> GetHeroesList()
     {
@@ -246,6 +248,11 @@ public class UnitManager : MonoBehaviour
 
     public void DeselectHero()
     {
+        if(SelectedHero == null)
+        {
+            return;
+        }
+        
         foreach (Tile tile in ReachableTiles)
         {
             tile.highlight.SetActive(false);
