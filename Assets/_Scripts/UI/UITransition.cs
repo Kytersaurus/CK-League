@@ -6,11 +6,9 @@ public class UITransition : MonoBehaviour
     public void CloseUI(GameObject UI)
     {
         UI.SetActive(false);
-        MenuManager.Instance.popUpActive = false;
     }
     public void OpenUI(GameObject UI)
     {
         UI.SetActive(true);
-        MenuManager.Instance.popUpActive = true;
     }
 }

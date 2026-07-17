@@ -28,9 +28,9 @@ public class BaseUnit : MonoBehaviour
     public BaseUnit attackedBy;
     public bool counterAtk;
     public int counterAtkDmg;
-
     public static event Action<BaseUnit> OnUnitDeath;
     public static event Action OnUnitAction;
+    public Image AttackIndicator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
@@ -101,6 +101,7 @@ public class BaseUnit : MonoBehaviour
     public void SetDestination(Tile tile)
     {
         DestinationTile = tile;
+        GridManager.Instance.ShowUnitDest(this, true);
         Path.Clear();
         ConstructPath(tile);
         OnUnitAction?.Invoke();

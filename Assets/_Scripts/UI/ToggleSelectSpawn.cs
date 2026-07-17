@@ -22,8 +22,10 @@ public class ToggleSelectSpawn : MonoBehaviour
         _selectBorder.gameObject.SetActive(isOn);
         if (!isOn)
         {
+            _unitData = null;
             return;
         }
+        UnitManager.Instance.SelectedHero = null;
         if (_unitData != null)
         {
             UnitManager.Instance.UnitToSpawn = _unitData;

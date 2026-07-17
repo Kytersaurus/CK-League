@@ -10,8 +10,6 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _victoryPanel;
     [SerializeField] private GameObject _defeatPanel;
     public GameObject _pauseMenu;
-    public bool popUpActive;
-
     void Awake()
     {
         Instance = this;
@@ -20,7 +18,11 @@ public class MenuManager : MonoBehaviour
     public void ShowGamePhase(GameState currentState)
     {
         string phaseName;
-        if(currentState == GameState.MovementPhase)
+        if(currentState == GameState.SpawnHeroes)
+        {
+            phaseName = "Spawn Heroes Phase";
+        }
+        else if(currentState == GameState.MovementPhase)
         {
             phaseName = "Movement Phase";
         }
@@ -48,20 +50,15 @@ public class MenuManager : MonoBehaviour
         _showPhaseObject.GetComponentInChildren<TextMeshProUGUI>().text = phaseName;
         _showPhaseObject.SetActive(true);
     }
+    public void ShowPauseMenu(bool show)
+    {
+        _pauseMenu.SetActive(show);
+    }
     void Update()
     {
         if (UnitManager.Instance.SelectedHero == null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            if (!_pauseMenu.activeSelf)
-            {
-                _pauseMenu.SetActive(true);
-                popUpActive = true;
-            } 
-            else
-            {
-                _pauseMenu.SetActive(false);
-                popUpActive = false;
-            }
+            ShowPauseMenu(!_pauseMenu.activeSelf);
         }
         if (GameManager.Instance.State == GameState.SpawnHeroes)
         {
@@ -76,14 +73,14 @@ public class MenuManager : MonoBehaviour
         }
         if (GameManager.Instance.State == GameState.AttackPhase || GameManager.Instance.State == GameState.MovementPhase)
         {
-            if (!popUpActive && (UnitManager.Instance.AllAttacksSelected() || GameManager.Instance.State == GameState.MovementPhase))
-            {
-                EndTurnButton.Instance.ActivateEndTurnButton();
-            }
-            else
-            {
-                EndTurnButton.Instance.DeactivateEndTurnButton();
-            }
+            // if (!popUpActive && (UnitManager.Instance.AllAttacksSelected() || GameManager.Instance.State == GameState.MovementPhase))
+            // {
+            //     EndTurnButton.Instance.ActivateEndTurnButton();
+            // }
+            // else
+            // {
+            //     EndTurnButton.Instance.DeactivateEndTurnButton();
+            // }
         }
         if (UnitManager.Instance.SelectedHero != null && Keyboard.current.escapeKey.wasPressedThisFrame )
         {

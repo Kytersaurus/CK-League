@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Linq;
 using Clrain.Collections;
 using TMPro;
+using Unity.Plastic.Newtonsoft.Json.Converters;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -154,7 +155,7 @@ public class UnitManager : MonoBehaviour
                 unitSelect.interactable = false;
             }
             _unitSpawnToggles.Add(unitSelect);
-            y -= 100;
+            y -= 120;
         }
     }
     public void SpawnHero(int x, int y)
@@ -334,6 +335,10 @@ public class UnitManager : MonoBehaviour
         {
             unit.TargetsList.Clear();
             unit.TargetsList = FindAllAttackTargets(unit);
+            if (unit.TargetsList.Count != 0 && unit is BaseHero)
+            {
+                unit.AttackIndicator.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -382,6 +387,7 @@ public class UnitManager : MonoBehaviour
                 unit.Target.attackedBy = unit;
                 unit.SelectedAttack = null;
             }
+            unit.AttackIndicator.gameObject.SetActive(false);
         }
         foreach (BaseUnit unit in _remainingUnits)
         {
@@ -399,7 +405,11 @@ public class UnitManager : MonoBehaviour
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
-            if(unit.TargetsList.Count != 0 && (unit.Target == null || unit.SelectedAttack == null))
+            if(unit.SelectedAttack == null)
+            {
+                return false;
+            }
+            if (!(unit.SelectedAttack is Heals) || !(unit.SelectedAttack is Mitigate) && unit.Target == null)
             {
                 return false;
             }

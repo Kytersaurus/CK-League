@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using System.IO;
-using Clrain.Collections; //priority queue script
+using Clrain.Collections;
+using UnityEngine.UI; //priority queue script
 
 [System.Serializable]
 public class TileEntry
@@ -388,5 +389,25 @@ public class GridManager : MonoBehaviour
         }
         return validTile;
                                                        
+    }
+    public void ShowUnitDest(BaseUnit unit, bool show)
+    {
+        if (unit.DestinationTile == null)
+        {
+            return;
+        }
+        unit.DestinationTile.Objective.SetActive(show);
+        if (!show)
+        {
+            return;
+        }
+        SpriteRenderer ghostUnitSR = unit.DestinationTile.Objective.GetComponent<SpriteRenderer>();
+        SpriteRenderer unitSR = unit.GetComponent<SpriteRenderer>();
+        ghostUnitSR.sprite = unit.UnitIcon;
+        ghostUnitSR.transform.localScale = unitSR.transform.localScale;
+
+        Color ghostColour = ghostUnitSR.color;
+        ghostColour.a = 0.6f;
+        ghostUnitSR.color = ghostColour;
     }
 }
