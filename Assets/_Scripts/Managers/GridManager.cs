@@ -338,7 +338,8 @@ public class GridManager : MonoBehaviour
 
     public Tile GetEnemyPath(BaseUnit unit, List<BaseUnit> remainingHeroes)
     {
-        Tile from = unit.OccupiedTile;
+        int difficulty = 3;
+        Tile startingTile = unit.OccupiedTile;
         var dists = new Dictionary<Tile, int>();
         var vis = new HashSet<Tile>(); 
         var pq = new PriorityQueue<Tile, int>(); //using pq script from internet as unity does not support it natively
@@ -350,8 +351,8 @@ public class GridManager : MonoBehaviour
             dists[tile] = int.MaxValue;
             previousTile[tile] = null;
         }
-        dists[from] = 0;
-        pq.Enqueue(from, 0);
+        dists[startingTile] = 0;
+        pq.Enqueue(startingTile, 0);
 
         while (pq.Count > 0)
         {
@@ -377,30 +378,65 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        //Find closest hero
-        BaseHero closestHero = null;
-        int closestDistance = int.MaxValue;
-        Tile closestEmptyTile = null;
-        foreach(BaseHero hero in remainingHeroes)
+        //Retreat if surrounded (difficulty 3 and above only)
+        if(difficulty >= 3)
         {
-            List<Tile> neighbourTiles;
-            neighbourTiles = GetNeighbourTiles(hero.OccupiedTile);
-            Tile targetTile = null;
-            int targetDistance = int.MaxValue;
-            foreach(Tile tile in neighbourTiles)
+            List<Tile> neighbouringTiles = GetNeighbourTiles(startingTile);
+            neighbouringTiles.OrderBy(o=>o.transform.position.x).ToList(); //left before right
+            int neighbouringHeroesCount = 0;
+            Tile escapeTile = null;
+            foreach(Tile tile in neighbouringTiles)
             {
-                if(dists[tile] < targetDistance && tile.OccupiedUnit == null)
+                if(tile.OccupiedUnit != null && tile.OccupiedUnit.Faction == Faction.Hero)
                 {
-                    targetTile = tile;
-                    targetDistance = dists[tile];
+                    neighbouringHeroesCount++;
+                }
+                else if(tile.OccupiedUnit == null)
+                {
+                    escapeTile = tile; //neighbouringTiles is sorted by left, up, down, right
                 }
             }
 
-            if(targetDistance < closestDistance)
+            if(neighbouringHeroesCount > 1)
             {
-                closestHero = hero;
-                closestDistance = targetDistance;
-                closestEmptyTile = targetTile;
+                return escapeTile;
+            }
+        }
+
+        //Find closest hero
+        BaseHero closestHero = null;
+        int closestDistance = int.MaxValue;
+        Tile targetTile = null;
+        foreach(BaseHero hero in remainingHeroes)
+        {
+            if(difficulty == 1)
+            {
+                if(dists[hero.OccupiedTile] < closestDistance)
+                {
+                    closestHero = hero;
+                    closestDistance = dists[hero.OccupiedTile];
+                    targetTile = hero.OccupiedTile; 
+                }
+            }
+            else if(difficulty >= 2)
+            {
+                List<Tile> neighbourTiles = GetNeighbourTiles(hero.OccupiedTile);
+                foreach(Tile tile in neighbourTiles)
+                {
+                    if(dists[tile] < closestDistance && tile.OccupiedUnit == null)
+                    {
+                        targetTile = tile;
+                        closestDistance = dists[tile];
+                        closestHero = hero;
+                    }
+                }
+
+                /*if(closestDistance < closestDistance)
+                {
+                    closestHero = hero;
+                    closestDistance = targetDistance;
+                    closestEmptyTile = targetTile;
+                }*/
             }
         }
         
@@ -409,7 +445,7 @@ public class GridManager : MonoBehaviour
         {
             return unit.OccupiedTile;
         }
-        Tile validTile = closestEmptyTile;
+        Tile validTile = targetTile;
         var reachableTiles = GetReachableTiles(unit, unit.moveRange);
         while (!reachableTiles.Contains(validTile) && validTile != unit.OccupiedTile)
         {
