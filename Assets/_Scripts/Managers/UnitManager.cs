@@ -451,8 +451,8 @@ public class UnitManager : MonoBehaviour
     {
         foreach(BaseUnit enemy in _remainingEnemies)
         {
-            BaseHero target = (BaseHero)FindClosestTarget(enemy);
-            Tile closestTileToTarget = GridManager.Instance.GetEnemyPath(enemy, target);
+            //BaseHero target = (BaseHero)FindClosestTarget(enemy);
+            Tile closestTileToTarget = GridManager.Instance.GetEnemyPath(enemy, _remainingHeroes);
             ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
             /*float closestDistance = Vector2.Distance(enemy.OccupiedTile.transform.position, target.OccupiedTile.transform.position);
             ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
