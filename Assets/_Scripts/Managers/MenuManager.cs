@@ -84,6 +84,10 @@ public class MenuManager : MonoBehaviour
         }
         if (UnitManager.Instance.SelectedHero != null && Keyboard.current.escapeKey.wasPressedThisFrame )
         {
+            // if (UnitManager.Instance.SelectedHero != null && UnitManager.Instance.SelectedHero.OccupiedTile != null)
+            // {
+            //     UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
+            // }
             UnitManager.Instance.SetSelectedHero(null);
         }
     }

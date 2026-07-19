@@ -33,8 +33,9 @@ public class GameManager : MonoBehaviour
             case GameState.SpawnHeroes:
                 if (UnitManager.Instance.SpecificHeroSpawn)
                 {
+                    UnitManager.Instance.SpawnHeroes();
                     EndTurnButton.Instance.EndTurn();
-                    return;
+                    break;
                 }
                 UnitManager.Instance.SpawnPanelActive(true);
                 GridManager.Instance.GetSpawnTiles();

@@ -81,6 +81,20 @@ public class UnitManager : MonoBehaviour
 
         GameManager.Instance.UpdateGameState(GameState.SpawnHeroes);
     }
+    public void SpawnHeroes()
+    {
+        foreach (ScriptableUnit unit in _units)
+        {
+            if (unit.Faction == Faction.Hero)
+            {
+                var spawnedHero = Instantiate(unit.UnitPrefab);
+                Tile spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, true);
+                spawnTile.SetUnit(spawnedHero);
+                _remainingHeroes.Add(spawnedHero);
+                _remainingUnits.Add(spawnedHero);
+            }
+        }
+    }
     public void SpawnPanelActive(bool isActive)
     {
         _spawnPanelObj.SetActive(isActive);
@@ -206,6 +220,7 @@ public class UnitManager : MonoBehaviour
             DeselectHero();
         }
         SelectedHero = hero;
+        
         if (_attackBar != null)
         {
             Destroy(_attackBar);
@@ -214,6 +229,7 @@ public class UnitManager : MonoBehaviour
         {
             return;
         }
+        SelectedHero.OccupiedTile.highlightSelect.SetActive(true);
         if (GameManager.Instance.State == GameState.AttackPhase)
         {
             _attackBar = Instantiate(hero.attackToolBar, _canvas.transform);
@@ -253,7 +269,7 @@ public class UnitManager : MonoBehaviour
         {
             return;
         }
-        
+        SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
         foreach (Tile tile in ReachableTiles)
         {
             tile.highlight.SetActive(false);
