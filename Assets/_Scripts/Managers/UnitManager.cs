@@ -388,9 +388,12 @@ public class UnitManager : MonoBehaviour
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
-            if(unit.Action == AttackPhaseAction.Attack && unit.Target != null)
+            if(unit.Action == AttackPhaseAction.Attack && unit.SelectedAttack != null)
             {
-                _actionQueue.Enqueue(unit, unit.AttackSpeed);
+                if (unit.SelectedAttack is Heals || unit.SelectedAttack is Mitigate || unit.Target != null)
+                {
+                    _actionQueue.Enqueue(unit, unit.AttackSpeed);
+                }
             }
         }
 
@@ -400,7 +403,10 @@ public class UnitManager : MonoBehaviour
             if (unit.Alive && unit.SelectedAttack != null)
             {
                 unit.SelectedAttack.Execute(unit, unit.Target);
-                unit.Target.attackedBy = unit;
+                if (unit.Target != null)
+                {
+                    unit.Target.attackedBy = unit;    
+                }
                 unit.SelectedAttack = null;
             }
             unit.AttackIndicator.gameObject.SetActive(false);

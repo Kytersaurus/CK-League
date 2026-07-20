@@ -9,6 +9,9 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject _showPhaseObject;
     [SerializeField] private GameObject _victoryPanel;
     [SerializeField] private GameObject _defeatPanel;
+    [SerializeField] private Transform _WorldSpaceCanvas;
+    [SerializeField] private GameObject _floatingDamagePrefab;
+    [SerializeField] private Vector2 _floatingDamageIntialPos;
     public GameObject _pauseMenu;
     void Awake()
     {
@@ -53,6 +56,13 @@ public class MenuManager : MonoBehaviour
     public void ShowPauseMenu(bool show)
     {
         _pauseMenu.SetActive(show);
+    }
+    public void SpawnDamageIndicator(string message, Vector3 positon, bool blocked, bool heal)
+    {
+        Vector3 DmgObjPos = positon + (Vector3) _floatingDamageIntialPos;
+        GameObject DmgObj = Instantiate(_floatingDamagePrefab, DmgObjPos , Quaternion.identity, _WorldSpaceCanvas);
+        DamageIndicator DmgObjScript = DmgObj.GetComponent<DamageIndicator>();
+        DmgObjScript.SetupMessage(message, blocked, heal);
     }
     void Update()
     {

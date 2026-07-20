@@ -8,12 +8,8 @@ public abstract class Attacks : ScriptableObject
     public string attackDesc;
     public virtual void Execute(BaseUnit attacker, BaseUnit target)//Default attacking function for all attacks, overide if neccessary
     {
-        if (target.immune)
-        {
-            target.immune = false;
-            return;
-        }
         target.TakeDamage(CalculateDmg(target.reducedDmg, damage));
+        target.reducedDmg = 1;
     }
     public int CalculateDmg(float reduction, int dmg)
     {

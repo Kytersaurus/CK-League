@@ -137,7 +137,7 @@ public class Tile : MonoBehaviour
             }
             highlightSelect.SetActive(false);
         }
-        else if (highlightError.activeSelf)
+        if (highlightError.activeSelf)
         {
             highlightError.SetActive(false);
         }
@@ -187,17 +187,12 @@ public class Tile : MonoBehaviour
             {
                 UnitManager.Instance.SelectedHero.hasMoved = true;
                 GridManager.Instance.ShowUnitDest(UnitManager.Instance.SelectedHero, false);
-                //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
                 UnitManager.Instance.SelectedHero.SetDestination(this);
                 //UnitManager.Instance.SelectedHero.ConstructPath(this);
                 if (UnitManager.Instance.AllMovementsSelected())
                 {
                     EndTurnButton.Instance.ActivateEndTurnButton();
                 }
-                /*SetUnit(UnitManager.Instance.SelectedHero);
-                UnitManager.Instance.DeselectHero();
-                if(!UnitManager.Instance.SkipAttackPhase())
-                    GameManager.Instance.UpdateGameState(GameState.AttackPhase);*/
             }
         }
         //Attack Phase
@@ -206,19 +201,17 @@ public class Tile : MonoBehaviour
             if(OccupiedUnit.Faction == Faction.Hero && OccupiedUnit.TargetsList.Count != 0)
             {
                 UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
-                //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(true);
             }
             else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit) && UnitManager.Instance.SelectedHero.SelectedAttack != null)
             {
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
                 if (UnitManager.Instance.SelectedHero.SelectedAttack is Heals || UnitManager.Instance.SelectedHero.SelectedAttack is Mitigate)
                 {
-                    //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
+                    UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
                     return;   
                 }
                 else
                 {
-                    //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
                     UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);  
                 }
                 if (UnitManager.Instance.AllAttacksSelected())

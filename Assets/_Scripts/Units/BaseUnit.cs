@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 public class BaseUnit : MonoBehaviour
@@ -41,6 +42,21 @@ public class BaseUnit : MonoBehaviour
     }
     public void TakeDamage (int damage)
     {
+        int dmgTaken = CurrentHealth - damage < 0 ? CurrentHealth : damage;
+        string val = $"{dmgTaken}";
+        bool blocked = false;
+        if (immune)
+        {
+            val = "0";
+            blocked = true;
+            damage = 0;
+            immune = false;
+        }
+        else if (reducedDmg != 1)
+        {
+            blocked = true;
+        }
+        MenuManager.Instance.SpawnDamageIndicator(val, transform.position, blocked, false);
         CurrentHealth -= damage;
         if(CurrentHealth <= 0)
         {
@@ -80,6 +96,8 @@ public class BaseUnit : MonoBehaviour
 
     public void HealHealth (int healAmount)
     {
+        int healthHealed = CurrentHealth + healAmount > maxHealth ? maxHealth - CurrentHealth : healAmount; 
+        MenuManager.Instance.SpawnDamageIndicator($"{healthHealed}", transform.position, false, true);
         if (CurrentHealth + healAmount < maxHealth)
         {
             CurrentHealth += healAmount;
