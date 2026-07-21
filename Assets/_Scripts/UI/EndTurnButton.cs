@@ -46,6 +46,10 @@ public class EndTurnButton : MonoBehaviour
             }
             else
             {
+                foreach(BaseUnit unit in UnitManager.Instance.GetRemainingHeroes())
+                {
+                    unit.AttackIndicator.gameObject.SetActive(false);
+                }
                 GameManager.Instance.UpdateGameState(GameState.MovementPhase);
             }
         }
@@ -59,7 +63,7 @@ public class EndTurnButton : MonoBehaviour
             }
         }
 
-        DeactivateEndTurnButton();
+        //DeactivateEndTurnButton();
     }
     
     public void DeactivateEndTurnButton()

@@ -33,7 +33,7 @@ public class AttackToolBarScript : MonoBehaviour
             return;
         }
         RectTransform _rect = _attackBar.GetComponent<RectTransform>();
-        _rect.anchoredPosition = new Vector2(0, -560);
+        _rect.anchoredPosition = new Vector2(-5, -540);
 
          _slider.maxValue = _selectedUnit.maxHealth;
         _profileIcon.sprite = _selectedUnit.UnitIcon;

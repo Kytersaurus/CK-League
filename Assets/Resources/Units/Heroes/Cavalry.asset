@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Cavalry
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableUnit
   Faction: 0
-  UnitPrefab: {fileID: 2330839052410658927, guid: dd4ae28c5d8bc5943820e3bd9742a014, type: 3}
+  UnitPrefab: {fileID: 2330839052410658927, guid: 70bbde4e7e2cbac4fa85b7e40482a407, type: 3}
+  spawnX: 0
+  spawnY: 0

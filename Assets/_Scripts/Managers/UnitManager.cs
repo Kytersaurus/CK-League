@@ -3,6 +3,7 @@ using System.Data.Common;
 using System.Linq;
 using Clrain.Collections;
 using TMPro;
+using Unity.Plastic.Newtonsoft.Json.Converters;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -80,6 +81,20 @@ public class UnitManager : MonoBehaviour
 
         GameManager.Instance.UpdateGameState(GameState.SpawnHeroes);
     }
+    public void SpawnHeroes()
+    {
+        foreach (ScriptableUnit unit in _units)
+        {
+            if (unit.Faction == Faction.Hero)
+            {
+                var spawnedHero = Instantiate(unit.UnitPrefab);
+                Tile spawnTile = GridManager.Instance.GetSpecificSpawnTile(unit.spawnX, unit.spawnY, true);
+                spawnTile.SetUnit(spawnedHero);
+                _remainingHeroes.Add(spawnedHero);
+                _remainingUnits.Add(spawnedHero);
+            }
+        }
+    }
     public void SpawnPanelActive(bool isActive)
     {
         _spawnPanelObj.SetActive(isActive);
@@ -154,7 +169,7 @@ public class UnitManager : MonoBehaviour
                 unitSelect.interactable = false;
             }
             _unitSpawnToggles.Add(unitSelect);
-            y -= 100;
+            y -= 120;
         }
     }
     public void SpawnHero(int x, int y)
@@ -205,6 +220,7 @@ public class UnitManager : MonoBehaviour
             DeselectHero();
         }
         SelectedHero = hero;
+        
         if (_attackBar != null)
         {
             Destroy(_attackBar);
@@ -213,6 +229,7 @@ public class UnitManager : MonoBehaviour
         {
             return;
         }
+        SelectedHero.OccupiedTile.highlightSelect.SetActive(true);
         if (GameManager.Instance.State == GameState.AttackPhase)
         {
             _attackBar = Instantiate(hero.attackToolBar, _canvas.transform);
@@ -252,7 +269,7 @@ public class UnitManager : MonoBehaviour
         {
             return;
         }
-        
+        SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
         foreach (Tile tile in ReachableTiles)
         {
             tile.highlight.SetActive(false);
@@ -334,6 +351,10 @@ public class UnitManager : MonoBehaviour
         {
             unit.TargetsList.Clear();
             unit.TargetsList = FindAllAttackTargets(unit);
+            if (unit.TargetsList.Count != 0 && unit is BaseHero)
+            {
+                unit.AttackIndicator.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -407,9 +428,12 @@ public class UnitManager : MonoBehaviour
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
-            if(unit.Action == AttackPhaseAction.Attack && unit.Target != null)
+            if(unit.Action == AttackPhaseAction.Attack && unit.SelectedAttack != null)
             {
-                _actionQueue.Enqueue(unit, unit.AttackSpeed);
+                if (unit.SelectedAttack is Heals || unit.SelectedAttack is Mitigate || unit.Target != null)
+                {
+                    _actionQueue.Enqueue(unit, unit.AttackSpeed);
+                }
             }
         }
 
@@ -419,9 +443,13 @@ public class UnitManager : MonoBehaviour
             if (unit.Alive && unit.SelectedAttack != null)
             {
                 unit.SelectedAttack.Execute(unit, unit.Target);
-                unit.Target.attackedBy = unit;
+                if (unit.Target != null)
+                {
+                    unit.Target.attackedBy = unit;    
+                }
                 unit.SelectedAttack = null;
             }
+            unit.AttackIndicator.gameObject.SetActive(false);
         }
         foreach (BaseUnit unit in _remainingUnits)
         {
@@ -439,7 +467,11 @@ public class UnitManager : MonoBehaviour
     {
         foreach(BaseUnit unit in _remainingUnits)
         {
-            if(unit.TargetsList.Count != 0 && (unit.Target == null || unit.SelectedAttack == null))
+            if(unit.SelectedAttack == null)
+            {
+                return false;
+            }
+            if (!(unit.SelectedAttack is Heals) || !(unit.SelectedAttack is Mitigate) && unit.Target == null)
             {
                 return false;
             }

@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Archer
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableUnit
   Faction: 0
-  UnitPrefab: {fileID: 6578676962674491697, guid: f2e68d5fe185d6c449cb47ebc8dcfa6c, type: 3}
+  UnitPrefab: {fileID: 6578676962674491697, guid: 79f6f14b367417b4eb673d6f6d8fc7dd, type: 3}
+  spawnX: 0
+  spawnY: 0

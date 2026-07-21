@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,6 +13,7 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
     [SerializeField] private GameObject _tooltipPanel;
     [SerializeField] private TextMeshProUGUI _attackDescription;
     [SerializeField] private TextMeshProUGUI _attackVal;
+    [SerializeField] private Image _selectedBox;
     void Awake()
     {
         _toggle.onValueChanged.AddListener(OnPress);
@@ -28,10 +31,18 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
     }
     void OnPress(bool pressed)
     {
+        _selectedBox.gameObject.SetActive(pressed);
         if (pressed)
         {
             UnitManager.Instance.SelectedHero.SelectedAttack = attack;
-        }
+            List<BaseUnit> targets = UnitManager.Instance.SelectedHero.TargetsList;
+            bool targetsActive = !(attack is Heals || attack is Mitigate);
+            //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(targetsActive);
+            foreach (BaseUnit unit in targets)
+            {
+                unit.OccupiedTile.highlight.SetActive(targetsActive);
+            }
+    }
         else
         {
             UnitManager.Instance.SelectedHero.SelectedAttack = null;

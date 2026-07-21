@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: Warrior
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableUnit
   Faction: 0
-  UnitPrefab: {fileID: 8701891561292654473, guid: d4a0048e40d0cfe43a48f3fd4bb1bc6d, type: 3}
+  UnitPrefab: {fileID: 8701891561292654473, guid: 3964a4f221507d347ae138f3d4666204, type: 3}
+  spawnX: 0
+  spawnY: 0

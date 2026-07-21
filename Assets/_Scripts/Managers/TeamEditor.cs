@@ -697,13 +697,13 @@ public class TeamEditor : MonoBehaviour
             }
             _teamUnitsList.Clear();
         }
-        int x = 300, y = 80;
+        int x = 380, y = 60;
         foreach (UnitSaveData unitData in _team)
         {
-            if (x > 600)
+            if (x > 580)
             {
-                y -= 110;
-                x = 300;
+                y = -60;
+                x = 340;
             }
             
             Toggle unitSelect = Instantiate(_unitToggle, _teamPanel);
@@ -723,7 +723,7 @@ public class TeamEditor : MonoBehaviour
 
 
             _teamUnitsList.Add(unitSelect);
-            x += 150;
+            x += 200;
         }
     }
     public void SaveUnit()
