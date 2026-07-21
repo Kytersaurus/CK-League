@@ -352,13 +352,53 @@ public class UnitManager : MonoBehaviour
 
     public void SetEnemyAttacks()
     {
+        int difficulty = GameManager.Instance.EnemyDifficulty;
+        Dictionary<BaseUnit, int> potentialAttacksReceived = new Dictionary<BaseUnit, int>();
+        foreach(BaseUnit hero in _remainingHeroes)
+        {
+            potentialAttacksReceived[hero] = 0;
+            foreach(BaseUnit enemy in _remainingEnemies)
+            {
+                if(InAttackRange(enemy, hero))
+                {
+                    potentialAttacksReceived[hero]++;
+                }
+            }
+        }
         foreach(BaseUnit enemy in _remainingEnemies)
         {
             enemy.Action = AttackPhaseAction.Attack;
-            enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>Random.value).First();
-            if(enemy.TargetsList.Count > 0)
+            if(difficulty == 1)
             {
-                enemy.Target = enemy.TargetsList.OrderBy(o=>Random.value).First();
+                enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>Random.value).First();
+                if(enemy.TargetsList.Count > 0)
+                {
+                    enemy.Target = enemy.TargetsList.OrderBy(o=>Random.value).First();
+                }                
+            }
+            else if(difficulty == 2)
+            {
+                enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>o.damage).First();
+                if(enemy.TargetsList.Count > 0)
+                {
+                    enemy.Target = enemy.TargetsList.OrderByDescending(o=>o.CurrentHealth).First();
+                }                
+            }
+            else if(difficulty >= 3)
+            {
+                enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>o.damage).First();
+                if(enemy.TargetsList.Count > 0)
+                {
+                    int greatestPotentialAttacks = 0;
+                    foreach(BaseUnit hero in enemy.TargetsList)
+                    {
+                        if(potentialAttacksReceived[hero] >= greatestPotentialAttacks)
+                        {
+                            enemy.Target = hero;
+                            greatestPotentialAttacks = potentialAttacksReceived[hero];
+                        }
+                    }
+                }
             }
         }
     }
@@ -428,7 +468,7 @@ public class UnitManager : MonoBehaviour
         }
     }*/
 
-    public BaseUnit FindClosestTarget(BaseUnit unit)
+    /*public BaseUnit FindClosestTarget(BaseUnit unit)
     {
         BaseUnit target = null;
         var shortestDistance = float.MaxValue;
@@ -445,14 +485,14 @@ public class UnitManager : MonoBehaviour
             }
         }
         return target;
-    }
+    }*/
 
     public void SetEnemyMovement()
     {
         foreach(BaseUnit enemy in _remainingEnemies)
         {
-            BaseHero target = (BaseHero)FindClosestTarget(enemy);
-            Tile closestTileToTarget = GridManager.Instance.GetEnemyPath(enemy, target);
+            //BaseHero target = (BaseHero)FindClosestTarget(enemy);
+            Tile closestTileToTarget = GridManager.Instance.GetEnemyPath(enemy, _remainingHeroes);
             ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);
             /*float closestDistance = Vector2.Distance(enemy.OccupiedTile.transform.position, target.OccupiedTile.transform.position);
             ReachableTiles = GridManager.Instance.GetReachableTiles(enemy, enemy.moveRange);

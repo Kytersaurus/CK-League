@@ -336,23 +336,25 @@ public class GridManager : MonoBehaviour
             .ToList();
     }
 
-    public Tile GetEnemyPath(BaseUnit unit, BaseUnit target)
+    public Tile GetEnemyPath(BaseUnit unit, List<BaseUnit> remainingHeroes)
     {
-        Tile from = unit.OccupiedTile;
+        int difficulty = GameManager.Instance.EnemyDifficulty;
+        Tile startingTile = unit.OccupiedTile;
         var dists = new Dictionary<Tile, int>();
         var vis = new HashSet<Tile>(); 
         var pq = new PriorityQueue<Tile, int>(); //using pq script from internet as unity does not support it natively
         var previousTile = new Dictionary<Tile, Tile>();
         
+        //Djikstra's Algorithm for entire map
         foreach (Tile tile in _tiles.Values)
         {
             dists[tile] = int.MaxValue;
             previousTile[tile] = null;
         }
-        dists[from] = 0;
-        pq.Enqueue(from, 0);
+        dists[startingTile] = 0;
+        pq.Enqueue(startingTile, 0);
 
-        while (pq.Count > 0 && !vis.Contains(target.OccupiedTile))
+        while (pq.Count > 0)
         {
             Tile curr = pq.Dequeue();
             List<Tile> nbs = GetNeighbourTiles(curr);
@@ -362,7 +364,7 @@ public class GridManager : MonoBehaviour
             }
             foreach (Tile nb in nbs)
             {
-                if (vis.Contains(nb) || (!nb.Walkable && nb != target.OccupiedTile))
+                if (vis.Contains(nb) || (!nb.Walkable && nb.OccupiedUnit == null))
                 {
                     continue;
                 }
@@ -371,16 +373,76 @@ public class GridManager : MonoBehaviour
                 {
                     dists[nb] = newDist;
                     previousTile[nb] = curr;
-                    pq.Enqueue(nb, newDist);
+                    if(nb.OccupiedUnit == null || nb.OccupiedUnit.Faction == Faction.Enemy)
+                    {
+                        pq.Enqueue(nb, newDist);
+                    }
+                }
+            }
+        }
+
+        //Retreat if surrounded (difficulty 2 and above only)
+        if(difficulty >= 2)
+        {
+            List<Tile> neighbouringTiles = GetNeighbourTiles(startingTile);
+            neighbouringTiles.OrderBy(o=>o.transform.position.x).ToList(); //left before right
+            int neighbouringHeroesCount = 0;
+            Tile escapeTile = startingTile;
+            foreach(Tile tile in neighbouringTiles)
+            {
+                if(tile.OccupiedUnit != null && tile.OccupiedUnit.Faction == Faction.Hero)
+                {
+                    neighbouringHeroesCount++;
+                }
+                else if(tile.OccupiedUnit == null && tile.MoveCost == 1)
+                {
+                    escapeTile = tile; //neighbouringTiles is sorted by left, up, down, right
+                }
+            }
+
+            if(neighbouringHeroesCount > 1)
+            {
+                return escapeTile;
+            }
+        }
+
+        //Find closest hero
+        BaseHero closestHero = null;
+        int closestDistance = int.MaxValue;
+        Tile targetTile = null;
+        foreach(BaseHero hero in remainingHeroes)
+        {
+            if(dists[hero.OccupiedTile] < closestDistance)
+            {
+                closestHero = hero;
+                closestDistance = dists[hero.OccupiedTile];
+                targetTile = hero.OccupiedTile; 
+            }
+        }
+        if(difficulty >= 3)//override if empty tile next to hero is found
+        {
+            closestDistance = int.MaxValue;
+            foreach(BaseHero hero in remainingHeroes)
+            {
+                List<Tile> neighbourTiles = GetNeighbourTiles(hero.OccupiedTile);
+                foreach(Tile tile in neighbourTiles)
+                {
+                    if(dists[tile] < closestDistance && (tile.Walkable || tile.OccupiedUnit == unit))
+                    {
+                        targetTile = tile;
+                        closestDistance = dists[tile];
+                        closestHero = hero;
+                    }
                 }
             }
         }
         
-        if(dists[target.OccupiedTile] == int.MaxValue)
+        //Find tile in enemy movement range that is in the path towards closest hero
+        if(closestHero == null)
         {
             return unit.OccupiedTile;
         }
-        Tile validTile = target.OccupiedTile;
+        Tile validTile = targetTile;
         var reachableTiles = GetReachableTiles(unit, unit.moveRange);
         while (!reachableTiles.Contains(validTile) && validTile != unit.OccupiedTile)
         {
