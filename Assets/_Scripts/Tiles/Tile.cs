@@ -207,7 +207,6 @@ public class Tile : MonoBehaviour
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
                 if (UnitManager.Instance.SelectedHero.SelectedAttack is Heals || UnitManager.Instance.SelectedHero.SelectedAttack is Mitigate)
                 {
-                    UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
                     return;   
                 }
                 else
