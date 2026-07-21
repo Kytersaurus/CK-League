@@ -1541,6 +1541,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8eba792c6862654488ecacbd504ded55, type: 2}
   - {fileID: 11400000, guid: 249b2c3711878f14bb32d89d781261ca, type: 2}
   - {fileID: 11400000, guid: 0c1b4688141e3ae40862e3d7d8d56939, type: 2}
+  - {fileID: 11400000, guid: 0f210b6067d65b84ea1538838fa7a780, type: 2}
   SelectedHero: {fileID: 0}
   _canvas: {fileID: 994186588}
   SpecificHeroSpawn: 0
@@ -2146,6 +2147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   State: 0
+  EnemyDifficulty: 3
 --- !u!4 &1012456513
 Transform:
   m_ObjectHideFlags: 0

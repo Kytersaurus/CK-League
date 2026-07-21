@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,21 +28,31 @@ public class GameManager : MonoBehaviour
         {
             case GameState.GenerateGrid:
                 GridManager.Instance.SetupGrid();
+                if (ProgressManager.Instance.LevelProgressSaved)
+                {
+                    UnitManager.Instance.SpawnUnitsFromSave();
+                }
                 break;
             case GameState.SpawnEnemies:
-                UnitManager.Instance.SpawnEnemies();
+            if (!ProgressManager.Instance.LevelProgressSaved)
+                {
+                    UnitManager.Instance.SpawnEnemies();
+                }
                 break;
             case GameState.SpawnHeroes:
-                if (UnitManager.Instance.SpecificHeroSpawn)
+                if (!ProgressManager.Instance.LevelProgressSaved)
                 {
-                    UnitManager.Instance.SpawnHeroes();
-                    EndTurnButton.Instance.EndTurn();
-                    break;
+                    if (UnitManager.Instance.SpecificHeroSpawn)
+                    {
+                        UnitManager.Instance.SpawnHeroes();
+                        EndTurnButton.Instance.EndTurn();
+                        break;
+                    }
+                    UnitManager.Instance.SpawnPanelActive(true);
+                    GridManager.Instance.GetSpawnTiles();
+                    EndTurnButton.Instance.ChangeText("Start");
+                    EndTurnButton.Instance.ActivateEndTurnButton();
                 }
-                UnitManager.Instance.SpawnPanelActive(true);
-                GridManager.Instance.GetSpawnTiles();
-                EndTurnButton.Instance.ChangeText("Start");
-                EndTurnButton.Instance.ActivateEndTurnButton();
                 break;
             case GameState.MovementPhase:
                 UnitManager.Instance.ResetMovedState();

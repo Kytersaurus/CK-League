@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using Clrain.Collections;
+using TextMateSharp.Internal.Rules;
 using TMPro;
-using Unity.Plastic.Newtonsoft.Json.Converters;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +14,8 @@ public class UnitManager : MonoBehaviour
     private List<BaseUnit> _remainingHeroes = new List<BaseUnit>();
     private List<BaseUnit> _remainingEnemies = new List<BaseUnit>();
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
-    private List<BaseHero> _allUnitsUsedInStage = new List<BaseHero>();
-
+    private List<BaseUnit> _allUnitsUsedInStage = new List<BaseUnit>();
+    private List<ScriptableUnit> _allUnitPrefabs;
     public BaseHero SelectedHero;
     private PriorityQueue<BaseUnit, int> _movementQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
     private PriorityQueue<BaseUnit, int> _actionQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
@@ -37,7 +36,7 @@ public class UnitManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        
+        _allUnitPrefabs = Resources.LoadAll<ScriptableUnit>("Units").ToList();
         // _units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
         // _heroes = _units.Where(u=>u.Faction == Faction.Hero).ToList();
         
@@ -94,6 +93,63 @@ public class UnitManager : MonoBehaviour
                 _remainingUnits.Add(spawnedHero);
             }
         }
+    }
+    public void SpawnUnitsFromSave()
+    {
+        LevelSaveData data = ProgressManager.Instance.LoadLevelProgress();
+        List<UnitBattleData> enemyDatas = data.enemies;
+        List<HeroBattleData> heroDatas = data.heroes;
+        GameManager.Instance.State = data.gameState;
+        foreach (HeroBattleData heroData in heroDatas)
+        {
+            ScriptableUnit heroScriptUnit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == heroData.unitName);
+            BaseHero hero = Instantiate(heroScriptUnit.UnitPrefab) as BaseHero;
+            hero.unitName = heroData.unitName;
+            hero.Faction = heroData.faction;
+            hero.CurrentHealth = heroData.currentHealth;
+            hero.maxHealth = heroData.maxHealth;
+            hero.Position.x = heroData.gridX;
+            hero.Position.y = heroData.gridY;
+            hero.Alive = heroData.alive;
+            
+            hero.guid = heroData.guid;
+            hero.className = heroData.className;
+            hero.level = heroData.level;
+            hero.experience = heroData.experience;
+            if (hero.Alive)
+            {
+                Tile spawnTile = GridManager.Instance.GetSpecificSpawnTile(heroData.gridX, heroData.gridY, true);
+                spawnTile.SetUnit(hero);
+                _remainingUnits.Add(hero);
+                _remainingHeroes.Add(hero);
+            }
+            else
+            {
+                Destroy(hero.gameObject);
+                _allUnitsUsedInStage.Add(hero);
+            }
+        }
+        foreach (UnitBattleData enemyData in enemyDatas)
+        {
+            ScriptableUnit enemyScriptUnit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == enemyData.unitName);
+            BaseUnit enemy = Instantiate(enemyScriptUnit.UnitPrefab);
+            enemy.Faction = enemyData.faction;
+            enemy.CurrentHealth = enemyData.currentHealth;
+            enemy.maxHealth = enemyData.maxHealth;
+            enemy.Position.x = enemyData.gridX;
+            enemy.Position.y = enemyData.gridY;
+            enemy.Alive = enemyData.alive;
+            if (enemy.Alive)
+            {
+                Tile spawnedTile = GridManager.Instance.GetSpecificSpawnTile(enemyData.gridX, enemyData.gridY, false);
+                _remainingEnemies.Add(enemy);
+                _remainingUnits.Add(enemy);
+            }
+            else
+            {
+                Destroy(enemy.gameObject);
+            }
+        }   
     }
     public void SpawnPanelActive(bool isActive)
     {
@@ -184,7 +240,7 @@ public class UnitManager : MonoBehaviour
         spawnedHero.className = data.className;
         spawnedHero.level = data.level;
         spawnedHero.experience = data.experience;
-
+        spawnedHero.Position = new Vector2(x, y);
         var attacks = TeamManager.Instance.AllAttacks;
         spawnedHero.moveSet = data.attackNames
             .Select(name => attacks.FirstOrDefault(a => a.attackName == name))
@@ -201,18 +257,6 @@ public class UnitManager : MonoBehaviour
         RefreshTeam();
         GridManager.Instance.HighlightSpawnTiles(false);
     }
-    public void SaveUnitProgress()
-    {
-        if (_allUnitsUsedInStage == null || _allUnitsUsedInStage.Count == 0)
-        {
-            return;
-        }
-        foreach (BaseHero hero in _allUnitsUsedInStage)
-        {
-            TeamManager.Instance.UpdateUnitData(hero);
-        }
-    }
-
     public void SetSelectedHero(BaseHero hero)
     {
         if (SelectedHero != null)
@@ -301,8 +345,8 @@ public class UnitManager : MonoBehaviour
             else
                 GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
         }
-        _remainingUnits.Remove(unit);
         unit.Alive = false;
+        _allUnitsUsedInStage.Add(unit);
         Destroy(unit.gameObject);
     }
 
@@ -586,12 +630,31 @@ public class UnitManager : MonoBehaviour
     {
         return _remainingHeroes;
     }
+    public List<BaseUnit> GetAllUnitsUsedInStage()
+    {
+        foreach (BaseUnit unit in _remainingUnits)
+        {
+            _allUnitsUsedInStage.Add(unit);
+        }
+        return _allUnitsUsedInStage;
+    }
     
     public void ResetMovedState()
     {
         foreach (BaseUnit unit in _remainingUnits)
         {
             unit.hasMoved = false;
+        }
+    }
+    public void SaveHeroProgressAfterLevel()
+    {
+        foreach (BaseUnit unit in _remainingUnits)
+        {
+            _allUnitsUsedInStage.Add(unit);
+        }
+        foreach (BaseHero unit in _allUnitsUsedInStage)
+        {
+            TeamManager.Instance.UpdateUnitData(unit);
         }
     }
 }

@@ -230,6 +230,7 @@ public class Tile : MonoBehaviour
         unit.transform.position = transform.position;
         OccupiedUnit = unit;
         unit.OccupiedTile = this;
+        unit.Position = unit.OccupiedTile.GridPos;
         GridManager.Instance.ShowUnitDest(unit, false);
     }
 }
