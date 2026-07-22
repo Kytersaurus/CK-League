@@ -47,11 +47,13 @@ public class UnitManager : MonoBehaviour
     {
         BaseUnit.OnUnitDeath += KillUnit;
         BaseUnit.OnUnitAction += DeselectHero;
+        BaseUnit.OnDamageTaken += AddExperience;
     }
     private void OnDisable()
     {
         BaseUnit.OnUnitDeath -= KillUnit;
         BaseUnit.OnUnitAction -= DeselectHero;
+        BaseUnit.OnDamageTaken -= AddExperience;
     }
     public List<BaseUnit> GetHeroesList()
     {
@@ -442,11 +444,11 @@ public class UnitManager : MonoBehaviour
             var unit = _actionQueue.Dequeue();
             if (unit.Alive && unit.SelectedAttack != null)
             {
-                unit.SelectedAttack.Execute(unit, unit.Target);
                 if (unit.Target != null)
                 {
-                    unit.Target.attackedBy = unit;    
+                    unit.Target.attackedBy = unit;
                 }
+                unit.SelectedAttack.Execute(unit, unit.Target);
                 unit.SelectedAttack = null;
             }
             unit.AttackIndicator.gameObject.SetActive(false);
@@ -592,6 +594,15 @@ public class UnitManager : MonoBehaviour
         foreach (BaseUnit unit in _remainingUnits)
         {
             unit.hasMoved = false;
+        }
+    }
+
+    public void AddExperience(BaseUnit unit, int damage)
+    {
+        if(unit.attackedBy.Faction == Faction.Hero)
+        {
+            var hero = (BaseHero)unit.attackedBy;
+            hero.experience += damage;
         }
     }
 }
