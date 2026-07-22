@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: New Basic Lightning Attack
   m_EditorClassIdentifier: Assembly-CSharp::BasicLightningAttack
   attackName: Basic Lightning Spell
-  damage: 40
-  range: 0
+  damage: 20
   icon: {fileID: -4664471186202462783, guid: 3b2ae7e9f9bff4d4c8d26e161a7554b0, type: 3}
-  attackDesc: Does a ton of damage.
+  attackDesc: Basic lightning spell for ranged damage

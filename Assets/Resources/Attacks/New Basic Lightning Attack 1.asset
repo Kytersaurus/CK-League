@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6271b5efa7c805341ab685af600b8af3, type: 3}
+  m_Name: New Basic Lightning Attack 1
+  m_EditorClassIdentifier: Scripts::BasicLightningAttack
+  attackName: Lightning Storm Spell
+  damage: 50
+  icon: {fileID: 7739986734590855550, guid: 66e2cdb65a48f7d4f921c6d80ae66817, type: 3}
+  attackDesc: Advanced lightning spell which does significantly more damage. Only
+    usable by the arch mage.

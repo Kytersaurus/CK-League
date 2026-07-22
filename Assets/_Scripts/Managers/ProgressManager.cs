@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using NUnit.Framework;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.SceneManagement;
  [System.Serializable]
@@ -97,6 +99,10 @@ public class ProgressManager : MonoBehaviour
     }
     public void SaveLevelProgress()
     {
+        if (GameManager.Instance.State == GameState.SpawnHeroes)
+        {
+            return;
+        }
         string savePath = _levelProgressSavePath(SceneManager.GetActiveScene().name);
         List<UnitBattleData> enemyDatas = new List<UnitBattleData>();
         List<HeroBattleData> heroDatas = new List<HeroBattleData>();
@@ -107,7 +113,7 @@ public class ProgressManager : MonoBehaviour
                 BaseHero hero = unit as BaseHero;
                 HeroBattleData heroData = new HeroBattleData
                 {
-                    unitName = hero.name,
+                    unitName = hero.name.Replace("(Clone)", ""),
                     faction = hero.Faction,
                     currentHealth = hero.CurrentHealth,
                     maxHealth = hero.maxHealth,
@@ -126,7 +132,7 @@ public class ProgressManager : MonoBehaviour
             {
                 UnitBattleData enemyData = new UnitBattleData
                 {
-                    unitName = unit.name,
+                    unitName = unit.name.Replace("(Clone)", ""),
                     faction = unit.Faction,
                     currentHealth = unit.CurrentHealth,
                     maxHealth = unit.maxHealth,
@@ -156,11 +162,12 @@ public class ProgressManager : MonoBehaviour
         }
         return JsonUtility.FromJson<LevelSaveData>(File.ReadAllText(savePath));
     }
-    public void DeleteLevelSaveData(string levelName)
+    public void DeleteLevelSaveData()
     {
-        if (File.Exists(_levelProgressSavePath(levelName)))
+        string savePath = _levelProgressSavePath(SceneManager.GetActiveScene().name);
+        if (File.Exists(savePath))
         {
-            File.Delete(_levelProgressSavePath(levelName));
+            File.Delete(savePath);
         }
     }
 }

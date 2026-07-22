@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
+using log4net.Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TeamEditor : MonoBehaviour
 {
     public static TeamEditor Instance;
     private List<ScriptableUnit> _allNewUnits = new List<ScriptableUnit>();
+    private List<ScriptableUnit> _allUnitPrefabs = new List<ScriptableUnit>();
     private List<UnitSaveData> _allExistingUnits = new List<UnitSaveData>();
     private List<Attacks> _allAttacks = new List<Attacks>();
     private List<UnitSaveData> _team = new List<UnitSaveData>();
@@ -16,23 +19,25 @@ public class TeamEditor : MonoBehaviour
     private ScriptableUnit _newSelectedUnit;
     private Attacks _selectedAttack;
     [SerializeField] private Transform _newUnitPanel, _existingUnitPanel, _attacksPanel, _infoPanel, _teamPanel;
-    [SerializeField] private Image _selectedUnitImage,  _selectedAttackImage;
-    [SerializeField] private TextMeshProUGUI _selectedUnitDesc,_selectedAttackDesc;
+    [SerializeField] private Image _selectedUnitImage,  _selectedAttackImage, _evolveUnitImage;
+    [SerializeField] private TextMeshProUGUI _selectedUnitDesc,_selectedAttackDesc, _evolveA, _evolveB, _evolveUnitDesc;
     [SerializeField] private ToggleGroup _newUnitToggleGroup, _existingUnitToggleGroup, _attacksToggleGroup;
     [SerializeField] private Toggle _unitToggle, _newUnitPanelToggle, _attacksPanelToggle;
     [SerializeField] private List<Toggle> _teamSelectToggles;
-    [SerializeField] private Button _deselectUnitButton, _deselectAttackButton, _addUnitToTeamButton, _deleteUnitButton, _saveUnitButton, _addAttackButton, _removeAttackButton, _saveTeamButton, _deleteTeamButton, _removeUnitFromTeamButton;
+    [SerializeField] private Button _deselectUnitButton, _deselectAttackButton, _addUnitToTeamButton, _deleteUnitButton, _saveUnitButton, _addAttackButton, _removeAttackButton, _saveTeamButton, _deleteTeamButton, _removeUnitFromTeamButton, _unitEvolveButton;
     private List<Toggle> _newUnitsList, _existingUnitsList, _attacksList, _unitAttacksList, _teamUnitsList;
     public bool TeamSaved;
-    [SerializeField] GameObject _popUp, _popUpConfirmSwitchNoSave, _popUpConfirmDeleteTeam, _popUpConfirmDeleteUnit;
+    [SerializeField] GameObject _popUp, _popUpConfirmSwitchNoSave, _popUpConfirmDeleteTeam, _popUpConfirmDeleteUnit, _evolvePanel, _evolveButton, _popUpConfirmLeaveNoSaveTeam;
     private PopUpScript _popUpScript;
     private int _prevTeamSlot, _teamSlot;
+    private string _classTrack;
     void Awake()
     {
         Instance = this;
     }
     void Start()
     {
+        DeselectEverything();
         _popUpScript = _popUp.GetComponent<PopUpScript>();
         RefreshNewUnitsList();
         RefreshExistingUnitsList();
@@ -113,10 +118,18 @@ public class TeamEditor : MonoBehaviour
         {
             _removeUnitFromTeamButton.gameObject.SetActive(true);
         }
+        if (_selectedUnit != null)
+        {
+            _unitEvolveButton.gameObject.SetActive(CanUnitChangeClass());
+        }
+        if (_selectedUnit == null)
+        {
+            _unitEvolveButton.gameObject.SetActive(false);
+        }
     }
     public void RefreshNewUnitsList()
     {
-        _allNewUnits = TeamManager.Instance.AllUnitPrefabs;
+        _allNewUnits = TeamManager.Instance.AllBaseUnitPrefabs;
         if (_newUnitsList == null)
         {
             _newUnitsList = new List<Toggle>();
@@ -132,7 +145,7 @@ public class TeamEditor : MonoBehaviour
         int x = -550, y = 180;
         foreach (ScriptableUnit unit in _allNewUnits)
         {
-            if (x > 550)
+            if (x > 450)
             {
                 y -= 140;
                 x = -550;
@@ -181,7 +194,7 @@ public class TeamEditor : MonoBehaviour
         int x = -550, y = 180;
         foreach (UnitSaveData unitData in _allExistingUnits)
         {
-            if (x > 550)
+            if (x > 450)
             {
                 y -= 140;
                 x = -550;
@@ -195,7 +208,7 @@ public class TeamEditor : MonoBehaviour
             RectTransform rect = unitSelect.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(x, y);
             unitSelect.group = _existingUnitToggleGroup;
-            ScriptableUnit unit = _allNewUnits.FirstOrDefault(u => u.name == unitData.unitName);
+            ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == unitData.unitName);
             ToggleSelect toggleScript = unitSelect.GetComponent<ToggleSelect>();
             toggleScript.SetExistingUnit(unitData);
 
@@ -230,7 +243,7 @@ public class TeamEditor : MonoBehaviour
         int x = -550, y = 180;
         foreach (Attacks attack in _allAttacks)
         {
-            if (x > 550)
+            if (x > 450)
             {
                 y -= 140;
                 x = -550;
@@ -334,7 +347,7 @@ public class TeamEditor : MonoBehaviour
 
         if (_selectedUnit != null)
         {
-            ScriptableUnit unit = _allNewUnits.FirstOrDefault(u => u.name == _selectedUnit.unitName);
+            ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == _selectedUnit.unitName);
             _selectedUnitImage.sprite = unit.UnitPrefab.UnitIcon;
             _selectedUnitImage.preserveAspect = true;
             _selectedUnitDesc.text = $"Name: {unit.name}\n" +
@@ -355,6 +368,7 @@ public class TeamEditor : MonoBehaviour
                                     "Experience: 0\n" +
                                     $"Unit Description: {unit.UnitPrefab.UnitDescription}\n";
             RefreshUnitAttackList();
+            _unitEvolveButton.gameObject.SetActive(false);
         }
     }
     public void ShowAttackInfo()
@@ -412,7 +426,7 @@ public class TeamEditor : MonoBehaviour
     
     public BaseHero GetUnitPrefab(UnitSaveData data)
     {
-        ScriptableUnit unit = _allNewUnits.FirstOrDefault(u => u.name == data.unitName);
+        ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == data.unitName);
             if (unit == null)
             {
                 Debug.Log("No unit found");
@@ -524,7 +538,7 @@ public class TeamEditor : MonoBehaviour
         }
         if (_selectedUnit != null)
         {
-            ScriptableUnit unit = _allNewUnits.FirstOrDefault(u => u.name == _selectedUnit.unitName);
+            ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == _selectedUnit.unitName);
             if (_selectedAttack is MeleeAttack && (unit.UnitPrefab is BaseArcher || unit.UnitPrefab is BaseMage))
             {
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take Melee Attacks");
@@ -583,6 +597,31 @@ public class TeamEditor : MonoBehaviour
             if (_newSelectedUnit.UnitPrefab.moveSet.Contains(_selectedAttack))
             {
                 _popUpScript.ShowPopUpAndSetText("Selected Unit already has this attack equipped");
+                return;
+            }
+            if (_selectedAttack is HealPoolSpell && !(unit.UnitPrefab is HealerMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is LifeSlashAttack && !(unit.UnitPrefab is BeserkerWarrior))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack.attackName == "Advanced block" && !(unit.UnitPrefab is HeavyCavalry || unit.UnitPrefab is TankWarrior))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack.attackName == "Lightning Storm Spell" && !(unit.UnitPrefab is ArchMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is Mitigate && unit.UnitPrefab is BeserkerWarrior)
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
                 return;
             }
             _newSelectedUnit.UnitPrefab.moveSet.Add(_selectedAttack);
@@ -710,7 +749,7 @@ public class TeamEditor : MonoBehaviour
             RectTransform rect = unitSelect.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(x, y);
             unitSelect.group = _existingUnitToggleGroup;
-            ScriptableUnit unit = _allNewUnits.FirstOrDefault(u => u.name == unitData.unitName);
+            ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == unitData.unitName);
             ToggleSelect toggleScript = unitSelect.GetComponent<ToggleSelect>();
             toggleScript.SetExistingUnit(unitData);
 
@@ -729,6 +768,8 @@ public class TeamEditor : MonoBehaviour
     public void SaveUnit()
     {
         CreateAndSaveUnit();
+        DeselectEverything();
+        RefreshExistingUnitsList();
     }
     public void ConfirmDeleteUnit()
     {
@@ -859,5 +900,94 @@ public class TeamEditor : MonoBehaviour
             }
         }
     }
-    
+    public bool CanUnitChangeClass()
+    {
+        ScriptableUnit unit = TeamManager.Instance.AllBaseUnitPrefabs.FirstOrDefault(u => u.name == _selectedUnit.unitName);
+        if (unit == null)
+        {
+            Debug.Log("No base Unit found");
+            return false;
+        }
+        if (unit.EvolvePathA != null && unit.EvolvePathB != null && _selectedUnit.level >= unit.EvolveLevel)
+        {
+            Debug.Log("unit can evolve");
+            return true;
+        }
+        Debug.Log("unit unable to evolve");
+        return false;
+    }
+    public void ChangeUnitClass()
+    {
+        ScriptableUnit unit = TeamManager.Instance.AllBaseUnitPrefabs.FirstOrDefault(u => u.name == _selectedUnit.unitName);
+        if (!CanUnitChangeClass())
+        {
+            return;
+        }
+        ScriptableUnit finalUnit;
+        if (_classTrack == "A")
+        {
+            finalUnit = unit.EvolvePathA;
+        }
+        else if (_classTrack == "B")
+        {
+            finalUnit = unit.EvolvePathB;
+        }
+        else
+        {
+            finalUnit = null;
+        }
+        _classTrack = null;
+        TeamManager.Instance.SaveNewUnitClass(_selectedUnit, (BaseHero)finalUnit.UnitPrefab);
+        DeselectEverything();
+        RefreshExistingUnitsList();
+        ShowEvolvePanel(false);
+        RefreshTeam(false);
+    }
+    public void ChangeUnitClassTrack(string track)
+    {
+        _classTrack = track;
+        _evolveUnitImage.gameObject.SetActive(true);
+        _evolveUnitDesc.gameObject.SetActive(true);
+        ScriptableUnit unit = TeamManager.Instance.AllBaseUnitPrefabs.FirstOrDefault(u => u.name == _selectedUnit.unitName);
+        if (_classTrack == "A")
+        {
+            _evolveUnitImage.sprite = unit.EvolvePathA.UnitPrefab.UnitIcon;
+            _evolveUnitDesc.text = $"Name: {unit.EvolvePathA.name}\n" +
+                                    GetUnitStats(unit.EvolvePathA.UnitPrefab as BaseHero) +
+                                    $"Unit Description: {unit.EvolvePathA.UnitPrefab.UnitDescription}\n";
+        }
+        if (_classTrack == "B")
+        {
+           _evolveUnitImage.sprite = unit.EvolvePathB.UnitPrefab.UnitIcon; 
+           _evolveUnitDesc.text = $"Name: {unit.EvolvePathB.name}\n" +
+                                    GetUnitStats(unit.EvolvePathB.UnitPrefab as BaseHero) +
+                                    $"Unit Description: {unit.EvolvePathB.UnitPrefab.UnitDescription}\n";
+        }
+        _evolveButton.SetActive(true);
+    }
+    public void ShowEvolvePanel(bool isShown)
+    {
+        _evolvePanel.SetActive(isShown);
+        _evolveUnitImage.gameObject.SetActive(false);
+        _evolveUnitDesc.gameObject.SetActive(false);
+        if (!isShown || _selectedUnit == null)
+        {
+            return;
+        }
+        ScriptableUnit unit = TeamManager.Instance.AllBaseUnitPrefabs.FirstOrDefault(u => u.name == _selectedUnit.unitName);
+        _evolveA.text = $"{unit.EvolvePathA.name}";
+        _evolveB.text = $"{unit.EvolvePathB.name}";
+        _evolveButton.SetActive(false);
+    }
+    public void ExitTeamEditor()
+    {
+        if (!TeamSaved)
+        {
+            _popUpConfirmLeaveNoSaveTeam.SetActive(true);
+        }
+        else
+        {
+            SceneManager.LoadScene("Level Select");
+        }
+    }
 }

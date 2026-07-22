@@ -10,7 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef69eefd33eea9e419babf11ff612800, type: 3}
-  m_Name: Ogre2
-  m_EditorClassIdentifier: Assembly-CSharp::ScriptableUnit
-  Faction: 1
-  UnitPrefab: {fileID: 5984570235343405919, guid: b9b697ddf1d6a8d4fbdd1c3e4ba5e179, type: 3}
+  m_Name: Scout Archer
+  m_EditorClassIdentifier: Scripts::ScriptableUnit
+  Faction: 0
+  UnitPrefab: {fileID: 7029274725799912455, guid: 2834c3310e587f84ca5f70839cdcd7ed, type: 3}
+  spawnX: 0
+  spawnY: 0
+  EvolvePathA: {fileID: 0}
+  EvolvePathB: {fileID: 0}
+  EvolveLevel: 0

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &811719724296000441
+--- !u!1 &350734929220669295
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8716106296241856539}
-  - component: {fileID: 696387603364434114}
-  - component: {fileID: 4180949045940240930}
+  - component: {fileID: 8639322220212882654}
+  - component: {fileID: 3979864148300258980}
+  - component: {fileID: 1318215052904351856}
   m_Layer: 5
   m_Name: Attack Indicator
   m_TagString: Untagged
@@ -18,40 +18,40 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!224 &8716106296241856539
+--- !u!224 &8639322220212882654
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811719724296000441}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 350734929220669295}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.012468772, y: 0.012468772, z: 1.3154285}
+  m_LocalScale: {x: -0.015078943, y: 0.015078943, z: 0.86009014}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3937745615201340750}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.755, y: -0.12}
+  m_AnchoredPosition: {x: 1.087, y: 0.27301}
   m_SizeDelta: {x: 34, y: 31}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &696387603364434114
+--- !u!222 &3979864148300258980
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811719724296000441}
+  m_GameObject: {fileID: 350734929220669295}
   m_CullTransparentMesh: 1
---- !u!114 &4180949045940240930
+--- !u!114 &1318215052904351856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 811719724296000441}
+  m_GameObject: {fileID: 350734929220669295}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -107,7 +107,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1564445446181513205}
-  - {fileID: 8716106296241856539}
+  - {fileID: 8639322220212882654}
   m_Father: {fileID: 7936564632459670178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -189,9 +189,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7936564632459670178}
   - component: {fileID: 5135173484745426493}
-  - component: {fileID: 7637416815247104811}
+  - component: {fileID: 1710726974046225585}
   m_Layer: 0
-  m_Name: Wizard with healthbar
+  m_Name: Sniper Archer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -207,7 +207,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1, y: 1, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: 2.7, y: 2.7, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3937745615201340750}
@@ -262,17 +262,17 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 3
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
+  m_Sprite: {fileID: 6945741361587435958, guid: ab31642caa9b859448a88aa6d5d1d2e6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.11, y: 0.15}
+  m_Size: {x: 0.2, y: 0.27}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &7637416815247104811
+--- !u!114 &1710726974046225585
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,9 +281,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6970510293019159674}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a146e69c821fcfc498555736f53ccf42, type: 3}
+  m_Script: {fileID: 11500000, guid: f842f7dfcd34be449b31745aa0535bbb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseMage
+  m_EditorClassIdentifier: Scripts::SniperArcher
   OccupiedTile: {fileID: 0}
   Faction: 0
   Action: 0
@@ -292,18 +292,17 @@ MonoBehaviour:
   Target: {fileID: 0}
   healthBar: {fileID: 2743834586076405301}
   moveSet:
-  - {fileID: 11400000, guid: 509b6a188c187ec4ebd262e635bd35c1, type: 2}
-  - {fileID: 11400000, guid: 694c893fb0822fa4caabe93c974e238b, type: 2}
-  - {fileID: 11400000, guid: 53a8ad70b3ada4c4f92b8d4e66e74d50, type: 2}
+  - {fileID: 11400000, guid: b72dddea629c53c4db92cefcfaedac2c, type: 2}
+  - {fileID: 11400000, guid: 5b01f7a79474ad44885c296f7ebc9534, type: 2}
   - {fileID: 11400000, guid: 57c8faa7da48e2842be9f1cf5ccf8b1c, type: 2}
-  UnitIcon: {fileID: 733194533896573156, guid: f091c4df6995d1b4799b9840d099a9d6, type: 3}
+  - {fileID: 11400000, guid: 694c893fb0822fa4caabe93c974e238b, type: 2}
+  UnitIcon: {fileID: 6945741361587435958, guid: ab31642caa9b859448a88aa6d5d1d2e6, type: 3}
   SelectedAttack: {fileID: 0}
-  UnitDescription: Standard Mage, lacks in health and move range but attacks are
-    powerful.
+  UnitDescription: Less mobile but with far greater range.
   maxHealth: 50
-  CurrentHealth: 0
-  AttackRange: 3
-  AttackPower: 70
+  CurrentHealth: 50
+  AttackRange: 5
+  AttackPower: 1
   AttackSpeed: 3
   moveRange: 1
   DestinationTile: {fileID: 0}
@@ -313,12 +312,13 @@ MonoBehaviour:
   attackedBy: {fileID: 0}
   counterAtk: 0
   counterAtkDmg: 0
-  AttackIndicator: {fileID: 4180949045940240930}
+  AttackIndicator: {fileID: 1318215052904351856}
+  Position: {x: 0, y: 0}
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
   guid: 
-  unitName: 
-  className: 
-  level: 0
+  unitName: Sniper Archer
+  className: Sniper Archer
+  level: 2
   experience: 0
 --- !u!1001 &240034667750404394
 PrefabInstance:
@@ -362,11 +362,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.01
+      value: 0.01753182
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.01
+      value: 0.01753182
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalScale.z
@@ -402,11 +402,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.02
+      value: -0.217
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.12
+      value: 0.273
       objectReference: {fileID: 0}
     - target: {fileID: 1649092181281658591, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Block
   attackName: Block
   damage: 0
-  icon: {fileID: -6964825938870346498, guid: a27443be55f9f6a4db4c86eda8052c7d, type: 3}
+  icon: {fileID: -8567135909103856833, guid: a27443be55f9f6a4db4c86eda8052c7d, type: 3}
   attackDesc: Change to negate enemy attacks
-  chance: 1
+  chance: 0.5
   perReduction: 0
   counterAttackChance: 0
   counterAttackDmg: 0

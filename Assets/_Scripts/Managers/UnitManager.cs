@@ -25,7 +25,7 @@ public class UnitManager : MonoBehaviour
     [SerializeField] private Canvas _canvas;
     public bool SpecificHeroSpawn, SpecificEnemySpawn;
     public UnitSaveData UnitToSpawn;
-    [SerializeField] Toggle _unitSpawnToggle;
+    [SerializeField] Toggle _unitSpawnToggle, _team1Toggle;
     [SerializeField] Transform _spawnPanel;
     [SerializeField] ToggleGroup _unitSpawnToggleGroup;
     [SerializeField] GameObject _spawnPanelObj, _teamSelectToggles;
@@ -104,10 +104,11 @@ public class UnitManager : MonoBehaviour
         {
             ScriptableUnit heroScriptUnit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == heroData.unitName);
             BaseHero hero = Instantiate(heroScriptUnit.UnitPrefab) as BaseHero;
+            healthbarScript healthbar = hero.GetComponentInChildren<healthbarScript>();
             hero.unitName = heroData.unitName;
             hero.Faction = heroData.faction;
-            hero.CurrentHealth = heroData.currentHealth;
-            hero.maxHealth = heroData.maxHealth;
+            healthbar.SetMaxHealth(heroData.maxHealth);
+            healthbar.SetHealth(heroData.currentHealth);
             hero.Position.x = heroData.gridX;
             hero.Position.y = heroData.gridY;
             hero.Alive = heroData.alive;
@@ -131,17 +132,19 @@ public class UnitManager : MonoBehaviour
         }
         foreach (UnitBattleData enemyData in enemyDatas)
         {
-            ScriptableUnit enemyScriptUnit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == enemyData.unitName);
+            ScriptableUnit enemyScriptUnit = TeamManager.Instance.AllEnemyUnitPrefabs.FirstOrDefault(u => u.name == enemyData.unitName);
             BaseUnit enemy = Instantiate(enemyScriptUnit.UnitPrefab);
+            healthbarScript healthbar = enemy.GetComponentInChildren<healthbarScript>();
             enemy.Faction = enemyData.faction;
-            enemy.CurrentHealth = enemyData.currentHealth;
-            enemy.maxHealth = enemyData.maxHealth;
+            healthbar.SetMaxHealth(enemyData.maxHealth);
+            healthbar.SetHealth(enemyData.currentHealth);
             enemy.Position.x = enemyData.gridX;
             enemy.Position.y = enemyData.gridY;
             enemy.Alive = enemyData.alive;
             if (enemy.Alive)
             {
-                Tile spawnedTile = GridManager.Instance.GetSpecificSpawnTile(enemyData.gridX, enemyData.gridY, false);
+                Tile spawnTile = GridManager.Instance.GetSpecificSpawnTile(enemyData.gridX, enemyData.gridY, false);
+                spawnTile.SetUnit(enemy);
                 _remainingEnemies.Add(enemy);
                 _remainingUnits.Add(enemy);
             }
@@ -157,6 +160,7 @@ public class UnitManager : MonoBehaviour
         if (isActive)
         {
             GridManager.Instance.SpawnCamPosition();
+            _team1Toggle.isOn = true;
         }
         else
         {
@@ -233,7 +237,6 @@ public class UnitManager : MonoBehaviour
         UnitSaveData data = UnitToSpawn;
         ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == data.unitName);
 
-
         BaseHero spawnedHero = Instantiate(unit.UnitPrefab) as BaseHero;
         spawnedHero.guid = data.guid;
         spawnedHero.unitName = data.unitName;
@@ -256,6 +259,7 @@ public class UnitManager : MonoBehaviour
         UnitToSpawn = null;
         RefreshTeam();
         GridManager.Instance.HighlightSpawnTiles(false);
+        spawnedHero.OccupiedTile.highlightSelect.SetActive(false);
     }
     public void SetSelectedHero(BaseHero hero)
     {

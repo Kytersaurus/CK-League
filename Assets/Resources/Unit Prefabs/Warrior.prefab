@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 5135173484745426493}
   - component: {fileID: 8701891561292654473}
   m_Layer: 0
-  m_Name: Base Warrior
+  m_Name: Warrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -314,9 +314,10 @@ MonoBehaviour:
   counterAtk: 0
   counterAtkDmg: 0
   AttackIndicator: {fileID: 16492057162879595}
+  Position: {x: 0, y: 0}
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
   guid: 
-  unitName: 
+  unitName: Warrior
   className: 
   level: 0
   experience: 0

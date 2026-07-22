@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: New Arrow Attack
   m_EditorClassIdentifier: Assembly-CSharp::ArrowAttack
   attackName: Basic arrow shot
-  damage: 30
-  range: 0
+  damage: 20
   icon: {fileID: -5705400141739567644, guid: b536794575f4b6b4592c10be582ee82b, type: 3}
   attackDesc: Ranged attack that does decent damage.

@@ -313,9 +313,10 @@ MonoBehaviour:
   counterAtk: 0
   counterAtkDmg: 0
   AttackIndicator: {fileID: 1318215052904351856}
+  Position: {x: 0, y: 0}
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
   guid: 
-  unitName: 
+  unitName: Archer
   className: 
   level: 0
   experience: 0

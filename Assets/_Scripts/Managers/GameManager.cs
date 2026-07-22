@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +30,7 @@ public class GameManager : MonoBehaviour
                 if (ProgressManager.Instance.LevelProgressSaved)
                 {
                     UnitManager.Instance.SpawnUnitsFromSave();
+                    UnitManager.Instance.SpawnPanelActive(false);
                 }
                 break;
             case GameState.SpawnEnemies:
@@ -63,8 +63,11 @@ public class GameManager : MonoBehaviour
                 UnitManager.Instance.SetEnemyAttacks();
                 break;
             case GameState.Victory:
+                ProgressManager.Instance.DeleteLevelSaveData();
+                UnitManager.Instance.SaveHeroProgressAfterLevel();
                 break;
             case GameState.Defeat:
+                ProgressManager.Instance.DeleteLevelSaveData();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
