@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -34,6 +35,8 @@ public class UnitManager : MonoBehaviour
     private List<Toggle> _unitSpawnToggles = new List<Toggle>();
     public List<UnitSaveData> _selectedTeamData;
     public Vector2 SpawnBox = new Vector2();
+    
+    public static event Action<BaseHero> OnExperienceAdded;
     void Awake()
     {
         Instance = this;
@@ -393,10 +396,10 @@ public class UnitManager : MonoBehaviour
             enemy.Action = AttackPhaseAction.Attack;
             if(difficulty == 1)
             {
-                enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>Random.value).First();
+                enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>UnityEngine.Random.value).First();
                 if(enemy.TargetsList.Count > 0)
                 {
-                    enemy.Target = enemy.TargetsList.OrderBy(o=>Random.value).First();
+                    enemy.Target = enemy.TargetsList.OrderBy(o=>UnityEngine.Random.value).First();
                 }                
             }
             else if(difficulty == 2)
@@ -601,8 +604,10 @@ public class UnitManager : MonoBehaviour
     {
         if(unit.attackedBy.Faction == Faction.Hero)
         {
+            var multiplier = 1.0f;
             var hero = (BaseHero)unit.attackedBy;
-            hero.experience += damage;
+            hero.experience += (int)(damage*multiplier);
+            OnExperienceAdded?.Invoke(hero);
         }
     }
 }
