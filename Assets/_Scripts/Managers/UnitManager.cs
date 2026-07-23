@@ -600,7 +600,7 @@ public class UnitManager : MonoBehaviour
             var multiplier = 1.0f;
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(damage*multiplier);
-            OnExperienceAdded?.Invoke(hero);
+            //OnExperienceAdded?.Invoke(hero);
         }
     }
     public void AddExperienceFromKill(BaseUnit attackedUnit)
@@ -611,7 +611,7 @@ public class UnitManager : MonoBehaviour
             var multiplier = 1.0f;
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(experience*multiplier);
-            OnExperienceAdded?.Invoke(hero);
+            //OnExperienceAdded?.Invoke(hero);
         }
     }
 }
