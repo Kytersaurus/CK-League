@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -34,6 +35,8 @@ public class UnitManager : MonoBehaviour
     private List<Toggle> _unitSpawnToggles = new List<Toggle>();
     public List<UnitSaveData> _selectedTeamData;
     public Vector2 SpawnBox = new Vector2();
+    
+    public static event Action<BaseHero> OnExperienceAdded;
     void Awake()
     {
         Instance = this;
@@ -47,11 +50,13 @@ public class UnitManager : MonoBehaviour
     {
         BaseUnit.OnUnitDeath += KillUnit;
         BaseUnit.OnUnitAction += DeselectHero;
+        BaseUnit.OnDamageTaken += AddExperienceFromDamage;
     }
     private void OnDisable()
     {
         BaseUnit.OnUnitDeath -= KillUnit;
         BaseUnit.OnUnitAction -= DeselectHero;
+        BaseUnit.OnDamageTaken -= AddExperienceFromDamage;
     }
     public List<BaseUnit> GetHeroesList()
     {
@@ -288,18 +293,11 @@ public class UnitManager : MonoBehaviour
         if(unit.Faction == Faction.Hero)
         {
             _remainingHeroes.Remove(unit);
-            /*if(_remainingHeroes.Count == 0)
-                GameManager.Instance.UpdateGameState(GameState.Defeat);
-            else
-                GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
         }
         else
         {
             _remainingEnemies.Remove(unit);
-            /*if(_remainingEnemies.Count == 0)
-                GameManager.Instance.UpdateGameState(GameState.Victory);
-            else
-                GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
+            AddExperienceFromKill(unit);
         }
         _remainingUnits.Remove(unit);
         unit.Alive = false;
@@ -391,10 +389,10 @@ public class UnitManager : MonoBehaviour
             enemy.Action = AttackPhaseAction.Attack;
             if(difficulty == 1)
             {
-                enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>Random.value).First();
+                enemy.SelectedAttack = enemy.moveSet.OrderBy(o=>UnityEngine.Random.value).First();
                 if(enemy.TargetsList.Count > 0)
                 {
-                    enemy.Target = enemy.TargetsList.OrderBy(o=>Random.value).First();
+                    enemy.Target = enemy.TargetsList.OrderBy(o=>UnityEngine.Random.value).First();
                 }                
             }
             else if(difficulty == 2)
@@ -442,11 +440,11 @@ public class UnitManager : MonoBehaviour
             var unit = _actionQueue.Dequeue();
             if (unit.Alive && unit.SelectedAttack != null)
             {
-                unit.SelectedAttack.Execute(unit, unit.Target);
                 if (unit.Target != null)
                 {
-                    unit.Target.attackedBy = unit;    
+                    unit.Target.attackedBy = unit;
                 }
+                unit.SelectedAttack.Execute(unit, unit.Target);
                 unit.SelectedAttack = null;
             }
             unit.AttackIndicator.gameObject.SetActive(false);
@@ -592,6 +590,28 @@ public class UnitManager : MonoBehaviour
         foreach (BaseUnit unit in _remainingUnits)
         {
             unit.hasMoved = false;
+        }
+    }
+
+    public void AddExperienceFromDamage(BaseUnit attackedUnit, int damage)
+    {
+        if(attackedUnit.attackedBy.Faction == Faction.Hero)
+        {
+            var multiplier = 1.0f;
+            var hero = (BaseHero)attackedUnit.attackedBy;
+            hero.experience += (int)(damage*multiplier);
+            //OnExperienceAdded?.Invoke(hero);
+        }
+    }
+    public void AddExperienceFromKill(BaseUnit attackedUnit)
+    {
+        if(attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
+        {
+            var experience = 10;
+            var multiplier = 1.0f;
+            var hero = (BaseHero)attackedUnit.attackedBy;
+            hero.experience += (int)(experience*multiplier);
+            //OnExperienceAdded?.Invoke(hero);
         }
     }
 }

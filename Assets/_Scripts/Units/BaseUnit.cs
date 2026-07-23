@@ -31,6 +31,7 @@ public class BaseUnit : MonoBehaviour
     public int counterAtkDmg;
     public static event Action<BaseUnit> OnUnitDeath;
     public static event Action OnUnitAction;
+    public static event Action<BaseUnit, int> OnDamageTaken;
     public Image AttackIndicator;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -56,8 +57,12 @@ public class BaseUnit : MonoBehaviour
         {
             blocked = true;
         }
-        MenuManager.Instance.SpawnDamageIndicator(val, transform.position, blocked, false);
+        if(MenuManager.Instance != null)
+        {
+            MenuManager.Instance.SpawnDamageIndicator(val, transform.position, blocked, false);
+        }
         CurrentHealth -= damage;
+        OnDamageTaken?.Invoke(this, dmgTaken);
         if(CurrentHealth <= 0)
         {
             CurrentHealth = 0;
