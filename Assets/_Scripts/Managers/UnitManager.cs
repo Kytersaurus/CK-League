@@ -646,6 +646,8 @@ public class UnitManager : MonoBehaviour
         foreach (BaseHero unit in _remainingUnits)
         {
             TeamManager.Instance.UpdateUnitData(unit);
+        }
+    }
 
     public void AddExperienceFromDamage(BaseUnit attackedUnit, int damage)
     {
