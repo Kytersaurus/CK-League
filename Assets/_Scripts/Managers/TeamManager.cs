@@ -37,6 +37,14 @@ public class TeamManager : MonoBehaviour
     public int ActiveTeamSlot = 0;
     public bool SavedTeamExists => File.Exists(TeamSavePath(ActiveTeamSlot));
     public bool SavedUnitExists(string guid) => File.Exists(UnitSavePath(guid));
+    public void OnEnable()
+    {
+        UnitManager.OnExperienceAdded += UpdateUnitData;
+    }
+    public void OnDisable()
+    {
+        UnitManager.OnExperienceAdded -= UpdateUnitData;
+    }
     void Awake()
     {
         Instance = this;
