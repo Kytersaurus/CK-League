@@ -643,7 +643,7 @@ public class UnitManager : MonoBehaviour
     }
     public void SaveHeroProgressAfterLevel()
     {
-        foreach (BaseHero unit in _remainingUnits)
+        foreach (BaseHero unit in _remainingHeroes)
         {
             TeamManager.Instance.UpdateUnitData(unit);
         }
@@ -659,6 +659,7 @@ public class UnitManager : MonoBehaviour
             //OnExperienceAdded?.Invoke(hero);
         }
     }
+
     public void AddExperienceFromKill(BaseUnit attackedUnit)
     {
         if(attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
@@ -668,6 +669,17 @@ public class UnitManager : MonoBehaviour
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(experience*multiplier);
             //OnExperienceAdded?.Invoke(hero);
+        }
+    }
+
+    public void LevelUpHeroes()
+    {
+        foreach(BaseHero hero in _remainingHeroes)
+        {
+            if(hero.level == 1 && hero.experience >= 200)
+            {
+                hero.level = 2;
+            }
         }
     }
 }
