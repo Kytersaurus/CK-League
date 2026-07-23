@@ -59,7 +59,7 @@ public class BaseUnit : MonoBehaviour
         }
         MenuManager.Instance.SpawnDamageIndicator(val, transform.position, blocked, false);
         CurrentHealth -= damage;
-        OnDamageTaken?.Invoke(this, damage);
+        OnDamageTaken?.Invoke(this, dmgTaken);
         if(CurrentHealth <= 0)
         {
             CurrentHealth = 0;
