@@ -2560,7 +2560,7 @@ MonoBehaviour:
   _defeatPanel: {fileID: 1086115039}
   _WorldSpaceCanvas: {fileID: 1660382781}
   _floatingDamagePrefab: {fileID: 2712633532038296321, guid: 7942621e4b4a12c49a2385172dd4f089, type: 3}
-  _floatingDamageIntialPos: {x: 0, y: 0.5}
+  _floatingDamageIntialPos: {x: 0, y: 0}
   _pauseMenu: {fileID: 1631972780}
 --- !u!114 &837927414
 MonoBehaviour:
@@ -3169,6 +3169,7 @@ MonoBehaviour:
   AllAttacks: []
   AllUnitPrefabs: []
   AllBaseUnitPrefabs: []
+  AllEnemyUnitPrefabs: []
   ActiveTeamSlot: 0
 --- !u!4 &971504659
 Transform:

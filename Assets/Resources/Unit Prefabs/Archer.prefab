@@ -301,7 +301,7 @@ MonoBehaviour:
   UnitDescription: Archer unit, long range attakcs but with low health and mobility.
   maxHealth: 75
   CurrentHealth: 0
-  AttackRange: 7
+  AttackRange: 4
   AttackPower: 3
   AttackSpeed: 3
   moveRange: 2

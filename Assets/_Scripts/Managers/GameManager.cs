@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -64,7 +65,10 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.Victory:
                 ProgressManager.Instance.DeleteLevelSaveData();
-                UnitManager.Instance.SaveHeroProgressAfterLevel();
+                if (SceneManager.GetActiveScene().name != "Tutorial")
+                {
+                    UnitManager.Instance.SaveHeroProgressAfterLevel();    
+                }
                 break;
             case GameState.Defeat:
                 ProgressManager.Instance.DeleteLevelSaveData();

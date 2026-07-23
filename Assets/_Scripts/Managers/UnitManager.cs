@@ -14,7 +14,6 @@ public class UnitManager : MonoBehaviour
     private List<BaseUnit> _remainingHeroes = new List<BaseUnit>();
     private List<BaseUnit> _remainingEnemies = new List<BaseUnit>();
     private List<BaseUnit> _remainingUnits = new List<BaseUnit>();
-    private List<BaseUnit> _allUnitsUsedInStage = new List<BaseUnit>();
     private List<ScriptableUnit> _allUnitPrefabs;
     public BaseHero SelectedHero;
     private PriorityQueue<BaseUnit, int> _movementQueue = new PriorityQueue<BaseUnit, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
@@ -39,7 +38,6 @@ public class UnitManager : MonoBehaviour
         _allUnitPrefabs = Resources.LoadAll<ScriptableUnit>("Units").ToList();
         // _units = Resources.LoadAll<ScriptableUnit>("Units").ToList();
         // _heroes = _units.Where(u=>u.Faction == Faction.Hero).ToList();
-        
     }
 
     private void OnEnable()
@@ -99,7 +97,8 @@ public class UnitManager : MonoBehaviour
         LevelSaveData data = ProgressManager.Instance.LoadLevelProgress();
         List<UnitBattleData> enemyDatas = data.enemies;
         List<HeroBattleData> heroDatas = data.heroes;
-        GameManager.Instance.State = data.gameState;
+        GameManager.Instance.UpdateGameState(data.gameState);
+        EndTurnButton.Instance.ActivateEndTurnButton();
         foreach (HeroBattleData heroData in heroDatas)
         {
             ScriptableUnit heroScriptUnit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == heroData.unitName);
@@ -127,7 +126,6 @@ public class UnitManager : MonoBehaviour
             else
             {
                 Destroy(hero.gameObject);
-                _allUnitsUsedInStage.Add(hero);
             }
         }
         foreach (UnitBattleData enemyData in enemyDatas)
@@ -350,7 +348,7 @@ public class UnitManager : MonoBehaviour
                 GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
         }
         unit.Alive = false;
-        _allUnitsUsedInStage.Add(unit);
+        _remainingUnits.Remove(unit);
         Destroy(unit.gameObject);
     }
 
@@ -634,15 +632,10 @@ public class UnitManager : MonoBehaviour
     {
         return _remainingHeroes;
     }
-    public List<BaseUnit> GetAllUnitsUsedInStage()
+    public List<BaseUnit> GetRemaingUnits()
     {
-        foreach (BaseUnit unit in _remainingUnits)
-        {
-            _allUnitsUsedInStage.Add(unit);
-        }
-        return _allUnitsUsedInStage;
+        return _remainingUnits;
     }
-    
     public void ResetMovedState()
     {
         foreach (BaseUnit unit in _remainingUnits)
@@ -652,11 +645,7 @@ public class UnitManager : MonoBehaviour
     }
     public void SaveHeroProgressAfterLevel()
     {
-        foreach (BaseUnit unit in _remainingUnits)
-        {
-            _allUnitsUsedInStage.Add(unit);
-        }
-        foreach (BaseHero unit in _allUnitsUsedInStage)
+        foreach (BaseHero unit in _remainingUnits)
         {
             TeamManager.Instance.UpdateUnitData(unit);
         }

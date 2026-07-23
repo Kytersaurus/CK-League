@@ -106,7 +106,7 @@ public class ProgressManager : MonoBehaviour
         string savePath = _levelProgressSavePath(SceneManager.GetActiveScene().name);
         List<UnitBattleData> enemyDatas = new List<UnitBattleData>();
         List<HeroBattleData> heroDatas = new List<HeroBattleData>();
-        foreach (BaseUnit unit in UnitManager.Instance.GetAllUnitsUsedInStage())
+        foreach (BaseUnit unit in UnitManager.Instance.GetRemaingUnits())
         {
             if (unit is BaseHero)
             {
