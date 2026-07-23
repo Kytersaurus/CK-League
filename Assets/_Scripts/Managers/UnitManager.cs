@@ -50,13 +50,13 @@ public class UnitManager : MonoBehaviour
     {
         BaseUnit.OnUnitDeath += KillUnit;
         BaseUnit.OnUnitAction += DeselectHero;
-        BaseUnit.OnDamageTaken += AddExperience;
+        BaseUnit.OnDamageTaken += AddExperienceFromDamage;
     }
     private void OnDisable()
     {
         BaseUnit.OnUnitDeath -= KillUnit;
         BaseUnit.OnUnitAction -= DeselectHero;
-        BaseUnit.OnDamageTaken -= AddExperience;
+        BaseUnit.OnDamageTaken -= AddExperienceFromDamage;
     }
     public List<BaseUnit> GetHeroesList()
     {
@@ -293,18 +293,11 @@ public class UnitManager : MonoBehaviour
         if(unit.Faction == Faction.Hero)
         {
             _remainingHeroes.Remove(unit);
-            /*if(_remainingHeroes.Count == 0)
-                GameManager.Instance.UpdateGameState(GameState.Defeat);
-            else
-                GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
         }
         else
         {
             _remainingEnemies.Remove(unit);
-            /*if(_remainingEnemies.Count == 0)
-                GameManager.Instance.UpdateGameState(GameState.Victory);
-            else
-                GameManager.Instance.UpdateGameState(GameState.MovementPhase);*/
+            AddExperienceFromKill(unit);
         }
         _remainingUnits.Remove(unit);
         unit.Alive = false;
@@ -600,13 +593,24 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    public void AddExperience(BaseUnit unit, int damage)
+    public void AddExperienceFromDamage(BaseUnit attackedUnit, int damage)
     {
-        if(unit.attackedBy.Faction == Faction.Hero)
+        if(attackedUnit.attackedBy.Faction == Faction.Hero)
         {
             var multiplier = 1.0f;
-            var hero = (BaseHero)unit.attackedBy;
+            var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(damage*multiplier);
+            OnExperienceAdded?.Invoke(hero);
+        }
+    }
+    public void AddExperienceFromKill(BaseUnit attackedUnit)
+    {
+        if(attackedUnit.attackedBy.Faction == Faction.Hero)
+        {
+            var experience = 10;
+            var multiplier = 1.0f;
+            var hero = (BaseHero)attackedUnit.attackedBy;
+            hero.experience += (int)(experience*multiplier);
             OnExperienceAdded?.Invoke(hero);
         }
     }
