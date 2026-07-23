@@ -6,6 +6,10 @@ public class ScriptableUnit : ScriptableObject
     public Faction Faction;
     public BaseUnit UnitPrefab;
     public int spawnX, spawnY;
+
+    public ScriptableUnit EvolvePathA;
+    public ScriptableUnit EvolvePathB;
+    public int EvolveLevel;
 }
 
 

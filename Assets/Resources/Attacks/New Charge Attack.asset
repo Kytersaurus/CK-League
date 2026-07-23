@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: New Charge Attack
   m_EditorClassIdentifier: Assembly-CSharp::ChargeAttack
   attackName: Charge Spear Attack
-  damage: 50
-  range: 0
+  damage: 30
   icon: {fileID: 8232147021218357876, guid: 92e9120e5792ecf43ab2340f68007ca0, type: 3}
   attackDesc: Spear charge attrack. Unit must move prior to using this move.

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7229855886606692960}
   - component: {fileID: 5984570235343405919}
   m_Layer: 0
-  m_Name: Tutorial ogre
+  m_Name: Tutorial Ogre
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -33,6 +33,7 @@ public class BaseUnit : MonoBehaviour
     public static event Action OnUnitAction;
     public static event Action<BaseUnit, int> OnDamageTaken;
     public Image AttackIndicator;
+    public Vector2 Position;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 

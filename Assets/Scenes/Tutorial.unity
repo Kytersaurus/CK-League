@@ -1079,8 +1079,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -104.000015, y: -161}
-  m_SizeDelta: {x: 132.6279, y: 0}
+  m_AnchoredPosition: {x: -104.000015, y: -197.70496}
+  m_SizeDelta: {x: 132.6279, y: 25.8475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529222450
 MonoBehaviour:
@@ -1663,6 +1663,7 @@ MonoBehaviour:
     experience: 0
     attackNames: []
   _unitSpawnToggle: {fileID: 0}
+  _team1Toggle: {fileID: 0}
   _spawnPanel: {fileID: 946692828}
   _unitSpawnToggleGroup: {fileID: 0}
   _spawnPanelObj: {fileID: 946692827}
@@ -2127,7 +2128,7 @@ MonoBehaviour:
     If you change your mind on which unit to select when there are multiple later,
     you can press the esc key to deselect the targets or any units. esc key also
     brings up the pause menu. Once the target is set, press end turn to carry out
-    the attack.
+    the attack. Some attacks such as heals dont need u to select a target.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
   m_sharedMaterial: {fileID: 89183857413607442, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
@@ -2576,6 +2577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   State: 0
+  EnemyDifficulty: 3
 --- !u!4 &1012456513
 Transform:
   m_ObjectHideFlags: 0
@@ -2703,8 +2705,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 108}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -2.377, y: 153.172}
+  m_SizeDelta: {x: 361.136, y: 90.821}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1147452812
 MonoBehaviour:
@@ -2726,7 +2728,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: VICTORY! You just beat the tutorial!
+  m_text: VICTORY! You just beat the tutorial! You have unlocked the Team Editor.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 35ffd559bc8b0fc47818509b0fe9553c, type: 2}
   m_sharedMaterial: {fileID: -8874916238243864684, guid: 35ffd559bc8b0fc47818509b0fe9553c, type: 2}
@@ -2987,7 +2989,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Level 1
+          m_StringArgument: Unit Selection
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1159142606
@@ -4412,9 +4414,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Next Level
-
-'
+  m_text: Team Editor
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

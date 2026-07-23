@@ -131,7 +131,7 @@ RectTransform:
   m_GameObject: {fileID: 6756648526313515929}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.012996984, y: 0.012996984, z: 0.68557686}
+  m_LocalScale: {x: -0.01770709, y: 0.01770709, z: 0.93402994}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3937745615201340750}
@@ -313,9 +313,10 @@ MonoBehaviour:
   counterAtk: 0
   counterAtkDmg: 0
   AttackIndicator: {fileID: 604724963852578991}
+  Position: {x: 0, y: 0}
   attackToolBar: {fileID: 4108927589517879928, guid: 0c3e17357ca4db94e94e0e2021edfea4, type: 3}
   guid: 
-  unitName: 
+  unitName: Cavalry
   className: 
   level: 0
   experience: 0

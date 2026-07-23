@@ -50,7 +50,7 @@ public class Tile : MonoBehaviour
 
     void OnMouseEnter()
     {   
-        if (MenuManager.Instance._pauseMenu.activeSelf)
+        if (MenuManager.Instance != null && MenuManager.Instance._pauseMenu.activeSelf)
         {
             return;
         }
@@ -131,7 +131,7 @@ public class Tile : MonoBehaviour
     {
         if (highlightSelect.activeSelf)
         {
-            if (UnitManager.Instance.SelectedHero != null && this == UnitManager.Instance.SelectedHero.OccupiedTile)
+            if (UnitManager.Instance != null && UnitManager.Instance.SelectedHero != null && this == UnitManager.Instance.SelectedHero.OccupiedTile)
             {
                 return;
             }
@@ -159,7 +159,10 @@ public class Tile : MonoBehaviour
             return;
         }
         #endif
-        
+        if (GameManager.Instance == null)
+        {
+            return;
+        }
         if(GameManager.Instance.State == GameState.SpawnHeroes && Walkable && GridManager.Instance.SpawnTiles.Contains(this))
         {
             if (UnitManager.Instance.UnitToSpawn != null)
@@ -230,6 +233,7 @@ public class Tile : MonoBehaviour
         unit.transform.position = transform.position;
         OccupiedUnit = unit;
         unit.OccupiedTile = this;
+        unit.Position = unit.OccupiedTile.GridPos;
         GridManager.Instance.ShowUnitDest(unit, false);
     }
 }

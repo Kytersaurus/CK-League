@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8009b2281161f64db936b4256aa0192, type: 3}
+  m_Name: New Heal Pool Spell
+  m_EditorClassIdentifier: Scripts::HealPoolSpell
+  attackName: Healing Pool Spell
+  damage: 0
+  icon: {fileID: -3954292492731343644, guid: ff4090580b6ed454192b281da511e0c5, type: 3}
+  attackDesc: Heals the targetted unit for 30 hp. Only usable by the healer wizard.
+  healAmount: 30

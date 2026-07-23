@@ -32,6 +32,8 @@ public class TeamManager : MonoBehaviour
     private string UnitSavePath(string guid) => Path.Combine(Application.persistentDataPath, $"unit_{guid}.json");
     public List<Attacks> AllAttacks;
     public List<ScriptableUnit> AllUnitPrefabs;
+    public List<ScriptableUnit> AllBaseUnitPrefabs;
+    public List<ScriptableUnit> AllEnemyUnitPrefabs;
     public int ActiveTeamSlot = 0;
     public bool SavedTeamExists => File.Exists(TeamSavePath(ActiveTeamSlot));
     public bool SavedUnitExists(string guid) => File.Exists(UnitSavePath(guid));
@@ -50,7 +52,10 @@ public class TeamManager : MonoBehaviour
         AllUnitPrefabs = Resources.LoadAll<ScriptableUnit>("Units")
             .Where(u => u.Faction == Faction.Hero)
             .ToList();
-        
+        AllBaseUnitPrefabs = Resources.LoadAll<ScriptableUnit>("BaseUnits").ToList();
+        AllEnemyUnitPrefabs = Resources.LoadAll<ScriptableUnit>("Units")
+            .Where(u => u.Faction == Faction.Enemy)
+            .ToList();
     }
     public void SaveTeam(List<UnitSaveData> units)
     {
@@ -124,6 +129,31 @@ public class TeamManager : MonoBehaviour
             level = hero.level,
             experience = hero.experience,
             attackNames = hero.moveSet.Select(a => a.attackName).ToArray()
+        };
+        SaveUnitData(data);
+    }
+    public void SaveNewUnitClass(UnitSaveData prev, BaseHero after)
+    {
+        ScriptableUnit prevUnit = AllBaseUnitPrefabs.FirstOrDefault(u => u.name == prev.unitName);
+        List<string> newAttacks = prev.attackNames.ToList();
+        if (after is BeserkerWarrior)
+        {
+            foreach (string attack in prev.attackNames)
+            {
+                if (attack == "Block" || attack == "Advanced block" || attack == "Dodge")
+                {
+                    newAttacks.Remove(attack);
+                }
+            }
+        }
+        UnitSaveData data = new UnitSaveData
+        {
+            guid = prev.guid,
+            unitName = after.unitName,
+            className = after.className,
+            level = after.level,
+            experience = after.experience,
+            attackNames = newAttacks.ToArray()
         };
         SaveUnitData(data);
     }
