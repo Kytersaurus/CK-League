@@ -605,7 +605,7 @@ public class UnitManager : MonoBehaviour
     }
     public void AddExperienceFromKill(BaseUnit attackedUnit)
     {
-        if(attackedUnit.attackedBy.Faction == Faction.Hero)
+        if(attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
         {
             var experience = 10;
             var multiplier = 1.0f;
