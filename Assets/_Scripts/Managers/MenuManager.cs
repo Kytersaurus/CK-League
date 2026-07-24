@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
-using System;
 
 public class MenuManager : MonoBehaviour
 {

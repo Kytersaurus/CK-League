@@ -300,8 +300,8 @@ MonoBehaviour:
   SelectedAttack: {fileID: 0}
   UnitDescription: Calvarly unit, high health and high mobility, short range.
   maxHealth: 150
-  CurrentHealth: 0
-  AttackRange: 2
+  CurrentHealth: 150
+  AttackRange: 1
   AttackPower: 10
   AttackSpeed: 2
   moveRange: 3

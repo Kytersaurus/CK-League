@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using log4net.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;

@@ -87,7 +87,7 @@ public class Tile : MonoBehaviour
             }
             else if (GridManager.Instance.SpawnTiles == null || !GridManager.Instance.SpawnTiles.Contains(this) || !Walkable)
             {
-                highlightError.SetActive(true);    
+                highlightError.SetActive(true);
             }
         }
         if (GameManager.Instance.State == GameState.MovementPhase)
@@ -189,6 +189,7 @@ public class Tile : MonoBehaviour
             }
             if (UnitManager.Instance.UnitToSpawn == null && UnitManager.Instance.SelectedHero != null)
             {
+                UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
                 SetUnit(UnitManager.Instance.SelectedHero);
             }
         }

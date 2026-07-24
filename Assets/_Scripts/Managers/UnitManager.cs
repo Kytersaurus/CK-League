@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Clrain.Collections;
-using TextMateSharp.Internal.Rules;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -686,7 +685,7 @@ public class UnitManager : MonoBehaviour
     {
         if(attackedUnit.attackedBy.Faction == Faction.Hero)
         {
-            var multiplier = 1.0f;
+            var multiplier = 2.0f;
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(damage*multiplier);
             //OnExperienceAdded?.Invoke(hero);
@@ -697,7 +696,7 @@ public class UnitManager : MonoBehaviour
     {
         if(attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
         {
-            var experience = 10;
+            var experience = 20;
             var multiplier = 1.0f;
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(experience*multiplier);

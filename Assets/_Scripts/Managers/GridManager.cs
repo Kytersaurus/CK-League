@@ -454,7 +454,7 @@ public class GridManager : MonoBehaviour
     }
     public void ShowUnitDest(BaseUnit unit, bool show)
     {
-        if (unit.DestinationTile == null)
+        if (!(unit is BaseHero) || unit.DestinationTile == null)
         {
             return;
         }
