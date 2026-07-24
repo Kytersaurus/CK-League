@@ -600,7 +600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &145445851
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1486,11 +1486,11 @@ RectTransform:
   m_LocalScale: {x: 0.4288513, y: 0.4288513, z: 0.27546972}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1209342732}
   - {fileID: 1147452811}
   - {fileID: 1159142603}
   - {fileID: 1622571852}
   - {fileID: 1565669540}
-  - {fileID: 1209342732}
   m_Father: {fileID: 994186589}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2062,7 +2062,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &572064323
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3908,10 +3908,10 @@ RectTransform:
   m_Children:
   - {fileID: 887558696}
   - {fileID: 1190197704}
-  - {fileID: 1593544179}
   - {fileID: 391899759}
   - {fileID: 1086115040}
   - {fileID: 1062573472}
+  - {fileID: 1593544179}
   - {fileID: 1631972781}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4162,10 +4162,10 @@ RectTransform:
   m_LocalScale: {x: 0.4288513, y: 0.4288513, z: 0.27546972}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 145445851}
   - {fileID: 6318039}
   - {fileID: 1861907293}
   - {fileID: 1226909619}
-  - {fileID: 145445851}
   m_Father: {fileID: 994186589}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4644,7 +4644,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1209342732
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6256,10 +6256,10 @@ RectTransform:
   m_LocalScale: {x: 0.66416, y: 0.66416, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 572064323}
   - {fileID: 2016148188}
   - {fileID: 322578173}
   - {fileID: 1234875768}
-  - {fileID: 572064323}
   m_Father: {fileID: 994186589}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7315,7 +7315,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4281479730
   m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -7328,7 +7328,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
