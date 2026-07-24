@@ -102,8 +102,11 @@ public class BaseUnit : MonoBehaviour
 
     public void HealHealth (int healAmount)
     {
-        int healthHealed = CurrentHealth + healAmount > maxHealth ? maxHealth - CurrentHealth : healAmount; 
-        MenuManager.Instance.SpawnDamageIndicator($"{healthHealed}", transform.position, false, true);
+        int healthHealed = CurrentHealth + healAmount > maxHealth ? maxHealth - CurrentHealth : healAmount;
+        if(MenuManager.Instance != null)
+        {
+            MenuManager.Instance.SpawnDamageIndicator($"{healthHealed}", transform.position, false, true);
+        }
         if (CurrentHealth + healAmount < maxHealth)
         {
             CurrentHealth += healAmount;

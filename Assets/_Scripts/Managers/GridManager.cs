@@ -54,7 +54,8 @@ public class GridManager : MonoBehaviour
             this.type = type;
             this.variant = variant;
         }
-    }
+    }    
+    
     //Level
     public void SpawnCamPosition()
     {
@@ -169,7 +170,10 @@ public class GridManager : MonoBehaviour
             var tile = GenerateTile(data.posX, data.posY, data.tileType, data.tileVariant);
             tile.Init(data.posX, data.posY);
         }
-        DefaultCamPosition();
+        if(_cam != null)
+        {
+            DefaultCamPosition();
+        }
         if (GameManager.Instance != null)
         {
             GameManager.Instance.UpdateGameState(GameState.SpawnEnemies);    
