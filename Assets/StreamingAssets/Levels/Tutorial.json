@@ -483,8 +483,8 @@
             "posX": 7,
             "posY": 5,
             "walkable": true,
-            "tileType": 0,
-            "tileVariant": 0
+            "tileType": 2,
+            "tileVariant": 1
         },
         {
             "posX": 7,
@@ -546,8 +546,8 @@
             "posX": 8,
             "posY": 5,
             "walkable": true,
-            "tileType": 0,
-            "tileVariant": 0
+            "tileType": 2,
+            "tileVariant": 1
         },
         {
             "posX": 8,
@@ -609,8 +609,8 @@
             "posX": 9,
             "posY": 5,
             "walkable": true,
-            "tileType": 0,
-            "tileVariant": 0
+            "tileType": 2,
+            "tileVariant": 1
         },
         {
             "posX": 9,

@@ -258,6 +258,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6318038}
   m_CullTransparentMesh: 1
+--- !u!1 &9497429
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9497430}
+  - component: {fileID: 9497432}
+  - component: {fileID: 9497431}
+  m_Layer: 5
+  m_Name: Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &9497430
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9497429}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5486953, y: 1.5486953, z: 3.630163}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1086115040}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 1.8257446, y: 0.80755615}
+  m_SizeDelta: {x: 974.8281, y: 550.42725}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9497431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9497429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &9497432
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9497429}
+  m_CullTransparentMesh: 1
 --- !u!1 &67764578
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,9 +391,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: 'Welcome to CK League! In this game you control a set of units with the
-    mouse, clicking to select the unit followed by its destination and clicking on
-    the end turn button in the bottom right to execute the movement. Try clicking
-    on the warrior and move it to the highlighted tile. '
+    mouse, Click on the warrior at the top left. This shows its movement range represented
+    by the highlighted white tiles. Click its destination tile to set destination
+    in which a afterimage will appear. Afterwards, click on the end turn button in
+    the bottom right to execute the movement. Try clicking on the warrior and move
+    it to the tile with an X symbol on it. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
   m_sharedMaterial: {fileID: 89183857413607442, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
@@ -859,6 +936,7 @@ RectTransform:
   m_LocalScale: {x: 0.42885128, y: 0.42885128, z: 0.42885128}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1998537611}
   - {fileID: 1147452811}
   - {fileID: 1159142603}
   - {fileID: 1622571852}
@@ -1537,9 +1615,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Now that you are in combat, select the rightmost attack in the toolbar
-    below. When you hover over the attack, a tooltip will show you what it does and
-    useful information like its damage and special effects.
+  m_text: Now that you are in combat, select the leftmost attack in the toolbar below.
+    When you hover over the attack, a tooltip will show you what it does and useful
+    information like its damage and special effects.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
   m_sharedMaterial: {fileID: 89183857413607442, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
@@ -2130,7 +2208,8 @@ MonoBehaviour:
     If you change your mind on which unit to select when there are multiple later,
     you can press the esc key to deselect the targets or any units. esc key also
     brings up the pause menu. Once the target is set, press end turn to carry out
-    the attack. Some attacks such as heals dont need u to select a target.
+    the attack. Some attacks such as heals, dodges or blocks dont need you to select
+    a target.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
   m_sharedMaterial: {fileID: 89183857413607442, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
@@ -2209,6 +2288,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 891715035}
+  m_CullTransparentMesh: 1
+--- !u!1 &901832369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 901832370}
+  - component: {fileID: 901832372}
+  - component: {fileID: 901832371}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &901832370
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901832369}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 994186589}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -160, y: 160}
+  m_SizeDelta: {x: 32, y: 32}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &901832371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901832369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 5678597054174119226, guid: a369aef9053e6f242853fc2354fbedc3, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &901832372
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901832369}
   m_CullTransparentMesh: 1
 --- !u!1 &946692827
 GameObject:
@@ -2399,8 +2553,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -104, y: -161}
-  m_SizeDelta: {x: 132.6279, y: 0}
+  m_AnchoredPosition: {x: -104, y: -182.1015}
+  m_SizeDelta: {x: 132.6279, y: 14.8596}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &975426855
 MonoBehaviour:
@@ -2542,6 +2696,7 @@ RectTransform:
   - {fileID: 1086115040}
   - {fileID: 1616637534}
   - {fileID: 1631972781}
+  - {fileID: 901832370}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2625,6 +2780,7 @@ RectTransform:
   m_LocalScale: {x: 0.4288513, y: 0.4288513, z: 0.27546972}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 9497430}
   - {fileID: 6318039}
   - {fileID: 1861907293}
   - {fileID: 1226909619}
@@ -3370,8 +3526,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Now if you have been paying attention you would have seen an ogre slowly
     making its way across the screen. It is now your job to deal with him in combat.
-    Move your unit close to it until u see the attack phase pop up on the top right,
-    click on the warrior to set its attacks. The warrior's range is low so get close!
+    Move your unit close to it until u see the attack phase icon pop up on the right
+    side of the unit healthbar, click on the warrior to see its attacks. The warrior's
+    range is low so get close!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
   m_sharedMaterial: {fileID: 89183857413607442, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
@@ -3511,7 +3668,7 @@ MonoBehaviour:
   m_text: Have you seen the different terrain types in game? While most of these
     tiles are obstacles in which you cannot pass through, some of these only hinder
     your movement. Notice the range represented by squares on the swamp tiles as
-    compared to the normal grass tiles. Now head pass the passage.
+    compared to the normal grass tiles. Now head pass the marsh tiles.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
   m_sharedMaterial: {fileID: 89183857413607442, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
@@ -3828,7 +3985,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1550329683}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3864,6 +4021,7 @@ MonoBehaviour:
   _panel4: {fileID: 1338932343}
   _panel5: {fileID: 529222448}
   _panel6: {fileID: 1149983988}
+  _obj1: {fileID: 901832369}
 --- !u!1 &1567327017
 GameObject:
   m_ObjectHideFlags: 0
@@ -4856,6 +5014,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1988093101}
+  m_CullTransparentMesh: 1
+--- !u!1 &1998537610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1998537611}
+  - component: {fileID: 1998537613}
+  - component: {fileID: 1998537612}
+  m_Layer: 5
+  m_Name: Panel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1998537611
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998537610}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.5486954, y: 1.5486954, z: 2.331811}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 391899759}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 1.8257446, y: 11.93634}
+  m_SizeDelta: {x: 974.8281, y: 550.42725}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1998537612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998537610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1998537613
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998537610}
   m_CullTransparentMesh: 1
 --- !u!1 &2016148187
 GameObject:

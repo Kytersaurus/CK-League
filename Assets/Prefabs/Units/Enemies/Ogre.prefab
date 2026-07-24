@@ -131,6 +131,7 @@ MonoBehaviour:
   counterAtk: 0
   counterAtkDmg: 0
   AttackIndicator: {fileID: 7211727439007734172}
+  Position: {x: 0, y: 0}
 --- !u!1 &1919632578706562750
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,15 +413,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2066178549486053386, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_Color.b
-      value: 0.058823552
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2066178549486053386, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_Color.g
-      value: 0.9529412
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2066178549486053386, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_Color.r
-      value: 0.9017535
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2256292414505713822, guid: 3f5eb6492f67b814c822ea9ac0c0deca, type: 3}
       propertyPath: m_AnchorMax.x

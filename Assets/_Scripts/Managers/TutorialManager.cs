@@ -5,7 +5,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject _panel1, _panel2, _panel3, _panel4, _panel5, _panel6;
     private bool _setup, _passagedCrossed, _toolBarTut, _attackTut, _targetTut;
     private BaseUnit _hero, _enemy;
-    private Tile _obj1;
+    [SerializeField] private GameObject _obj1;
     void Start()
     {
         _panel1.SetActive(true);
@@ -21,14 +21,13 @@ public class TutorialManager : MonoBehaviour
         if (!_setup)
         {
             _hero = UnitManager.Instance.GetRemainingHeroes()[0];
-            _obj1 = GridManager.Instance.GetTileAtPosition(new Vector2(6, 5));
-            _obj1.highlight.SetActive(true);
+            _obj1.SetActive(true);
             _setup = true;
         }
-        else if (_panel1.activeSelf && _hero.OccupiedTile.GridPos.x >= 6 && _hero.OccupiedTile.GridPos.y <= 6)
+        else if (_panel1.activeSelf && _hero.OccupiedTile.GridPos.x >= 6 && _hero.OccupiedTile.GridPos.y < 6)
         {
             _panel1.SetActive(false);
-            _obj1.highlight.SetActive(false);
+            _obj1.SetActive(false);
             _panel2.SetActive(true);
         }
         else if (!_passagedCrossed && _hero.OccupiedTile.GridPos.x >= 9)
