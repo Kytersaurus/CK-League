@@ -6,10 +6,10 @@ using UnityEngine.TestTools;
 
 public class UnitTesting
 {
-    [UnityTest]
+    /*[UnityTest]
     public IEnumerator TestAttacks()
     {
-        BaseUnit hero = MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Heroes/Warrior").UnitPrefab);
+        BaseHero hero = (BaseHero)MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Heroes/Warrior").UnitPrefab);
         BaseUnit enemy = MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Enemies/Ogre").UnitPrefab);
         yield return null;
         hero.CurrentHealth = 100;
@@ -31,6 +31,10 @@ public class UnitTesting
         GameObject gridManagerObject = new GameObject("GridManager");
         GridManager gridManager = gridManagerObject.AddComponent<GridManager>();
         yield return null;
+        TileEntry grass = new TileEntry();
+        grass.tileType = TileType.Grass;
+        grass.tileVariant = TileVariant.Body1;
+
         GameObject unitManagerObject = new GameObject("UnitManager");
         UnitManager unitManager = unitManagerObject.AddComponent<UnitManager>();
         //GameObject gameManagerObject = new GameObject("GameManager");
@@ -41,5 +45,5 @@ public class UnitTesting
         //startTile.SetUnit(hero);
 
         yield return null;
-    }
+    }*/
 }

@@ -455,7 +455,7 @@ public class UnitManager : MonoBehaviour
                 if(enemy.TargetsList.Count > 0)
                 {
                     int greatestPotentialAttacks = 0;
-                    foreach(BaseUnit hero in enemy.TargetsList)
+                    foreach(BaseUnit hero in enemy.TargetsList.OrderByDescending(o=>o.CurrentHealth))
                     {
                         if(potentialAttacksReceived[hero] >= greatestPotentialAttacks)
                         {
