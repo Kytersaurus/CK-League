@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
+using System;
 
 public class MenuManager : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private Transform _WorldSpaceCanvas;
     [SerializeField] private GameObject _floatingDamagePrefab;
     [SerializeField] private Vector2 _floatingDamageIntialPos;
+    [SerializeField] private TextMeshProUGUI _heroLevelUp;
     public GameObject _pauseMenu;
     void Awake()
     {
@@ -53,9 +56,24 @@ public class MenuManager : MonoBehaviour
         _showPhaseObject.GetComponentInChildren<TextMeshProUGUI>().text = phaseName;
         _showPhaseObject.SetActive(true);
     }
+    
     public void ShowPauseMenu(bool show)
     {
         _pauseMenu.SetActive(show);
+    }
+    public void ShowHeroLeveledUp(List<string> units, bool show)
+    {
+        _heroLevelUp.gameObject.SetActive(show);
+        if (!show)
+        {
+            return;
+        }
+        string text = "";
+        foreach (string unit in units)
+        {
+            text += unit + " leveled up\n";
+        }
+        _heroLevelUp.text = text;
     }
     public void SpawnDamageIndicator(string message, Vector3 positon, bool blocked, bool heal)
     {

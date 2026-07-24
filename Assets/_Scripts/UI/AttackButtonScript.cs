@@ -37,10 +37,18 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
             UnitManager.Instance.SelectedHero.SelectedAttack = attack;
             List<BaseUnit> targets = UnitManager.Instance.SelectedHero.TargetsList;
             bool targetsActive = !(attack is Heals || attack is Mitigate);
+            bool healOthers = attack is HealPoolSpell;
             //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(targetsActive);
             foreach (BaseUnit unit in targets)
             {
-                unit.OccupiedTile.highlight.SetActive(targetsActive);
+                if (unit is BaseEnemy)
+                {
+                    unit.OccupiedTile.highlight.SetActive(targetsActive && !healOthers);    
+                }
+                if (unit is BaseHero)
+                {
+                    unit.OccupiedTile.highlight.SetActive(healOthers);
+                }
             }
     }
         else

@@ -81,11 +81,11 @@ public class Tile : MonoBehaviour
             {
                 highlightSelect.SetActive(true);
             }
-            else if (UnitManager.Instance.SelectedHero != null && GridManager.Instance.SpawnTiles != null && GridManager.Instance.SpawnTiles.Contains(this))
+            else if (UnitManager.Instance.SelectedHero != null  && Walkable && GridManager.Instance.SpawnTiles != null && GridManager.Instance.SpawnTiles.Contains(this))
             {
                 highlightSelect.SetActive(true);
             }
-            else if (GridManager.Instance.SpawnTiles == null || !GridManager.Instance.SpawnTiles.Contains(this))
+            else if (GridManager.Instance.SpawnTiles == null || !GridManager.Instance.SpawnTiles.Contains(this) || !Walkable)
             {
                 highlightError.SetActive(true);    
             }
@@ -93,6 +93,10 @@ public class Tile : MonoBehaviour
         if (GameManager.Instance.State == GameState.MovementPhase)
         {
             if (OccupiedUnit != null && UnitManager.Instance.SelectedHero == null && OccupiedUnit.Faction == Faction.Hero)
+            {
+                highlightSelect.SetActive(true);
+            }
+            else if (UnitManager.Instance.SelectedHero != null && this == UnitManager.Instance.SelectedHero.OccupiedTile)
             {
                 highlightSelect.SetActive(true);
             }
@@ -112,15 +116,29 @@ public class Tile : MonoBehaviour
                 highlightSelect.SetActive(true);
                 return;
             }
-            else if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && OccupiedUnit.Faction == Faction.Enemy && UnitManager.Instance.SelectedHero.SelectedAttack != null && !(UnitManager.Instance.SelectedHero.SelectedAttack is Heals || UnitManager.Instance.SelectedHero.SelectedAttack is Mitigate))
+            else if (UnitManager.Instance.SelectedHero != null && UnitManager.Instance.SelectedHero.SelectedAttack != null && (UnitManager.Instance.SelectedHero.SelectedAttack is Heals || UnitManager.Instance.SelectedHero.SelectedAttack is Mitigate))
             {
-                highlightSelect.SetActive(true);
+                return;
+            }
+            else if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && OccupiedUnit.Faction == Faction.Enemy && UnitManager.Instance.SelectedHero.SelectedAttack is HealPoolSpell)
+            {
+                highlightError.SetActive(true);
+            }
+            else if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && UnitManager.Instance.SelectedHero.SelectedAttack != null && UnitManager.Instance.SelectedHero.TargetsList.Contains(OccupiedUnit))
+            {
+                if (UnitManager.Instance.SelectedHero.SelectedAttack is HealPoolSpell && OccupiedUnit.Faction == Faction.Hero)
+                {
+                    highlightSelect.SetActive(true);    
+                }
+                else if (OccupiedUnit.Faction == Faction.Enemy)
+                {
+                    highlightSelect.SetActive(true);    
+                }
             }
             else
             {
                 highlightError.SetActive(true);
             }
-            
         }
         else
         {
@@ -131,11 +149,7 @@ public class Tile : MonoBehaviour
     {
         if (highlightSelect.activeSelf)
         {
-            if (UnitManager.Instance != null && UnitManager.Instance.SelectedHero != null && this == UnitManager.Instance.SelectedHero.OccupiedTile)
-            {
-                return;
-            }
-            highlightSelect.SetActive(false);
+            highlightSelect.SetActive(UnitManager.Instance != null && UnitManager.Instance.SelectedHero != null && this == UnitManager.Instance.SelectedHero.OccupiedTile);
         }
         if (highlightError.activeSelf)
         {
@@ -201,7 +215,7 @@ public class Tile : MonoBehaviour
         //Attack Phase
         else if(GameManager.Instance.State == GameState.AttackPhase && OccupiedUnit != null)
         {
-            if(OccupiedUnit.Faction == Faction.Hero && OccupiedUnit.TargetsList.Count != 0)
+            if(OccupiedUnit.Faction == Faction.Hero && OccupiedUnit.TargetsList.Count != 0 && !(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.SelectedHero.SelectedAttack is HealPoolSpell))
             {
                 UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
             }
@@ -210,11 +224,15 @@ public class Tile : MonoBehaviour
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
                 if (UnitManager.Instance.SelectedHero.SelectedAttack is Heals || UnitManager.Instance.SelectedHero.SelectedAttack is Mitigate)
                 {
-                    return;   
+                    return;
                 }
+                else if (UnitManager.Instance.SelectedHero.SelectedAttack is HealPoolSpell && OccupiedUnit is BaseEnemy)
+                {
+                    return;
+                } 
                 else
                 {
-                    UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);  
+                    UnitManager.Instance.SelectedHero.SetTarget(OccupiedUnit);
                 }
                 if (UnitManager.Instance.AllAttacksSelected())
                 {

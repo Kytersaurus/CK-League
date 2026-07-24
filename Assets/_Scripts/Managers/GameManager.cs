@@ -68,7 +68,11 @@ public class GameManager : MonoBehaviour
                 if (SceneManager.GetActiveScene().name != "Tutorial")
                 {
                     UnitManager.Instance.LevelUpHeroes();
-                    UnitManager.Instance.SaveHeroProgressAfterLevel();    
+                    UnitManager.Instance.SaveHeroProgressAfterLevel();
+                    if (UnitManager.Instance.unitsLevelUp.Count > 0)
+                    {
+                        MenuManager.Instance.ShowHeroLeveledUp(UnitManager.Instance.unitsLevelUp, true);
+                    }
                 }
                 break;
             case GameState.Defeat:
