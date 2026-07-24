@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour
                 ProgressManager.Instance.DeleteLevelSaveData();
                 if (SceneManager.GetActiveScene().name != "Tutorial")
                 {
+                    UnitManager.Instance.LevelUpHeroes();
                     UnitManager.Instance.SaveHeroProgressAfterLevel();    
                 }
                 break;
