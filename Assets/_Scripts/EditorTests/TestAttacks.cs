@@ -80,4 +80,29 @@ public class TestAttacks
         Assert.AreEqual(100, hero.CurrentHealth);
         yield return null;
     }
+
+    [UnityTest]
+    public IEnumerator TestHealAlly()
+    {
+        BaseHero hero = (BaseHero)MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Heroes/Warrior").UnitPrefab);
+        BaseUnit enemy = MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Enemies/Ogre").UnitPrefab);
+        BaseHero mage = (BaseHero)MonoBehaviour.Instantiate(Resources.Load<ScriptableUnit>("Units/Heroes/Wizard").UnitPrefab);
+        yield return null;
+        hero.CurrentHealth = 100;
+        hero.maxHealth = 100;
+        enemy.CurrentHealth = 100;
+        HealExternal healUsed = (HealExternal)ScriptableObject.CreateInstance("HealPoolSpell");
+        healUsed.healAmount = 30;
+        healUsed.Execute(mage, hero);
+        Assert.AreEqual(100, hero.CurrentHealth);
+        yield return null;
+        hero.CurrentHealth = 10;
+        healUsed.Execute(mage, hero);
+        Assert.AreEqual(40, hero.CurrentHealth);
+        yield return null;
+        hero.CurrentHealth = 90;
+        healUsed.Execute(mage, hero);
+        Assert.AreEqual(100, hero.CurrentHealth);
+        yield return null;
+    }
 }
