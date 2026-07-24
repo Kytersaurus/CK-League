@@ -14,7 +14,7 @@ public class LevelManager : MonoBehaviour
             string levelName = _levelButtonTexts[i];
             _levelButtons[i].interactable = ProgressManager.Instance.CheckLevelUnlock(levelName);
         }
-        _teamEditorButton.gameObject.SetActive(ProgressManager.Instance.CheckLevelUnlock("Tutorial"));
+        _teamEditorButton.gameObject.SetActive(ProgressManager.Instance.CheckLevelUnlock("Level 1"));
     }
 
     void Update()

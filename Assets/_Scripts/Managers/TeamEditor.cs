@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using log4net.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -492,25 +491,29 @@ public class TeamEditor : MonoBehaviour
                 _popUpScript.ShowPopUpAndSetText("The unit is already on the team");
                 return;
             }
+            if (_selectedUnit.attackNames.Count() == 0)
+            {
+                _popUpScript.ShowPopUpAndSetText("The unit has no attacks");
+                return;
+            }
             _team.Add(_selectedUnit);
-            _selectedUnit = null;
-            SetAllTogglesOff();
+            DeselectEverything();
             TeamSaved = false;
             RefreshTeam(true);
-            ShowUnitInfo();
-            RefreshUnitAttackList();
             return;
         }
         if (_newSelectedUnit != null)
         {
+            if (_newSelectedUnit.UnitPrefab.moveSet.Count == 0)
+            {
+                _popUpScript.ShowPopUpAndSetText("The unit has no attacks");
+                return;
+            }
             UnitSaveData unit = CreateAndSaveUnit();
             _team.Add(unit);
-            _newSelectedUnit = null;
-            SetAllTogglesOff();
+            DeselectEverything();
             TeamSaved = false;
             RefreshTeam(true);
-            ShowUnitInfo();
-            RefreshUnitAttackList();
             return;
         }
         
@@ -523,9 +526,7 @@ public class TeamEditor : MonoBehaviour
         }
         _team.Remove(_selectedUnit);
         _selectedUnit = null;
-        ShowUnitInfo();
-        RefreshUnitAttackList();
-        SetAllTogglesOff();
+        DeselectEverything();
         TeamSaved = false;
         RefreshTeam(true);
     }
@@ -544,7 +545,7 @@ public class TeamEditor : MonoBehaviour
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take Melee Attacks");
                 return;
             }
-            if (!(_selectedAttack is MeleeAttack && !(_selectedAttack is Heals)) && (unit.UnitPrefab is BaseWarrior || unit.UnitPrefab is BaseCavalry))
+            if (!(_selectedAttack is MeleeAttack || _selectedAttack is Heals || _selectedAttack is Mitigate) && (unit.UnitPrefab is BaseWarrior || unit.UnitPrefab is BaseCavalry))
             {
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take ranged attacks");
                 return;
@@ -552,6 +553,41 @@ public class TeamEditor : MonoBehaviour
             if (_selectedAttack is MagicAttack && !(unit.UnitPrefab is BaseMage))
             {
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take magic attacks");
+                return;
+            }
+            if (_selectedAttack is HealPoolSpell && !(unit.UnitPrefab is HealerMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is ArrowAttack && !(unit.UnitPrefab is BaseArcher))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is LifeSlashAttack && !(unit.UnitPrefab is BeserkerWarrior))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is ChargeAttack && !(unit.UnitPrefab is BaseCavalry))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is Mitigate && unit.UnitPrefab is BeserkerWarrior)
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack.attackName == "Advanced block" && !(unit.UnitPrefab is HeavyCavalry || unit.UnitPrefab is TankWarrior))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack.attackName == "Lightning Storm Spell" && !(unit.UnitPrefab is ArchMage))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
                 return;
             }
             List<string> attacks = _selectedUnit.attackNames.ToList();
@@ -579,7 +615,7 @@ public class TeamEditor : MonoBehaviour
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take Melee Attacks");
                 return;
             }
-            if (!(_selectedAttack is MeleeAttack && !(_selectedAttack is Heals)) && (unit.UnitPrefab is BaseWarrior || unit.UnitPrefab is BaseCavalry))
+            if (!(_selectedAttack is MeleeAttack || _selectedAttack is Heals || _selectedAttack is Mitigate) && (unit.UnitPrefab is BaseWarrior || unit.UnitPrefab is BaseCavalry))
             {
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take ranged attacks");
                 return;
@@ -589,22 +625,27 @@ public class TeamEditor : MonoBehaviour
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take magic attacks");
                 return;
             }
-            if (_newSelectedUnit.UnitPrefab.moveSet.Count() >= 4)
-            {
-                _popUpScript.ShowPopUpAndSetText("Selected Unit has 4 attacks already");
-                return;
-            }
-            if (_newSelectedUnit.UnitPrefab.moveSet.Contains(_selectedAttack))
-            {
-                _popUpScript.ShowPopUpAndSetText("Selected Unit already has this attack equipped");
-                return;
-            }
             if (_selectedAttack is HealPoolSpell && !(unit.UnitPrefab is HealerMage))
             {
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
                 return;
             }
+            if (_selectedAttack is ArrowAttack && !(unit.UnitPrefab is BaseArcher))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
             if (_selectedAttack is LifeSlashAttack && !(unit.UnitPrefab is BeserkerWarrior))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is ChargeAttack && !(unit.UnitPrefab is BaseCavalry))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                return;
+            }
+            if (_selectedAttack is Mitigate && unit.UnitPrefab is BeserkerWarrior)
             {
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
                 return;
@@ -619,9 +660,14 @@ public class TeamEditor : MonoBehaviour
                 _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
                 return;
             }
-            if (_selectedAttack is Mitigate && unit.UnitPrefab is BeserkerWarrior)
+            if (_newSelectedUnit.UnitPrefab.moveSet.Count() >= 4)
             {
-                _popUpScript.ShowPopUpAndSetText("Selected Unit cannot take this attack");
+                _popUpScript.ShowPopUpAndSetText("Selected Unit has 4 attacks already");
+                return;
+            }
+            if (_newSelectedUnit.UnitPrefab.moveSet.Contains(_selectedAttack))
+            {
+                _popUpScript.ShowPopUpAndSetText("Selected Unit already has this attack equipped");
                 return;
             }
             _newSelectedUnit.UnitPrefab.moveSet.Add(_selectedAttack);

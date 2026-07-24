@@ -40,12 +40,23 @@ public class AttackToolBarScript : MonoBehaviour
         _unitDescription.text = _selectedUnit.UnitDescription;
         
         var attacks = _selectedUnit.moveSet;
-        for (int i = 0; i < attacks.Count && i <_attackButtons.Count; i++)
+        for (int i = 0; i <_attackButtons.Count; i++)
         {
-            _attackButtonIcons[i].sprite = attacks[i].icon;
-            var buttonScript = _attackButtons[i].GetComponent<AttackButtonScript>();
-            buttonScript.attack = attacks[i];
-        } 
+            if (i < attacks.Count)
+            {
+                _attackButtonIcons[i].sprite = attacks[i].icon;
+                var buttonScript = _attackButtons[i].GetComponent<AttackButtonScript>();
+                buttonScript.attack = attacks[i];
+                _attackButtonsObj[i].SetActive(true);
+            }
+            else
+            {
+                var buttonScript = _attackButtons[i].GetComponent<AttackButtonScript>();
+                buttonScript.attack = null;
+                _attackButtonsObj[i].SetActive(false);
+            }
+            
+        }
     }
     public void SetButtonsActive(bool state)
     {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Clrain.Collections;
-using TextMateSharp.Internal.Rules;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +23,7 @@ public class UnitManager : MonoBehaviour
     public bool IsAttackBarActive => _attackBar != null;
     [SerializeField] private Canvas _canvas;
     public bool SpecificHeroSpawn, SpecificEnemySpawn;
-    public UnitSaveData UnitToSpawn;
+    public UnitSaveData UnitToSpawn = null;
     [SerializeField] Toggle _unitSpawnToggle, _team1Toggle;
     [SerializeField] Transform _spawnPanel;
     [SerializeField] ToggleGroup _unitSpawnToggleGroup;
@@ -33,6 +32,7 @@ public class UnitManager : MonoBehaviour
     private List<Toggle> _unitSpawnToggles = new List<Toggle>();
     public List<UnitSaveData> _selectedTeamData;
     public Vector2 SpawnBox = new Vector2();
+    public List<string> unitsLevelUp = new List<string>();
     
     public static event Action<BaseHero> OnExperienceAdded;
     void Awake()
@@ -238,8 +238,18 @@ public class UnitManager : MonoBehaviour
     public void SpawnHero(int x, int y)
     {
         UnitSaveData data = UnitToSpawn;
+        if (data == null)
+        {
+            Debug.Log("Unit null is being called to spawn");
+            return;
+        }
         ScriptableUnit unit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == data.unitName);
-
+        if (unit == null)
+        {
+            Debug.Log("No unit prefab found");
+            UnitToSpawn = null;
+            return;
+        }
         BaseHero spawnedHero = Instantiate(unit.UnitPrefab) as BaseHero;
         spawnedHero.guid = data.guid;
         spawnedHero.unitName = data.unitName;
@@ -376,6 +386,28 @@ public class UnitManager : MonoBehaviour
                 if(InAttackRange(unit, enemy))
                     targetsList.Add(enemy);
             }
+            if (unit is HealerMage)
+            {
+                bool canHeal = false;
+                foreach (Attacks attack in unit.moveSet)
+                {
+                    if (attack is HealPoolSpell)
+                    {
+                        canHeal = true;
+                        break;
+                    }
+                }
+                if (canHeal)
+                {
+                    foreach(BaseHero hero in _remainingHeroes)
+                    {
+                        if (hero != unit && InAttackRange(unit, hero) && hero.CurrentHealth < hero.maxHealth)
+                        {
+                            targetsList.Add(hero);
+                        }
+                    }
+                }
+            }
         }
         else
         {
@@ -439,7 +471,7 @@ public class UnitManager : MonoBehaviour
                 if(enemy.TargetsList.Count > 0)
                 {
                     enemy.Target = enemy.TargetsList.OrderBy(o=>UnityEngine.Random.value).First();
-                }                
+                }
             }
             else if(difficulty == 2)
             {
@@ -653,7 +685,7 @@ public class UnitManager : MonoBehaviour
     {
         if(attackedUnit.attackedBy.Faction == Faction.Hero)
         {
-            var multiplier = 1.0f;
+            var multiplier = 2.0f;
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(damage*multiplier);
             //OnExperienceAdded?.Invoke(hero);
@@ -664,7 +696,7 @@ public class UnitManager : MonoBehaviour
     {
         if(attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
         {
-            var experience = 10;
+            var experience = 20;
             var multiplier = 1.0f;
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(experience*multiplier);
@@ -679,7 +711,12 @@ public class UnitManager : MonoBehaviour
             if(hero.level == 1 && hero.experience >= 200)
             {
                 hero.level = 2;
+                unitsLevelUp.Add(hero.unitName);
             }
         }
+    }
+    public void SetEnemyDifficulty(int i)
+    {
+        GameManager.Instance.EnemyDifficulty = i;
     }
 }
