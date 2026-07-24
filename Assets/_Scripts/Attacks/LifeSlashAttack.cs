@@ -5,7 +5,13 @@ public class LifeSlashAttack : MeleeAttack
 {
     public override void Execute(BaseUnit attacker, BaseUnit target)
     {
-        target.TakeDamage(CalculateDmg(target.reducedDmg, damage / (attacker.CurrentHealth / attacker.maxHealth)));
+        if (attacker.CurrentHealth == 0)
+        {
+            return;
+        }
+        float healthToMaxHealthRatio = (float)attacker.CurrentHealth / attacker.maxHealth;
+        int damageScaledToHealth = Mathf.RoundToInt(damage/healthToMaxHealthRatio);
+        target.TakeDamage(CalculateDmg(target.reducedDmg, damageScaledToHealth));
         target.reducedDmg = 1;
     }
 }
