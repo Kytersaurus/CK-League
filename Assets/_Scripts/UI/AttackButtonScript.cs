@@ -31,6 +31,10 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
     }
     void OnPress(bool pressed)
     {
+        if (UnitManager.Instance.SelectedHero == null)
+        {
+            return;
+        }
         _selectedBox.gameObject.SetActive(pressed);
         if (pressed)
         {
@@ -38,9 +42,17 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
             List<BaseUnit> targets = UnitManager.Instance.SelectedHero.TargetsList;
             bool targetsActive = !(attack is Heals || attack is Mitigate);
             bool healOthers = attack is HealPoolSpell;
+            if (!targetsActive || healOthers)
+            {
+                UnitManager.Instance.SelectedHero.Target = null;
+            }
             //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(targetsActive);
             foreach (BaseUnit unit in targets)
             {
+                if (unit == null || unit.OccupiedTile == null)
+                {
+                    continue;
+                }
                 if (unit is BaseEnemy)
                 {
                     unit.OccupiedTile.highlight.SetActive(targetsActive && !healOthers);    
@@ -50,10 +62,20 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
                     unit.OccupiedTile.highlight.SetActive(healOthers);
                 }
             }
-    }
+        }
         else
         {
             UnitManager.Instance.SelectedHero.SelectedAttack = null;
+            if (UnitManager.Instance.SelectedHero.TargetsList != null || UnitManager.Instance.SelectedHero.TargetsList.Count > 0)
+            {
+                foreach(BaseUnit unit in UnitManager.Instance.SelectedHero.TargetsList)
+                {
+                    if (unit != null && unit.OccupiedTile != null)
+                    {
+                        unit.OccupiedTile.highlight.SetActive(false);
+                    }
+                }
+            }
         }
     }
     public void OnPointerEnter(PointerEventData eventData)

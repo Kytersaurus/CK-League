@@ -72,6 +72,7 @@ public class MenuManager : MonoBehaviour
         {
             text += unit + " leveled up\n";
         }
+        text += "Go to the team editor to evolve into new classes";
         _heroLevelUp.text = text;
     }
     public void SpawnDamageIndicator(string message, Vector3 positon, bool blocked, bool heal)

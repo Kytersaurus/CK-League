@@ -121,14 +121,38 @@ public class TeamManager : MonoBehaviour
 
     public void UpdateUnitData(BaseHero hero)
     {
+        UnitSaveData oldUnit = LoadUnitData(hero.guid);
+        string newUnitName, newClassName;
+        bool oldUnitBetter;
+        if (oldUnit != null)
+        {
+            if (!string.IsNullOrEmpty(oldUnit.className) && string.IsNullOrEmpty(hero.className))
+            {
+                newUnitName = oldUnit.unitName;
+                newClassName = oldUnit.className;
+                oldUnitBetter = true;
+            }
+            else
+            {
+                newUnitName = hero.unitName;
+                newClassName = hero.className;
+                oldUnitBetter = false;
+            }
+        }
+        else
+        {
+            newUnitName = hero.unitName;
+            newClassName = hero.className;
+            oldUnitBetter = false;
+        }
         UnitSaveData data = new UnitSaveData
         {
-            guid = hero.guid,
-            unitName = hero.unitName,
-            className = hero.className,
-            level = hero.level,
-            experience = hero.experience,
-            attackNames = hero.moveSet.Select(a => a.attackName).ToArray()
+            guid = hero.guid,   
+            unitName = newUnitName,
+            className = newClassName,
+            level = oldUnit != null ? System.Math.Max(hero.level, oldUnit.level) : hero.level,
+            experience = oldUnit != null ? System.Math.Max(hero.experience, oldUnit.experience) : hero.experience,
+            attackNames = (oldUnit != null && oldUnitBetter) ? oldUnit.attackNames : hero.moveSet.Select(a => a.attackName).ToArray()
         };
         SaveUnitData(data);
     }

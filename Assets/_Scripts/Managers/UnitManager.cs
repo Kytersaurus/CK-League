@@ -102,8 +102,6 @@ public class UnitManager : MonoBehaviour
         LevelSaveData data = ProgressManager.Instance.LoadLevelProgress();
         List<UnitBattleData> enemyDatas = data.enemies;
         List<HeroBattleData> heroDatas = data.heroes;
-        GameManager.Instance.UpdateGameState(data.gameState);
-        EndTurnButton.Instance.ActivateEndTurnButton();
         foreach (HeroBattleData heroData in heroDatas)
         {
             ScriptableUnit heroScriptUnit = TeamManager.Instance.AllUnitPrefabs.FirstOrDefault(u => u.name == heroData.unitName);
@@ -156,6 +154,8 @@ public class UnitManager : MonoBehaviour
                 Destroy(enemy.gameObject);
             }
         }   
+        GameManager.Instance.UpdateGameState(data.gameState);
+        EndTurnButton.Instance.ActivateEndTurnButton();
     }
     public void SpawnPanelActive(bool isActive)
     {
@@ -329,6 +329,10 @@ public class UnitManager : MonoBehaviour
         if(SelectedHero == null)
         {
             return;
+        }
+        if (_attackBar != null)
+        {
+            Destroy(_attackBar);
         }
         SelectedHero.OccupiedTile.highlightSelect.SetActive(false);
         foreach (Tile tile in ReachableTiles)
@@ -683,7 +687,7 @@ public class UnitManager : MonoBehaviour
 
     public void AddExperienceFromDamage(BaseUnit attackedUnit, int damage)
     {
-        if(attackedUnit.attackedBy.Faction == Faction.Hero)
+        if(attackedUnit != null && attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
         {
             var multiplier = 2.0f;
             var hero = (BaseHero)attackedUnit.attackedBy;
@@ -718,5 +722,25 @@ public class UnitManager : MonoBehaviour
     public void SetEnemyDifficulty(int i)
     {
         GameManager.Instance.EnemyDifficulty = i;
+    }
+    public void HideUnwantedBehaviour()
+    {
+        foreach(BaseUnit unit in _remainingUnits)
+        {
+            if (unit is BaseHero)
+            {
+                unit.AttackIndicator.gameObject.SetActive(false);
+                foreach (BaseUnit enemy in unit.TargetsList)
+                {
+                    enemy.OccupiedTile.highlight.SetActive(false);
+                    enemy.OccupiedTile.highlightError.SetActive(false);
+                    enemy.OccupiedTile.highlightSelect.SetActive(false);
+                }    
+            }
+            else if (unit is BaseEnemy)
+            {
+                unit.OccupiedTile.Objective.SetActive(false);
+            }
+        }
     }
 }

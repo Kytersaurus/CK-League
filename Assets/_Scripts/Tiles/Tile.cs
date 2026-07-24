@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -118,6 +119,7 @@ public class Tile : MonoBehaviour
             }
             else if (UnitManager.Instance.SelectedHero != null && UnitManager.Instance.SelectedHero.SelectedAttack != null && (UnitManager.Instance.SelectedHero.SelectedAttack is Heals || UnitManager.Instance.SelectedHero.SelectedAttack is Mitigate))
             {
+                highlightError.SetActive(true);
                 return;
             }
             else if (OccupiedUnit != null && UnitManager.Instance.SelectedHero != null && OccupiedUnit.Faction == Faction.Enemy && UnitManager.Instance.SelectedHero.SelectedAttack is HealPoolSpell)
@@ -134,6 +136,11 @@ public class Tile : MonoBehaviour
                 {
                     highlightSelect.SetActive(true);    
                 }
+            }
+            else if (UnitManager.Instance.SelectedHero != null && OccupiedUnit is BaseHero)
+            {
+                highlightSelect.SetActive(UnitManager.Instance.SelectedHero.SelectedAttack == null);
+                highlightError.SetActive(UnitManager.Instance.SelectedHero.SelectedAttack != null);
             }
             else
             {

@@ -14,7 +14,7 @@ public abstract class FireAttack : MagicAttack
             {
                 continue;
             }
-            tile.OccupiedUnit.TakeDamage(CalculateDmg(tile.OccupiedUnit.reducedDmg, damage));
+            tile.OccupiedUnit.TakeDamage(CalculateDmg(tile.OccupiedUnit.reducedDmg, aoeDamage));
             tile.OccupiedUnit.reducedDmg = 1;
         }
     }

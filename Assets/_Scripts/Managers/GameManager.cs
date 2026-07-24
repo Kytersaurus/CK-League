@@ -56,10 +56,12 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.MovementPhase:
+                UnitManager.Instance.HideUnwantedBehaviour();
                 UnitManager.Instance.ResetMovedState();
                 UnitManager.Instance.SetEnemyMovement();
                 break;
             case GameState.AttackPhase:
+                UnitManager.Instance.HideUnwantedBehaviour();
                 UnitManager.Instance.UpdateAllTargetLists();
                 UnitManager.Instance.ResetAllTargets();
                 UnitManager.Instance.SetEnemyAttacks();
