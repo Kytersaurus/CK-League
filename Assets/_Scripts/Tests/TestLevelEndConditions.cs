@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using UnityEngine.UI;
 
-public class NewTestScript
+public class TestLevelEndConditions
 {
     
     [UnitySetUp]
