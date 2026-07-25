@@ -26,7 +26,7 @@ public class TeamEditor : MonoBehaviour
     [SerializeField] private Button _deselectUnitButton, _deselectAttackButton, _addUnitToTeamButton, _deleteUnitButton, _saveUnitButton, _addAttackButton, _removeAttackButton, _saveTeamButton, _deleteTeamButton, _removeUnitFromTeamButton, _unitEvolveButton;
     private List<Toggle> _newUnitsList, _existingUnitsList, _attacksList, _unitAttacksList, _teamUnitsList;
     public bool TeamSaved;
-    [SerializeField] GameObject _popUp, _popUpConfirmSwitchNoSave, _popUpConfirmDeleteTeam, _popUpConfirmDeleteUnit, _evolvePanel, _evolveButton, _popUpConfirmLeaveNoSaveTeam;
+    [SerializeField] GameObject _popUp, _popUpConfirmSwitchNoSave, _popUpConfirmDeleteTeam, _popUpConfirmDeleteUnit, _evolvePanel, _evolveButton, _popUpConfirmLeaveNoSaveTeam, _redDot;
     private PopUpScript _popUpScript;
     private int _prevTeamSlot, _teamSlot;
     private string _classTrack;
@@ -213,7 +213,16 @@ public class TeamEditor : MonoBehaviour
 
             BaseHero hero = unit.UnitPrefab as BaseHero;
             Image unitSprite = unitSelect.GetComponentInChildren<Image>();
-            unitSprite.sprite = hero.UnitIcon;
+            unitSprite.sprite = hero.UnitIcon;;
+            GameObject evolveNotification = Instantiate(_redDot, unitSelect.transform);
+            if (unit != null && unit.EvolvePathA != null && unit.EvolvePathB != null && unitData.level >= unit.EvolveLevel)
+            {
+                evolveNotification.SetActive(true);
+            }
+            else
+            {
+                evolveNotification.SetActive(false);
+            }
 
             TMP_Text unitStats = unitSelect.GetComponentInChildren<TMP_Text>();
             unitStats.text = $"{unit.name}";
