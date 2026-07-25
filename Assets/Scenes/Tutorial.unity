@@ -1156,8 +1156,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -104.000015, y: -197.70496}
-  m_SizeDelta: {x: 132.6279, y: 25.8475}
+  m_AnchoredPosition: {x: -104.000015, y: -215.55005}
+  m_SizeDelta: {x: 132.6279, y: 38.414}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &529222450
 MonoBehaviour:
@@ -2066,10 +2066,11 @@ MonoBehaviour:
   m_text: Now that you have selected an attack, move your mouse over to the ogre
     to set it as a target. All avaliable targets in range are highlighted as shown.
     If you change your mind on which unit to select when there are multiple later,
-    you can press the esc key to deselect the targets or any units. esc key also
-    brings up the pause menu. Once the target is set, press end turn or spacebar
-    to carry out the attack. Some attacks such as heals, dodges or blocks dont need
-    you to select a target.
+    you can press the esc key to deselect the unit, or when the attacks are set,
+    selecting the same unit again to change its attacks. esc key also brings up the
+    pause menu. Once the target is set, press end turn or spacebar to carry out the
+    attack. Some attacks such as heals, dodges or blocks dont need you to select
+    a target.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
   m_sharedMaterial: {fileID: 89183857413607442, guid: 2eb72df50b7d20a4aa44449d6fed6cb0, type: 2}
