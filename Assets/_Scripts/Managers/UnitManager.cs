@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Clrain.Collections;
+using Mono.Cecil.Cil;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -114,7 +115,15 @@ public class UnitManager : MonoBehaviour
             hero.Position.x = heroData.gridX;
             hero.Position.y = heroData.gridY;
             hero.Alive = heroData.alive;
-            
+            var attacks = TeamManager.Instance.AllAttacks;
+            var heroSavedData =  TeamManager.Instance.LoadUnitData(heroData.guid);
+            if (heroSavedData != null)
+            {
+                hero.moveSet = heroSavedData.attackNames
+                .Select(name => attacks.FirstOrDefault(a => a.attackName == name))
+                .Where(a => a != null)
+                .ToList();    
+            }
             hero.guid = heroData.guid;
             hero.className = heroData.className;
             hero.level = heroData.level;
@@ -689,7 +698,7 @@ public class UnitManager : MonoBehaviour
     {
         if(attackedUnit != null && attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
         {
-            var multiplier = 2.0f;
+            var multiplier = (float)GameManager.Instance.EnemyDifficulty;
             var hero = (BaseHero)attackedUnit.attackedBy;
             hero.experience += (int)(damage*multiplier);
             //OnExperienceAdded?.Invoke(hero);
@@ -701,8 +710,12 @@ public class UnitManager : MonoBehaviour
         if(attackedUnit.attackedBy != null && attackedUnit.attackedBy.Faction == Faction.Hero)
         {
             var experience = 20;
-            var multiplier = 1.0f;
-            var hero = (BaseHero)attackedUnit.attackedBy;
+            var multiplier = (float)GameManager.Instance.EnemyDifficulty;
+            var hero = attackedUnit.attackedBy as BaseHero;
+            if (hero == null)
+            {
+                Debug.Log("Enemy not attacked by hero");
+            }
             hero.experience += (int)(experience*multiplier);
             //OnExperienceAdded?.Invoke(hero);
         }

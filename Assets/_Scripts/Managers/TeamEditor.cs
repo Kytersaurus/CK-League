@@ -534,6 +534,10 @@ public class TeamEditor : MonoBehaviour
             return;
         }
         _team.Remove(_selectedUnit);
+        if (_team == null || _team.Count() <= 0)
+        {
+            DeleteTeam();
+        }
         _selectedUnit = null;
         DeselectEverything();
         TeamSaved = false;
@@ -766,6 +770,7 @@ public class TeamEditor : MonoBehaviour
     {
         TeamManager.Instance.DeleteTeam();
         _team = null;
+        DeselectEverything();
         RefreshTeam(true);
     }
     public void RefreshTeam(bool newTeam)
@@ -847,6 +852,7 @@ public class TeamEditor : MonoBehaviour
         RefreshUnitAttackList();
         ShowAttackInfo();
         RefreshExistingUnitsList();
+        RefreshTeam(false);
     }
     public void DeselectAttack()
     {
@@ -1036,13 +1042,31 @@ public class TeamEditor : MonoBehaviour
     }
     public void ExitTeamEditor()
     {
+        if (!CheckIfTeamIsCreated())
+        {
+            _popUpScript.ShowPopUpAndSetText("Please create or save a team");
+            return;
+        }
         if (!TeamSaved)
         {
             _popUpConfirmLeaveNoSaveTeam.SetActive(true);
+            return;
         }
-        else
+        SceneManager.LoadScene("Level Select");
+    }
+    public bool CheckIfTeamIsCreated()
+    {
+        int currTeam = _teamSlot;
+        for (int i = 0; i < 3; i++)
         {
-            SceneManager.LoadScene("Level Select");
+            TeamManager.Instance.ActiveTeamSlot = i;
+            if (TeamManager.Instance.SavedTeamExists)
+            {
+                TeamManager.Instance.ActiveTeamSlot = currTeam;
+                return true;
+            }
         }
+        TeamManager.Instance.ActiveTeamSlot = currTeam;
+        return false;
     }
 }

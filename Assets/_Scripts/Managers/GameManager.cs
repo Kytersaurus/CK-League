@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     public GameState State;
     public static event Action<GameState> OnGameStateChanged;
-    public int EnemyDifficulty = 3;
+    public int EnemyDifficulty = 1;
 
     void Awake()
     {

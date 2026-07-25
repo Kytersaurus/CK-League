@@ -99,16 +99,9 @@ public class MenuManager : MonoBehaviour
                 EndTurnButton.Instance.DeactivateEndTurnButton();
             }
         }
-        if (GameManager.Instance.State == GameState.AttackPhase || GameManager.Instance.State == GameState.MovementPhase)
+        if ((GameManager.Instance.State == GameState.AttackPhase || GameManager.Instance.State == GameState.MovementPhase) && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
-            // if (!popUpActive && (UnitManager.Instance.AllAttacksSelected() || GameManager.Instance.State == GameState.MovementPhase))
-            // {
-            //     EndTurnButton.Instance.ActivateEndTurnButton();
-            // }
-            // else
-            // {
-            //     EndTurnButton.Instance.DeactivateEndTurnButton();
-            // }
+           EndTurnButton.Instance.EndTurn();
         }
         if (UnitManager.Instance.SelectedHero != null && Keyboard.current.escapeKey.wasPressedThisFrame )
         {
