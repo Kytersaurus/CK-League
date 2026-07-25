@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: New Life Slash Attack
   m_EditorClassIdentifier: Scripts::LifeSlashAttack
   attackName: Life Slash
-  damage: 10
+  damage: 1000
   icon: {fileID: 6831817549892151548, guid: b08eebe7114beca4199dd0c7b92dbb31, type: 3}
   attackDesc: Target takes more damge based on the amount of health lost by the attacking
     unit. Only usable by the beserker
