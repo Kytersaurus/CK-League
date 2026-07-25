@@ -769,7 +769,8 @@ MonoBehaviour:
     units tab consists of units which were used in levels or saved by you manually.
     The attacks tab can only be accessed when a unit is selected. Click on one of
     the units to start. If a unit reaches level 2, it can evolve into a new class
-    and an evolve button will appear. You can choose 2 paths.
+    and an evolve button will appear. You can choose 2 paths. All image icons are
+    clickable in this editor.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9e0efe2e5a895214389f76165a6b16c7, type: 2}
   m_sharedMaterial: {fileID: -4771463237176932899, guid: 9e0efe2e5a895214389f76165a6b16c7, type: 2}
@@ -796,8 +797,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 34
+  m_fontSizeBase: 34
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

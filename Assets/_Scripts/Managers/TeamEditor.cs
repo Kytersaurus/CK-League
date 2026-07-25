@@ -617,6 +617,7 @@ public class TeamEditor : MonoBehaviour
             attacks.Add(_selectedAttack.attackName);
             _selectedUnit.attackNames = attacks.ToArray();
             RefreshUnitAttackList();
+            CreateAndSaveUnit();
             _selectedAttack = null;
             SetAllAttackTogglesOff();
         }
@@ -699,15 +700,26 @@ public class TeamEditor : MonoBehaviour
         if (_selectedUnit != null)
         {
             List<string> attacks = _selectedUnit.attackNames.ToList();
+            if (attacks.Count == 1)
+            {
+                _popUpScript.ShowPopUpAndSetText("Unit must have at least 1 attack");
+                return;
+            }
             attacks.Remove(_selectedAttack.attackName);
             _selectedUnit.attackNames = attacks.ToArray();
             RefreshUnitAttackList();
             _selectedAttack = null;
             ShowAttackInfo();
             SetAllAttackTogglesOff();
+            CreateAndSaveUnit();
         }
         if (_newSelectedUnit != null)
         {
+            if (_newSelectedUnit.UnitPrefab.moveSet.Count == 1)
+            {
+                _popUpScript.ShowPopUpAndSetText("Unit must have at least 1 attack");
+                return;
+            }
             _newSelectedUnit.UnitPrefab.moveSet.Remove(_selectedAttack);
             RefreshUnitAttackList();
             _selectedAttack = null;

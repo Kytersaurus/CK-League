@@ -121,7 +121,7 @@ MonoBehaviour:
   CurrentHealth: 0
   AttackRange: 1
   AttackPower: 20
-  AttackSpeed: 1
+  AttackSpeed: 2
   moveRange: 1
   DestinationTile: {fileID: 0}
   hasMoved: 0
