@@ -97,6 +97,58 @@ public class TestEnemyAI
     }
 
     [UnityTest]
+    public IEnumerator TestRetreatUp()
+    {
+        Tile enemyTile = GridManager.Instance.GetTileAtPosition(new Vector2(8,6));
+        BaseEnemy enemy = enemyList[0];
+        Tile warriorTile = GridManager.Instance.GetTileAtPosition(new Vector2(7,6)); //left
+        warriorTile.SetUnit(warrior);
+        enemyTile.SetUnit(enemy);
+        Tile cavalryTile = GridManager.Instance.GetTileAtPosition(new Vector2(9,6)); //right
+        cavalryTile.SetUnit(cavalry);
+        GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+        endTurn.onClick.Invoke();
+        Assert.AreEqual(new Vector2(8,5),enemy.Position); //check if retreat up
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator TestRetreatLeft()
+    {
+        Tile enemyTile = GridManager.Instance.GetTileAtPosition(new Vector2(8,6));
+        BaseEnemy enemy = enemyList[0];
+        Tile warriorTile = GridManager.Instance.GetTileAtPosition(new Vector2(8,7)); //top
+        warriorTile.SetUnit(warrior);
+        enemyTile.SetUnit(enemy);
+        Tile cavalryTile = GridManager.Instance.GetTileAtPosition(new Vector2(8,5)); //bottom
+        cavalryTile.SetUnit(cavalry);
+        Tile mageTile = GridManager.Instance.GetTileAtPosition(new Vector2(9,6)); //right
+        mageTile.SetUnit(mage);
+        GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+        endTurn.onClick.Invoke();
+        Assert.AreEqual(new Vector2(7,6),enemy.Position); //check if retreat left
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator TestRetreatDown()
+    {
+        Tile enemyTile = GridManager.Instance.GetTileAtPosition(new Vector2(8,6));
+        BaseEnemy enemy = enemyList[0];
+        Tile warriorTile = GridManager.Instance.GetTileAtPosition(new Vector2(8,7)); //top
+        warriorTile.SetUnit(warrior);
+        enemyTile.SetUnit(enemy);
+        Tile cavalryTile = GridManager.Instance.GetTileAtPosition(new Vector2(7,6)); //left
+        cavalryTile.SetUnit(cavalry);
+        Tile mageTile = GridManager.Instance.GetTileAtPosition(new Vector2(9,6)); //right
+        mageTile.SetUnit(mage);
+        GameManager.Instance.UpdateGameState(GameState.MovementPhase);
+        endTurn.onClick.Invoke();
+        Assert.AreEqual(new Vector2(8,5),enemy.Position); //check if retreat down
+        yield return null;
+    }
+
+    [UnityTest]
     public IEnumerator TestRetreatWhenFullySurrounded()
     {
         Tile enemyTile = GridManager.Instance.GetTileAtPosition(new Vector2(8,6));
