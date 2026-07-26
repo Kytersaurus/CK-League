@@ -18,5 +18,5 @@ MonoBehaviour:
   attackDesc: Negate or reduce incoming enemy attacks. Chance to counterattack.
   chance: 0.4
   perReduction: 0.3
-  counterAttackChance: 1
+  counterAttackChance: 0.4
   counterAttackDmg: 20

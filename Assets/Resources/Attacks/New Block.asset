@@ -15,7 +15,7 @@ MonoBehaviour:
   attackName: Block
   damage: 0
   icon: {fileID: -8567135909103856833, guid: a27443be55f9f6a4db4c86eda8052c7d, type: 3}
-  attackDesc: Change to negate enemy attacks
+  attackDesc: Chance to negate enemy attacks
   chance: 0.5
   perReduction: 0
   counterAttackChance: 0

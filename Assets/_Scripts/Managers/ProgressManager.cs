@@ -45,9 +45,8 @@ public class ProgressManager : MonoBehaviour
     {
         Instance = this;
         LoadProgress();
-        Levels = new List<string> {"Tutorial", "Level 1", "Level 2"};
+        Levels = new List<string> {"Tutorial", "Level 1", "Level 2", "Level 3", "Level 4", "Level 5"};
     }
-
     
     public bool CheckLevelUnlock(string levelName)
     {

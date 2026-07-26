@@ -227,7 +227,7 @@ public class Tile : MonoBehaviour
             {
                 UnitManager.Instance.SetSelectedHero((BaseHero)OccupiedUnit);
             }
-            else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.InAttackRange(UnitManager.Instance.SelectedHero, OccupiedUnit) && UnitManager.Instance.SelectedHero.SelectedAttack != null)
+            else if(UnitManager.Instance.SelectedHero != null && UnitManager.Instance.SelectedHero.TargetsList.Contains(OccupiedUnit) && UnitManager.Instance.SelectedHero.SelectedAttack != null)
             {
                 UnitManager.Instance.SelectedHero.Action = AttackPhaseAction.Attack;
                 if (UnitManager.Instance.SelectedHero.SelectedAttack is Heals || UnitManager.Instance.SelectedHero.SelectedAttack is Mitigate)

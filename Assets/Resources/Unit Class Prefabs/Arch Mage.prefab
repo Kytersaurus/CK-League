@@ -302,7 +302,7 @@ MonoBehaviour:
     gains access to higher level damage spells.
   maxHealth: 75
   CurrentHealth: 75
-  AttackRange: 3
+  AttackRange: 4
   AttackPower: 1
   AttackSpeed: 3
   moveRange: 1
