@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -28,6 +27,7 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
             val = $"Damage Amount: {attack.damage}";    
         }
         _attackVal.text = val;
+        _toggle.isOn = UnitManager.Instance.SelectedHero.SelectedAttack != null && UnitManager.Instance.SelectedHero.SelectedAttack == attack;
     }
     void OnPress(bool pressed)
     {
@@ -46,7 +46,6 @@ public class AttackButtonScript : MonoBehaviour, IPointerEnterHandler, IPointerE
             {
                 UnitManager.Instance.SelectedHero.Target = null;
             }
-            //UnitManager.Instance.SelectedHero.OccupiedTile.highlightSelect.SetActive(targetsActive);
             foreach (BaseUnit unit in targets)
             {
                 if (unit == null || unit.OccupiedTile == null)

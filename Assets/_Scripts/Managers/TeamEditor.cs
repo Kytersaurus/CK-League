@@ -9,7 +9,6 @@ public class TeamEditor : MonoBehaviour
 {
     public static TeamEditor Instance;
     private List<ScriptableUnit> _allNewUnits = new List<ScriptableUnit>();
-    private List<ScriptableUnit> _allUnitPrefabs = new List<ScriptableUnit>();
     private List<UnitSaveData> _allExistingUnits = new List<UnitSaveData>();
     private List<Attacks> _allAttacks = new List<Attacks>();
     private List<UnitSaveData> _team = new List<UnitSaveData>();
@@ -109,11 +108,11 @@ public class TeamEditor : MonoBehaviour
         {
             _deleteTeamButton.gameObject.SetActive(true);
         }
-        if (!_team.Contains(_selectedUnit))
+        if (!UnitInTeam(_selectedUnit))
         {
             _removeUnitFromTeamButton.gameObject.SetActive(false);
         }
-        if (_team.Contains(_selectedUnit))
+        if (UnitInTeam(_selectedUnit))
         {
             _removeUnitFromTeamButton.gameObject.SetActive(true);
         }
@@ -508,7 +507,7 @@ public class TeamEditor : MonoBehaviour
             _team.Add(_selectedUnit);
             DeselectEverything();
             TeamSaved = false;
-            RefreshTeam(true);
+            RefreshTeam(false);
             return;
         }
         if (_newSelectedUnit != null)
@@ -522,7 +521,7 @@ public class TeamEditor : MonoBehaviour
             _team.Add(unit);
             DeselectEverything();
             TeamSaved = false;
-            RefreshTeam(true);
+            RefreshTeam(false);
             return;
         }
         
@@ -541,7 +540,7 @@ public class TeamEditor : MonoBehaviour
         _selectedUnit = null;
         DeselectEverything();
         TeamSaved = false;
-        RefreshTeam(true);
+        RefreshTeam(false);
     }
     public void AddAttackToUnit()
     {
@@ -759,7 +758,7 @@ public class TeamEditor : MonoBehaviour
             return;
         }
         TeamManager.Instance.ActiveTeamSlot = slot;
-        RefreshTeam(false);
+        RefreshTeam(true);
         TeamSaved = true;
         Debug.Log($"Switched to team {slot+1}");
     }
@@ -787,7 +786,7 @@ public class TeamEditor : MonoBehaviour
     }
     public void RefreshTeam(bool newTeam)
     {
-        if (!newTeam)
+        if (newTeam)
         {
             _team = TeamManager.Instance.LoadTeamData();
         }
@@ -809,14 +808,14 @@ public class TeamEditor : MonoBehaviour
             _teamUnitsList.Clear();
         }
         int x = 380, y = 60;
-        foreach (UnitSaveData unitData in _team)
+        foreach (UnitSaveData unitID in _team)
         {
             if (x > 580)
             {
                 y = -60;
                 x = 340;
             }
-            
+            UnitSaveData unitData = TeamManager.Instance.LoadUnitData(unitID.guid);
             Toggle unitSelect = Instantiate(_unitToggle, _teamPanel);
             RectTransform rect = unitSelect.GetComponent<RectTransform>();
             rect.anchoredPosition = new Vector2(x, y);
@@ -832,10 +831,24 @@ public class TeamEditor : MonoBehaviour
             Image unitSprite = unitSelect.GetComponentInChildren<Image>();
             unitSprite.sprite = hero.UnitIcon;
 
-
             _teamUnitsList.Add(unitSelect);
             x += 200;
         }
+    }
+    public bool UnitInTeam(UnitSaveData unit)
+    {
+        if (unit == null)
+        {
+            return false;
+        }
+        foreach (UnitSaveData teamUnits in _team)
+        {
+            if (teamUnits.guid == unit.guid)
+            {
+                return true;
+            }
+        }
+        return false;
     }
     public void SaveUnit()
     {

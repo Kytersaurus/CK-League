@@ -324,10 +324,38 @@ public class UnitManager : MonoBehaviour
         }
         else if(GameManager.Instance.State == GameState.AttackPhase)
         {
-            var targetList = hero.TargetsList;
-            foreach(BaseUnit enemy in targetList)
+            if (SelectedHero.SelectedAttack != null)
             {
-                enemy.OccupiedTile.highlight.SetActive(true);
+                Attacks attack = SelectedHero.SelectedAttack;
+                bool targetsActive = !(attack is Heals || attack is Mitigate);
+                bool healOthers = attack is HealPoolSpell;
+                if (!targetsActive || healOthers)
+                {
+                    SelectedHero.Target = null;
+                }
+                foreach (BaseUnit unit in SelectedHero.TargetsList)
+                {
+                    if (unit == null || unit.OccupiedTile == null)
+                    {
+                        continue;
+                    }
+                    if (unit is BaseEnemy)
+                    {
+                        unit.OccupiedTile.highlight.SetActive(targetsActive && !healOthers);    
+                    }
+                    if (unit is BaseHero)
+                    {
+                        unit.OccupiedTile.highlight.SetActive(healOthers);
+                    }
+                }    
+            }
+            else
+            {
+                var targetList = hero.TargetsList;
+                foreach(BaseUnit enemy in targetList)
+                {
+                    enemy.OccupiedTile.highlight.SetActive(true);
+                }
             }
         }
     }
